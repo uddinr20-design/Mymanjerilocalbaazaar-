@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="ml" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manjeri Local Bazaar - മഞ്ചേരി ലോക്കൽ ബസാർ</title>
+    <!-- Tailwind CSS v3 CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <!-- QR Code Styling Library -->
+    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        #netlify-badge { display: none !important; }
+    </style>
+</head>
+<body class="text-gray-800 pb-36">
+
+    <!-- 1. Top Header -->
+    <header class="bg-emerald-700 text-white p-2.5 shadow-md sticky top-0 z-40">
+        <div class="max-w-md mx-auto flex flex-col gap-2">
+            
+            <!-- Top Row: Logo (Secret 3-Tap Admin Trigger) & Buttons -->
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2 cursor-pointer select-none" onclick="handleSecretAdminTrigger()" title="Bazaar Hub">
+                    <div class="bg-emerald-800 p-1.5 rounded-lg text-white text-base">
+                        🏪
+                    </div>
+                    <div>
+                        <h1 class="text-xs font-bold leading-tight" id="headerTitle">
+                            LocalBaazaar <span class="text-emerald-200 font-normal text-[10px]">/ നാട്ടുചന്ത</span>
+                        </h1>
+                        <p class="text-[10px] text-emerald-100 font-medium" id="headerSub">
+                            Manjeri, Nilambur, Pandikkad
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right Side Buttons -->
+                <div class="flex items-center gap-1.5">
+                    <button onclick="openAiAssistant()" class="bg-emerald-800 hover:bg-emerald-900 text-white px-2.5 py-1 rounded-full text-[10px] font-bold shadow-xs flex items-center gap-0.5 animate-pulse">
+                        <span>🤖</span> AI
+                    </button>
+                    <button onclick="openDrawerMenu()" class="bg-emerald-900 hover:bg-emerald-950 text-white px-3 py-1.5 rounded-xl text-sm font-extrabold shadow flex items-center justify-center">
+                        <span>⋮</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom Row inside Header -->
+            <div class="flex justify-between items-center pt-1.5 border-t border-emerald-600/60 text-[10px]">
+                <span class="text-emerald-100 font-medium">📍 Manjeri Market Hub</span>
+                <div class="flex items-center gap-1.5">
+                    <button onclick="openSosModal()" class="bg-red-700 text-white px-2.5 py-1 rounded-full font-bold shadow-xs flex items-center gap-1 animate-pulse">
+                        <span>🚑</span> SOS
+                    </button>
+                    <button onclick="toggleLanguage()" id="langBtn" class="bg-emerald-800 text-white px-2.5 py-1 rounded-full font-bold shadow-xs">
+                        മലയാളം
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Side Sliding Drawer Menu -->
+    <div id="sideDrawer" class="fixed inset-0 bg-black/50 z-[9999] hidden transition-opacity">
+        <div class="absolute top-0 left-0 w-72 h-full bg-white shadow-2xl p-4 flex flex-col justify-between transform -translate-x-full transition-transform duration-300" id="drawerContent">
+            <div>
+                <div class="flex justify-between items-center border-b pb-3 mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">🏪</span>
+                        <div>
+                            <h3 class="font-bold text-xs text-emerald-800">Manjeri Local Bazaar</h3>
+                            <p class="text-[10px] text-gray-500">നാട്ടുചന്ത | Menu</p>
+                        </div>
+                    </div>
+                    <button onclick="closeDrawerMenu()" class="text-gray-400 font-bold text-lg p-1">✕</button>
+                </div>
+                <div class="space-y-2 text-xs font-semibold text-gray-700">
+                    <a href="#" onclick="switchTab('home'); closeDrawerMenu();" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-50"><span>🏠</span> Home / ഹോം</a>
+                    <a href="#" onclick="openProfileModal(); closeDrawerMenu();" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-50"><span>👤</span> Profile & Account</a>
+                    <a href="#" onclick="installAppPrompt(); closeDrawerMenu();" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-50"><span>📥</span> Install App</a>
+                    <a href="#" onclick="shareApp(); closeDrawerMenu();" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-50"><span>🔗</span> Share Bazaar</a>
+                    <a href="#" onclick="openQrModal(); closeDrawerMenu();" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-50"><span>📱</span> Show QR Code</a>
+                    <a href="#" onclick="switchTab('info'); closeDrawerMenu();" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-50"><span>ℹ️</span> Info & Disclaimer</a>
+                </div>
+            </div>
+            <div class="border-t pt-3 text-[10px] text-gray-400 text-center">Manjeri Local Bazaar Hub<br>0% Commission P2P Platform</div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="max-w-md mx-auto p-3.5 space-y-3.5" id="mainContentView">
+
+        <!-- Floating Featured Ad Posters -->
+        <section>
+            <div class="flex justify-between items-center mb-1.5">
+                <h3 class="font-bold text-xs text-gray-600 uppercase" id="secFeatured">🌟 Floating Featured Ad Posters</h3>
+            </div>
+            <div id="featuredShopsContainer" class="flex gap-3 overflow-x-auto hide-scrollbar pb-1 scroll-smooth"></div>
+        </section>
+
+        <!-- Local Videos & Reels Section -->
+        <div class="bg-emerald-950 text-white rounded-2xl p-3 shadow-md">
+            <div class="flex justify-between items-center mb-2">
+                <h2 class="text-xs font-bold text-emerald-200 uppercase tracking-wide">🎬 Local Reels & Videos / വീഡിയോസ്</h2>
+                <button onclick="openAddShortModal()" class="bg-emerald-700 hover:bg-emerald-800 px-2.5 py-1 rounded text-[10px] font-bold shadow">+ Upload Video</button>
+            </div>
+            <div id="shortsContainer" class="flex gap-3 overflow-x-auto hide-scrollbar pb-1">
+                <div class="min-w-[140px] bg-emerald-900 rounded-xl p-2 relative flex-shrink-0">
+                    <video src="https://www.w3schools.com/html/mov_bbb.mp4" class="w-full h-32 object-cover rounded-lg mb-1" controls></video>
+                    <p class="font-bold text-[10px] truncate">Manjeri Fest Highlights</p>
+                    <p class="text-[9px] text-emerald-300">Nadan Reels</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar Widget -->
+        <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 p-3.5 rounded-2xl shadow-sm flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-amber-600 text-white p-2.5 rounded-xl text-center font-bold text-sm shadow-xs">📅</div>
+                <div>
+                    <h4 class="font-bold text-xs text-amber-900" id="calTitle">Manjeri Date & Muhurat Hub</h4>
+                    <p class="text-[11px] text-amber-800 mt-0.5">🇬🇧 Nov 16, 2026 | 🌴 Vrischikam 1, 1202 | 🕌 Jumada al-Thani 16, 1448</p>
+                </div>
+            </div>
+            <span class="text-[10px] bg-amber-200 text-amber-900 px-2 py-1 rounded-lg font-bold">Panchang</span>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="relative mb-2.5">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">🔍</span>
+            <input type="text" id="searchInput" oninput="searchListings()" placeholder="Search rooms, footwear, food, groceries..." class="w-full pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs shadow-xs focus:outline-emerald-600">
+        </div>
+
+        <!-- Swipeable Category Chips -->
+        <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1 mb-3" id="categoryContainer"></div>
+
+        <!-- Category Listings -->
+        <div class="mt-4 mb-6">
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="font-bold text-xs text-gray-700 uppercase" id="categoryTitleHeading">📋 All Category Listings</h3>
+                <button onclick="openPostAdModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold px-3 py-1.5 rounded-xl shadow-sm transition flex items-center gap-1">
+                    <span>➕</span> Post Ad
+                </button>
+            </div>
+            <div id="listingsContainer" class="space-y-4"></div>
+        </div>
+
+    </main>
+
+    <!-- Wishlist View -->
+    <div id="wishlistView" class="max-w-md mx-auto p-3.5 space-y-3.5 hidden">
+        <h3 class="font-bold text-sm text-gray-800 flex items-center gap-2">❤️ My Saved Wishlist</h3>
+        <div class="space-y-3" id="wishlistContainer"></div>
+    </div>
+
+    <!-- Cart View -->
+    <div id="cartView" class="max-w-md mx-auto p-3.5 space-y-3.5 hidden">
+        <h3 class="font-bold text-sm text-gray-800 flex items-center gap-2">🛒 My Shopping Cart / Orders</h3>
+        <div class="space-y-3" id="cartContainer"></div>
+    </div>
+
+    <!-- Info View -->
+    <div id="infoDisclaimerView" class="max-w-md mx-auto p-4 space-y-3 hidden bg-white rounded-2xl shadow-sm m-3">
+        <h3 class="font-bold text-sm text-emerald-800">ℹ️ Info & Disclaimer</h3>
+        <div class="text-xs text-gray-600 space-y-2 leading-relaxed">
+            <p><strong>Manjeri Local Bazaar (നാട്ടുചന്ത)</strong> is a 0% commission direct peer-to-peer trading platform connecting buyers and sellers across Manjeri, Nilambur, and Pandikkad.</p>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="qrModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xs w-full p-5 shadow-xl space-y-4 text-center">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-sm text-emerald-800">📱 Manjeri Local Bazaar QR</h3>
+                <button onclick="closeQrModal()" class="text-gray-400 font-bold text-sm">✕</button>
+            </div>
+            <div id="canvasContainer" class="flex justify-center my-2"></div>
+            <button onclick="downloadQR()" class="w-full bg-emerald-600 text-white py-2 rounded-xl font-bold text-xs">Download QR</button>
+        </div>
+    </div>
+
+    <div id="sosModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-sm text-red-700">🚑 Emergency Helpline</h3>
+                <button onclick="closeSosModal()" class="text-gray-400 font-bold text-sm">✕</button>
+            </div>
+            <div class="space-y-2 text-xs">
+                <a href="tel:112" class="flex justify-between items-center bg-red-50 p-2.5 rounded-xl border border-red-200 font-bold text-red-800"><span>🚨 Police / Emergency (112)</span><span>Call</span></a>
+                <a href="tel:108" class="flex justify-between items-center bg-red-50 p-2.5 rounded-xl border border-red-200 font-bold text-red-800"><span>🚑 Ambulance (108)</span><span>Call</span></a>
+            </div>
+        </div>
+    </div>
+
+    <div id="aiAssistantModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-xs text-emerald-800">🧑‍🌾 Naadan AI</h3>
+                <button onclick="closeAiAssistant()" class="text-gray-400 font-bold text-sm">✕</button>
+            </div>
+            <div class="h-48 bg-gray-50 border rounded-xl p-2.5 overflow-y-auto text-xs space-y-2" id="aiChatBox">
+                <div class="bg-emerald-100 text-emerald-900 p-2 rounded-xl">Namaskaram! 🙏 Ask me anything about Manjeri!</div>
+            </div>
+            <div class="flex gap-2">
+                <input type="text" id="aiUserInput" placeholder="Ask anything..." class="flex-1 p-2 border rounded-xl text-xs">
+                <button onclick="sendAiMessage()" class="bg-emerald-600 text-white px-3 py-2 rounded-xl text-xs font-bold">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="addShortModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 text-xs">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-emerald-800">🎬 Upload Video Short</h3>
+                <button onclick="closeAddShortModal()" class="text-gray-400 font-bold">✕</button>
+            </div>
+            <input type="text" id="shortTitle" placeholder="Video Title" class="w-full p-2 border rounded-xl">
+            <label class="block font-semibold text-gray-600">Select Video File / Camera:</label>
+            <input type="file" id="shortVideoFile" accept="video/*" capture="environment" class="w-full p-2 border rounded-xl bg-gray-50">
+            <button onclick="publishShortVideo()" class="w-full bg-emerald-600 text-white py-2 rounded-xl font-bold">Upload</button>
+        </div>
+    </div>
+
+    <!-- Post Ad Modal with Gallery/Camera File Upload -->
+    <div id="postAdModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 max-h-[85vh] overflow-y-auto text-xs pb-6">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-emerald-800">➕ Post Ad</h3>
+                <button onclick="closePostAdModal()" class="text-gray-400 font-bold">✕</button>
+            </div>
+            <div>
+                <label class="font-semibold text-gray-600">Select Category:</label>
+                <select id="userAdCat" class="w-full p-2 border rounded-xl mt-1 bg-white"></select>
+            </div>
+            <div>
+                <label class="font-semibold text-gray-600">Ad Title:</label>
+                <input type="text" id="userAdTitle" placeholder="e.g. House for Rent" class="w-full p-2 border rounded-xl mt-1">
+            </div>
+            <div>
+                <label class="font-semibold text-gray-600">Price Tag:</label>
+                <input type="text" id="userAdPrice" placeholder="e.g. ₹500" class="w-full p-2 border rounded-xl mt-1">
+            </div>
+            <div>
+                <label class="font-semibold text-gray-600">Description:</label>
+                <textarea id="userAdDesc" placeholder="Write details..." class="w-full p-2 border rounded-xl mt-1 h-16"></textarea>
+            </div>
+            <div>
+                <label class="font-semibold text-gray-600">WhatsApp Number:</label>
+                <input type="text" id="userAdPhone" placeholder="919876543210" class="w-full p-2 border rounded-xl mt-1" value="919876543210">
+            </div>
+            <div>
+                <label class="font-semibold text-gray-600">Upload Photo / Gallery / Camera:</label>
+                <input type="file" id="userAdFile" accept="image/*" capture="environment" class="w-full p-2 border rounded-xl mt-1 bg-gray-50">
+            </div>
+            <button onclick="submitUserAd()" class="w-full bg-emerald-600 text-white py-2 rounded-xl font-bold">Submit for Approval</button>
+        </div>
+    </div>
+
+    <!-- Admin Control Center Modal -->
+    <div id="adminApprovalModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-3">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-2xl space-y-3 max-h-[85vh] overflow-y-auto text-xs pb-12">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-amber-900">⚙️ Secret Admin Control Center</h3>
+                <button onclick="closeAdminApprovalModal()" class="text-gray-400 font-bold">✕</button>
+            </div>
+            <!-- Add New Category -->
+            <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 space-y-2">
+                <h4 class="font-bold text-amber-900">➕ Add New Category</h4>
+                <input type="text" id="adminCatName" placeholder="Category Name (e.g. Library / പുസ്തകശാല)" class="w-full p-1.5 border rounded-lg bg-white">
+                <input type="text" id="adminCatIcon" placeholder="Emoji Icon (e.g. 📚)" class="w-full p-1.5 border rounded-lg bg-white">
+                <button onclick="adminAddCategory()" class="w-full bg-amber-600 text-white py-1.5 rounded-lg font-bold">Save Category</button>
+            </div>
+            <h4 class="font-bold text-gray-700">Manage Categories:</h4>
+            <div id="adminCategoriesList" class="space-y-1 max-h-28 overflow-y-auto p-1 bg-gray-50 rounded border"></div>
+
+            <!-- Add Scrolling Featured Poster (Gallery Upload Support) -->
+            <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 space-y-2 mt-2">
+                <h4 class="font-bold text-emerald-900">🌟 Add Scrolling Featured Ad Poster</h4>
+                <input type="text" id="adminPosterTitle" placeholder="Poster Title (e.g. Rajadhani Manjeri)" class="w-full p-1.5 border rounded-lg bg-white">
+                <input type="text" id="adminPosterDesc" placeholder="Description / Offer" class="w-full p-1.5 border rounded-lg bg-white">
+                <input type="text" id="adminPosterPhone" placeholder="WhatsApp Phone (919876543210)" class="w-full p-1.5 border rounded-lg bg-white" value="919876543210">
+                <label class="block text-[10px] font-bold text-gray-700">Upload Poster Image from Gallery/Camera:</label>
+                <input type="file" id="adminPosterFile" accept="image/*" capture="environment" class="w-full p-1.5 border rounded-lg bg-white">
+                <button onclick="submitAdminPoster()" class="w-full bg-emerald-700 text-white py-1.5 rounded-lg font-bold">Publish Poster Live</button>
+            </div>
+
+            <h4 class="font-bold text-gray-700 pt-2">Pending User Ads for Approval:</h4>
+            <div id="pendingAdsContainer" class="space-y-2 pb-4"></div>
+        </div>
+    </div>
+
+    <!-- Clean Profile Modal -->
+    <div id="profileModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 text-xs">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-emerald-800">👤 User Profile & Login</h3>
+                <button onclick="closeProfileModal()" class="text-gray-400 font-bold">✕</button>
+            </div>
+            <div id="authContainer" class="space-y-2">
+                <input type="email" id="authEmail" placeholder="Email address" class="w-full p-2 border rounded-xl">
+                <input type="password" id="authPassword" placeholder="Password" class="w-full p-2 border rounded-xl">
+                <button onclick="handleLogin()" class="w-full bg-emerald-700 text-white py-2 rounded-xl font-bold">Login</button>
+            </div>
+            <div id="userProfileInfo" class="hidden space-y-2">
+                <p class="font-bold text-emerald-800" id="loggedInUserEmail"></p>
+                <button onclick="openAdminApprovalModal(); closeProfileModal();" class="w-full bg-amber-600 text-white py-2 rounded-xl font-bold">⚙️ Open Admin Control Center</button>
+                <button onclick="handleLogout()" class="w-full bg-red-600 text-white py-2 rounded-xl font-bold">Logout</button>
+            </div>
+            <button onclick="closeProfileModal()" class="w-full bg-gray-100 text-gray-700 py-1.5 rounded-xl font-bold">Close</button>
+        </div>
+    </div>
+
+    <!-- Clean Bottom Navigation Bar -->
+    <nav class="fixed bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md border border-gray-200 p-2 shadow-2xl rounded-2xl z-30">
+        <div class="max-w-md mx-auto flex justify-around text-center items-center">
+            <button onclick="switchTab('home')" id="nav-home" class="text-emerald-700 text-xs font-bold flex flex-col items-center">
+                <span class="text-lg">🏠</span><span>Home</span>
+            </button>
+            <button onclick="switchTab('wishlist')" id="nav-wishlist" class="text-gray-500 text-xs font-medium flex flex-col items-center relative">
+                <span class="text-lg">❤️</span><span>Wishlist</span>
+                <span id="wishlistBadge" class="absolute -top-1 right-2 bg-red-600 text-white text-[9px] px-1 rounded-full hidden">0</span>
+            </button>
+            <button onclick="switchTab('cart')" id="nav-cart" class="text-gray-500 text-xs font-medium flex flex-col items-center relative">
+                <span class="text-lg">🛒</span><span>Cart</span>
+                <span id="cartBadge" class="absolute -top-1 right-2 bg-emerald-600 text-white text-[9px] px-1 rounded-full hidden">0</span>
+            </button>
+            <button onclick="openPostAdModal()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-md flex flex-col items-center justify-center cursor-pointer">
+                <span class="text-base">➕</span><span>Publish</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- JavaScript & Firebase Logic -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAoR6XBi3InYe-cGkkyGRLGBX6MmqKhWbo",
+            authDomain: "local-bazaar-4263e.firebaseapp.com",
+            databaseURL: "https://local-bazaar-4263e-default-rtdb.firebaseio.com",
+            projectId: "local-bazaar-4263e",
+            storageBucket: "local-bazaar-4263e.appspot.com",
+            messagingSenderId: "799198735643",
+            appId: "1:799198735643:web:40f81a9275a89dfa58f7be",
+            measurementId: "G-20C5PNW9Z4"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let currentUser = localStorage.getItem('manjeri_user') || null;
+        const SUPER_ADMIN = "uddinr20@gmail.com";
+        let isAdminLoggedIn = (currentUser === SUPER_ADMIN);
+        let currentLang = 'en';
+        let wishlist = [];
+        let cart = [];
+
+        let defaultCategories = [
+            { id: 'all', name: 'All / എല്ലാം', icon: '🌟' },
+            { id: 'rooms', name: 'Rooms & House', icon: '🏠' },
+            { id: 'footwear', name: 'Footwear', icon: '👟' },
+            { id: 'groceries', name: 'Groceries', icon: '🛒' },
+            { id: 'palliative', name: 'Palliative Care', icon: '♿' },
+            { id: 'crockery', name: 'Crockery', icon: '🍽️' },
+            { id: 'transport', name: 'Auto & Taxi', icon: '🛺' },
+            { id: 'foodnonveg', name: 'Food (Non-Veg)', icon: '🍗' },
+            { id: 'library', name: 'Library / Books', icon: '📚' }
+        ];
+
+        let categories = JSON.parse(localStorage.getItem('manjeri_categories')) || defaultCategories;
+
+        const qrCode = new QRCodeStyling({
+            width: 180, height: 180, type: "canvas",
+            data: window.location.href.split('?')[0],
+            image: "https://cdn-icons-png.flaticon.com/512/2331/2331987.png",
+            dotsOptions: { type: "rounded", color: "#047857" },
+            backgroundOptions: { color: "#ffffff" }
+        });
+
+        function openQrModal() { document.getElementById('qrModal').classList.remove('hidden'); let c = document.getElementById('canvasContainer'); c.innerHTML = ""; qrCode.append(c); }
+        function closeQrModal() { document.getElementById('qrModal').classList.add('hidden'); }
+        function downloadQR() { qrCode.download({ name: "manjeri-bazaar-qr", extension: "png" }); }
+
+        function installAppPrompt() { alert("📥 To install: Tap browser menu (3 dots) and select 'Add to Home screen'."); }
+        function shareApp() {
+            let appUrl = window.location.href.split('?')[0];
+            window.open(`https://wa.me/?text=${encodeURIComponent('🌟 Manjeri Local Bazaar: ' + appUrl)}`, '_blank');
+        }
+        function shareListing(id, title, price, phone) {
+            let productUrl = `${window.location.href.split('?')[0]}?id=${id}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(title + ' - ' + price + '\n' + productUrl)}`, '_blank');
+        }
+
+        function openDrawerMenu() {
+            let d = document.getElementById('sideDrawer');
+            let c = document.getElementById('drawerContent');
+            d.classList.remove('hidden');
+            setTimeout(() => c.classList.remove('-translate-x-full'), 10);
+        }
+        function closeDrawerMenu() {
+            let d = document.getElementById('sideDrawer');
+            let c = document.getElementById('drawerContent');
+            c.classList.add('-translate-x-full');
+            setTimeout(() => d.classList.add('hidden'), 300);
+        }
+
+        let logoTapCount = 0;
+        let lastLogoTapTime = 0;
+        function handleSecretAdminTrigger() {
+            let now = new Date().getTime();
+            if(now - lastLogoTapTime > 600) logoTapCount = 1; else logoTapCount++;
+            lastLogoTapTime = now;
+            if(logoTapCount === 3) {
+                logoTapCount = 0;
+                openProfileModal();
+            }
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ml' : 'en';
+            let t = document.getElementById('headerTitle'), s = document.getElementById('headerSub'), f = document.getElementById('secFeatured');
+            if(currentLang === 'ml') {
+                t.innerHTML = `നാട്ടുചന്ത <span class="text-emerald-200 font-normal text-[10px]">/ LocalBaazaar</span>`;
+                s.innerText = "മഞ്ചേരി, നിലമ്പൂർ, പാണ്ടിക്കാട്";
+                f.innerText = "🌟 ഫീച്ചേർഡ് പരസ്യങ്ങൾ";
+            } else {
+                t.innerHTML = `LocalBaazaar <span class="text-emerald-200 font-normal text-[10px]">/ നാട്ടുചന്ത</span>`;
+                s.innerText = "Manjeri, Nilambur, Pandikkad";
+                f.innerText = "🌟 Floating Featured Ad Posters";
+            }
+        }
+
+        function openProfileModal() {
+            document.getElementById('profileModal').classList.remove('hidden');
+            if(currentUser === SUPER_ADMIN) {
+                document.getElementById('authContainer').classList.add('hidden');
+                document.getElementById('userProfileInfo').classList.remove('hidden');
+                document.getElementById('loggedInUserEmail').innerText = currentUser;
+            } else {
+                document.getElementById('authContainer').classList.remove('hidden');
+                document.getElementById('userProfileInfo').classList.add('hidden');
+            }
+        }
+        function closeProfileModal() { document.getElementById('profileModal').classList.add('hidden'); }
+
+        function handleLogin() {
+            let email = document.getElementById('authEmail').value.trim();
+            if(!email) { alert('Enter email'); return; }
+            currentUser = email;
+            localStorage.setItem('manjeri_user', email);
+            if(currentUser === SUPER_ADMIN) {
+                isAdminLoggedIn = true;
+                alert('Admin Verified!');
+                openAdminApprovalModal();
+            } else {
+                alert('Logged in successfully!');
+            }
+            closeProfileModal();
+            renderCategoriesBar();
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            isAdminLoggedIn = false;
+            localStorage.removeItem('manjeri_user');
+            document.getElementById('authContainer').classList.remove('hidden');
+            document.getElementById('userProfileInfo').classList.add('hidden');
+            alert('Logged out.');
+            renderCategoriesBar();
+        }
+
+        function openSosModal() { document.getElementById('sosModal').classList.remove('hidden'); }
+        function closeSosModal() { document.getElementById('sosModal').classList.add('hidden'); }
+        function openPostAdModal() { document.getElementById('postAdModal').classList.remove('hidden'); renderCategoryDropdowns(); }
+        function closePostAdModal() { document.getElementById('postAdModal').classList.add('hidden'); }
+        
+        function openAdminApprovalModal() {
+            if(!isAdminLoggedIn && currentUser !== SUPER_ADMIN) {
+                openProfileModal();
+                return;
+            }
+            renderAdminCategoriesList();
+            renderPendingAds();
+            document.getElementById('adminApprovalModal').classList.remove('hidden');
+        }
+        function closeAdminApprovalModal() { document.getElementById('adminApprovalModal').classList.add('hidden'); }
+        function openAiAssistant() { document.getElementById('aiAssistantModal').classList.remove('hidden'); }
+        function closeAiAssistant() { document.getElementById('aiAssistantModal').classList.add('hidden'); }
+        function openAddShortModal() { document.getElementById('addShortModal').classList.remove('hidden'); }
+        function closeAddShortModal() { document.getElementById('addShortModal').classList.add('hidden'); }
+
+        function publishShortVideo() {
+            let title = document.getElementById('shortTitle').value.trim() || 'Manjeri Short';
+            let fileInput = document.getElementById('shortVideoFile');
+            let videoUrl = "https://www.w3schools.com/html/mov_bbb.mp4";
+            if(fileInput.files && fileInput.files[0]) videoUrl = URL.createObjectURL(fileInput.files[0]);
+            document.getElementById('shortsContainer').innerHTML += `
+                <div class="min-w-[140px] bg-emerald-900 rounded-xl p-2 relative flex-shrink-0">
+                    <video src="${videoUrl}" class="w-full h-32 object-cover rounded-lg mb-1" controls></video>
+                    <p class="font-bold text-[10px] truncate">${title}</p>
+                </div>`;
+            closeAddShortModal();
+            alert('Video uploaded!');
+        }
+
+        function sendAiMessage() {
+            let input = document.getElementById('aiUserInput');
+            let box = document.getElementById('aiChatBox');
+            if(!input.value.trim()) return;
+            box.innerHTML += `<div class="bg-emerald-700 text-white p-2 rounded-xl text-right">${input.value}</div>`;
+            input.value = '';
+            setTimeout(() => {
+                box.innerHTML += `<div class="bg-emerald-100 text-emerald-900 p-2 rounded-xl">Namaskaram! 🙏 How can I assist you in Manjeri?</div>`;
+                box.scrollTop = box.scrollHeight;
+            }, 500);
+        }
+
+        function switchTab(tab) {
+            let h = document.getElementById('mainContentView'), w = document.getElementById('wishlistView'), c = document.getElementById('cartView'), i = document.getElementById('infoDisclaimerView');
+            h.classList.add('hidden'); w.classList.add('hidden'); c.classList.add('hidden'); i.classList.add('hidden');
+            if(tab === 'home') h.classList.remove('hidden');
+            else if(tab === 'wishlist') { w.classList.remove('hidden'); renderWishlist(); }
+            else if(tab === 'cart') { c.classList.remove('hidden'); renderCart(); }
+            else if(tab === 'info') i.classList.remove('hidden');
+        }
+
+        function renderCategoriesBar() {
+            let container = document.getElementById('categoryContainer');
+            if(!container) return;
+            container.innerHTML = '';
+            categories.forEach(c => {
+                let isActive = (c.id === activeCategory);
+                let btnClass = isActive ? "bg-emerald-700 text-white" : "bg-white border text-gray-700";
+                container.innerHTML += `
+                    <button onclick="filterCategory('${c.id}')" id="cat-${c.id}" class="category-btn ${btnClass} text-xs px-3.5 py-2 rounded-xl font-semibold whitespace-nowrap shadow-xs">
+                        ${c.icon} ${c.name}
+                    </button>
+                `;
+            });
+
+            if(currentUser === SUPER_ADMIN) {
+                container.innerHTML += `
+                    <button onclick="openAdminApprovalModal()" class="bg-amber-600 text-white text-xs px-3.5 py-2 rounded-xl font-bold whitespace-nowrap shadow-sm flex items-center gap-1">
+                        <span>➕</span> Add Category
+                    </button>
+                `;
+            }
+        }
+
+        function renderCategoryDropdowns() {
+            let select = document.getElementById('userAdCat');
+            if(!select) return;
+            select.innerHTML = categories.filter(c => c.id !== 'all').map(c => `<option value="${c.id}">${c.icon} ${c.name}</option>`).join('');
+        }
+
+        function renderAdminCategoriesList() {
+            let list = document.getElementById('adminCategoriesList');
+            if(!list) return;
+            list.innerHTML = categories.map(c => `
+                <div class="flex justify-between items-center bg-white p-2 rounded border">
+                    <span>${c.icon} <b>${c.name}</b></span>
+                    ${c.id !== 'all' ? `<button onclick="adminDeleteCategory('${c.id}')" class="bg-red-100 text-red-600 px-2 py-0.5 rounded font-bold text-[10px]">Delete</button>` : '<span class="text-[10px] text-gray-400">Default</span>'}
+                </div>
+            `).join('');
+        }
+
+        function adminAddCategory() {
+            let name = document.getElementById('adminCatName').value.trim();
+            let icon = document.getElementById('adminCatIcon').value.trim() || '📁';
+            if(!name) { alert('Enter category name'); return; }
+            let id = name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+            categories.push({ id, name, icon });
+            localStorage.setItem('manjeri_categories', JSON.stringify(categories));
+            renderCategoriesBar();
+            renderCategoryDropdowns();
+            renderAdminCategoriesList();
+            document.getElementById('adminCatName').value = '';
+            document.getElementById('adminCatIcon').value = '';
+            alert('Category added live successfully!');
+        }
+
+        function adminDeleteCategory(id) {
+            if(confirm('Delete this category?')) {
+                categories = categories.filter(c => c.id !== id);
+                localStorage.setItem('manjeri_categories', JSON.stringify(categories));
+                renderCategoriesBar();
+                renderCategoryDropdowns();
+                renderAdminCategoriesList();
+                alert('Category deleted.');
+            }
+        }
+
+        let defaultPosters = [
+            { title: "Rajadhani Manjeri", desc: "Grand shopping & lifestyle hub!", phone: "919876543210", img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500", badge: "FEATURED" }
+        ];
+
+        // Rich Demo Listings populated across all default categories to make the app look 'chakaas' out of the box
+        let defaultListings = [
+            { id: 'd1', category: 'rooms', title: '1 BHK & 2 BHK Family Rooms for Rent', desc: 'Prime location near Manjeri town, car parking available.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500'], price: '₹6,500 / mo' },
+            { id: 'd2', category: 'footwear', title: 'Malabar Branded Shoes & Footwear', desc: 'Latest sports shoes and sandals at best rates.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500'], price: '₹499 onwards' },
+            { id: 'd3', category: 'groceries', title: 'Manjeri Super Daily Organic Groceries', desc: 'Fresh rice, coconut oil, spices & home essentials delivered.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1542838132-92c53300491e?w=500'], price: '₹40/kg onwards' },
+            { id: 'd4', category: 'palliative', title: 'Manjeri Pain & Palliative Care Support', desc: 'Free wheelchair, medical equipment and home nursing assistance.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=500'], price: 'Free Service' },
+            { id: 'd5', category: 'crockery', title: 'Malabar Steel & Crockery Wholesale House', desc: 'Dinner sets, non-stick cookware and kitchen utensils.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1584346125727-4406159670f0?w=500'], price: 'Wholesale Rate' },
+            { id: 'd6', category: 'transport', title: 'Manjeri Safe Auto & Taxi GPS Stand', desc: '24/7 reliable auto and taxi services across town and suburbs.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=500'], icon: '🛺', price: 'Standard Meter' },
+            { id: 'd7', category: 'foodnonveg', title: 'Authentic Thalassery Chicken Biryani', desc: 'Spicy naadan style chicken biriyani, pathri and beef roast.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500'], price: '₹160' },
+            { id: 'd8', category: 'library', title: 'Manjeri Public Library & Study Centre', desc: 'Quiet reading rooms, competitive exam books and daily periodicals.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=500'], price: 'Free Access' }
+        ];
+
+        let cachedListings = defaultListings;
+        let cachedPending = [];
+        let activeCategory = 'all';
+
+        function initFirebaseSync() {
+            renderCategoriesBar();
+            loadPosters();
+            renderListings(activeCategory);
+
+            db.ref('listings').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    let firebaseListings = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                    cachedListings = [...defaultListings, ...firebaseListings];
+                } else {
+                    cachedListings = defaultListings;
+                }
+                renderListings(activeCategory, document.getElementById('searchInput').value);
+            });
+
+            db.ref('pending_ads').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    cachedPending = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                } else {
+                    cachedPending = [];
+                }
+                if(!document.getElementById('adminApprovalModal').classList.contains('hidden')) {
+                    renderPendingAds();
+                }
+            });
+        }
+
+        function loadPosters() {
+            let container = document.getElementById('featuredShopsContainer');
+            if(!container) return;
+            db.ref('posters').on('value', (snapshot) => {
+                let data = snapshot.val();
+                let postersToDisplay = data ? [...Object.keys(data).map(k => ({ id: k, ...data[k] })), ...defaultPosters] : defaultPosters;
+                container.innerHTML = '';
+                postersToDisplay.forEach((p) => {
+                    container.innerHTML += `
+                        <div class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-3.5 rounded-2xl shadow-sm min-w-[250px] max-w-[250px] flex-shrink-0 relative overflow-hidden flex flex-col justify-between">
+                            <div>
+                                <span class="text-[9px] bg-white/20 px-2 py-0.5 rounded font-bold uppercase">${p.badge || 'PROMO'}</span>
+                                <h3 class="font-bold text-sm mt-1.5 truncate">${p.title}</h3>
+                                <p class="text-[11px] text-emerald-100 mt-0.5 line-clamp-2">${p.desc}</p>
+                            </div>
+                            <div class="mt-3 flex justify-between items-center">
+                                <img src="${p.img}" class="w-10 h-10 rounded-xl object-cover border border-white/30" alt="Ad">
+                                <a href="https://wa.me/${p.phone}?text=Hello" target="_blank" class="bg-white text-emerald-700 text-[10px] px-3 py-1.5 rounded-lg font-bold">💬 Chat</a>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        function submitAdminPoster() {
+            let title = document.getElementById('adminPosterTitle').value.trim();
+            let desc = document.getElementById('adminPosterDesc').value.trim();
+            let phone = document.getElementById('adminPosterPhone').value.trim();
+            let fileInput = document.getElementById('adminPosterFile');
+
+            if(!title) { alert('Enter poster title!'); return; }
+
+            let imageUrl = "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500";
+            if(fileInput.files && fileInput.files[0]) {
+                imageUrl = URL.createObjectURL(fileInput.files[0]);
+            }
+
+            db.ref('posters').push({
+                title, desc, phone, img: imageUrl, badge: "FEATURED"
+            }, (err) => {
+                if(!err) { alert('Poster published live!'); document.getElementById('adminPosterTitle').value = ''; document.getElementById('adminPosterDesc').value = ''; }
+            });
+        }
+
+        function submitUserAd() {
+            let cat = document.getElementById('userAdCat').value;
+            let title = document.getElementById('userAdTitle').value.trim();
+            let price = document.getElementById('userAdPrice').value.trim();
+            let desc = document.getElementById('userAdDesc').value.trim();
+            let phone = document.getElementById('userAdPhone').value.trim();
+            let fileInput = document.getElementById('userAdFile');
+
+            if(!title) { alert('Enter title!'); return; }
+
+            let imageUrl = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500";
+            if(fileInput.files && fileInput.files[0]) {
+                imageUrl = URL.createObjectURL(fileInput.files[0]);
+            }
+
+            db.ref('pending_ads').push({
+                category: cat, title, desc, phone, price, images: [imageUrl]
+            }, (err) => {
+                if(!err) { alert('Submitted for approval!'); closePostAdModal(); }
+            });
+        }
+
+        function renderPendingAds() {
+            let container = document.getElementById('pendingAdsContainer');
+            if(!container) return;
+            container.innerHTML = cachedPending.length === 0 ? `<p class="text-gray-400">No pending ads.</p>` : cachedPending.map(item => `
+                <div class="bg-white p-2.5 rounded border space-y-1 shadow-xs">
+                    <h4 class="font-bold text-gray-900">${item.title} (${item.price})</h4>
+                    <p class="text-[11px] text-gray-600">${item.desc}</p>
+                    <div class="flex gap-2 pt-1">
+                        <button onclick="approveAd('${item.id}')" class="bg-emerald-600 text-white px-3 py-1 rounded font-bold">Approve</button>
+                        <button onclick="rejectAd('${item.id}')" class="bg-red-100 text-red-700 px-3 py-1 rounded font-bold">Reject</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function approveAd(id) {
+            let item = cachedPending.find(p => p.id === id);
+            if(!item) return;
+            let { id: _, ...data } = item;
+            db.ref('listings').push(data, (err) => { if(!err) db.ref('pending_ads/' + id).remove(); });
+        }
+
+        function rejectAd(id) { db.ref('pending_ads/' + id).remove(); }
+
+        function toggleWishlist(id) {
+            let item = cachedListings.find(l => l.id === id);
+            if(!item) return;
+            let idx = wishlist.findIndex(w => w.id === id);
+            if(idx > -1) wishlist.splice(idx, 1); else wishlist.push(item);
+            updateBadges();
+            renderListings(activeCategory, document.getElementById('searchInput').value);
+        }
+
+        function addToCart(id) {
+            let item = cachedListings.find(l => l.id === id);
+            if(!item) return;
+            cart.push(item);
+            alert('Added to Cart 🛒');
+            updateBadges();
+        }
+
+        function updateBadges() {
+            let wb = document.getElementById('wishlistBadge'), cb = document.getElementById('cartBadge');
+            if(wishlist.length > 0) { wb.innerText = wishlist.length; wb.classList.remove('hidden'); } else wb.classList.add('hidden');
+            if(cart.length > 0) { cb.innerText = cart.length; cb.classList.remove('hidden'); } else cb.classList.add('hidden');
+        }
+
+        function renderWishlist() {
+            let container = document.getElementById('wishlistContainer');
+            if(!container) return;
+            container.innerHTML = wishlist.length === 0 ? `<p class="text-xs text-gray-500 text-center py-6">Wishlist is empty ❤️</p>` : wishlist.map(item => `
+                <div class="bg-white p-3 rounded-2xl shadow-sm border flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <img src="${item.images[0]}" class="w-12 h-12 rounded-xl object-cover">
+                        <div><h4 class="font-bold text-xs">${item.title}</h4><p class="text-[11px] text-emerald-700 font-bold">${item.price}</p></div>
+                    </div>
+                    <button onclick="toggleWishlist('${item.id}')" class="text-red-500 text-xs font-bold px-2 py-1 bg-red-50 rounded-lg">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        function renderCart() {
+            let container = document.getElementById('cartContainer');
+            if(!container) return;
+            container.innerHTML = cart.length === 0 ? `<p class="text-xs text-gray-500 text-center py-6">Cart is empty 🛒</p>` : cart.map(item => `
+                <div class="bg-white p-3 rounded-2xl shadow-sm border flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <img src="${item.images[0]}" class="w-12 h-12 rounded-xl object-cover">
+                        <div><h4 class="font-bold text-xs">${item.title}</h4><p class="text-[11px] text-emerald-700 font-bold">${item.price}</p></div>
+                    </div>
+                    <a href="https://wa.me/${item.phone}?text=Order" target="_blank" class="bg-emerald-600 text-white text-[10px] px-3 py-1.5 rounded-xl font-bold">WhatsApp</a>
+                </div>
+            `).join('');
+        }
+
+        function renderListings(cat = 'all', q = '') {
+            activeCategory = cat;
+            let container = document.getElementById('listingsContainer');
+            let heading = document.getElementById('categoryTitleHeading');
+            if(!container) return;
+            
+            container.innerHTML = '';
+            let filtered = cachedListings.filter(item => {
+                let matchesCat = (cat === 'all' || item.category === cat);
+                let matchesSearch = item.title.toLowerCase().includes(q.toLowerCase()) || item.desc.toLowerCase().includes(q.toLowerCase());
+                return matchesCat && matchesSearch;
+            });
+
+            heading.innerHTML = `📋 Listings: <span class="text-emerald-700 uppercase font-bold">${cat}</span> (${filtered.length})`;
+
+            if(filtered.length === 0) {
+                container.innerHTML = `<div class="bg-white p-6 rounded-2xl text-center"><p class="text-xs text-gray-500">No ads found.</p></div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                let imgList = item.images && item.images.length > 0 ? item.images : ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500'];
+                let isWish = wishlist.some(w => w.id === item.id);
+                container.innerHTML += `
+                    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+                        <div class="relative bg-gray-100">
+                            <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar">${imgList.map(i=>`<img src="${i}" class="w-full h-48 object-cover flex-shrink-0">`).join('')}</div>
+                            <button onclick="toggleWishlist('${item.id}')" class="absolute top-2 left-2 bg-white/80 p-1.5 rounded-full text-sm">${isWish ? '❤️' : '🤍'}</button>
+                            <span class="absolute bottom-2 left-2 bg-emerald-700 text-white text-[10px] px-2.5 py-0.5 rounded-lg font-bold">${item.price}</span>
+                        </div>
+                        <div class="p-3.5 space-y-2">
+                            <h4 class="font-bold text-sm text-gray-800">${item.title}</h4>
+                            <p class="text-xs text-gray-600">${item.desc}</p>
+                            <div class="flex justify-between items-center pt-2 border-t">
+                                <span class="text-[11px] text-gray-500 font-medium">📞 ${item.phone}</span>
+                                <div class="flex gap-2 items-center">
+                                    <button onclick="shareListing('${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.price}', '${item.phone}')" class="text-blue-600 text-xs px-2 py-1 font-bold">Share</button>
+                                    <button onclick="addToCart('${item.id}')" class="bg-amber-600 text-white text-xs px-2.5 py-1.5 rounded-xl font-bold">Cart</button>
+                                    <a href="https://wa.me/${item.phone}?text=Hello" target="_blank" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded-xl font-bold">WhatsApp</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filterCategory(cat) {
+            renderCategoriesBar();
+            renderListings(cat, document.getElementById('searchInput').value);
+        }
+
+        function searchListings() {
+            renderListings(activeCategory, document.getElementById('searchInput').value);
+        }
+
+        window.onload = function() {
+            initFirebaseSync();
+        };
+    </script>
+</body>
+</html>
