@@ -12,45 +12,47 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }
+        body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; color: #1f2937; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         #netlify-badge { display: none !important; }
     </style>
 </head>
-<body class="text-gray-800 pb-36">
+<body class="bg-gray-100 text-gray-900 pb-36">
 
-    <!-- 1. Top Header -->
-    <header class="bg-emerald-700 text-white p-3 shadow-md sticky top-0 z-40">
+    <!-- 1. Top Header with 3-Lines Menu Button next to Logo -->
+    <header class="bg-emerald-700 text-white p-3 shadow-md sticky top-0 z-45">
         <div class="max-w-md mx-auto flex flex-col gap-2.5">
             
-            <!-- Top Row: Logo (Secret 3-Tap Admin Trigger) & Primary Buttons -->
+            <!-- Top Row: 3-Lines Menu Button & Logo/Brand -->
             <div class="flex justify-between items-center">
-                <div class="flex items-center gap-2 cursor-pointer select-none" onclick="handleSecretAdminTrigger()" title="Bazaar Hub">
-                    <div class="bg-emerald-800 p-2 rounded-xl text-white text-base shadow-xs">
-                        🏪
-                    </div>
-                    <div>
-                        <h1 class="text-xs font-bold leading-tight" id="headerTitle">
-                            LocalBaazaar <span class="text-emerald-200 font-normal text-[10px]">/ നാട്ടുചന്ത</span>
-                        </h1>
-                        <p class="text-[10px] text-emerald-100 font-medium" id="headerSub">
-                            Manjeri, Nilambur, Pandikkad
-                        </p>
+                <div class="flex items-center gap-2.5">
+                    <!-- 3-Lines (Hamburger) Menu Button placed right next to logo -->
+                    <button onclick="openDrawerMenu()" class="bg-emerald-800 hover:bg-emerald-900 text-white w-9 h-9 rounded-xl text-lg font-bold shadow-md flex items-center justify-center border border-emerald-600/50">
+                        ☰
+                    </button>
+                    <div class="flex items-center gap-2 cursor-pointer select-none" onclick="handleSecretAdminTrigger()" title="Bazaar Hub">
+                        <div class="bg-emerald-800 p-2 rounded-xl text-white text-base shadow-xs">
+                            🏪
+                        </div>
+                        <div>
+                            <h1 class="text-xs font-bold leading-tight" id="headerTitle">
+                                LocalBaazaar <span class="text-emerald-200 font-normal text-[10px]">/ നാട്ടുചന്ത</span>
+                            </h1>
+                            <p class="text-[10px] text-emerald-100 font-medium" id="headerSub">
+                                Manjeri, Nilambur, Pandikkad
+                            </p>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Right Side Buttons with Larger Three Dots Menu Button -->
+                <!-- Right Side Quick Buttons -->
                 <div class="flex items-center gap-2">
                     <button onclick="openAiAssistant()" class="bg-emerald-800 hover:bg-emerald-900 text-white px-2.5 py-1.5 rounded-full text-[10px] font-bold shadow-xs flex items-center gap-0.5 animate-pulse">
                         <span>🤖</span> AI
                     </button>
                     <button onclick="openQrModal()" class="bg-emerald-800 hover:bg-emerald-900 text-white px-2.5 py-1.5 rounded-full text-[10px] font-bold shadow-xs flex items-center gap-0.5">
                         <span>📱</span> QR
-                    </button>
-                    <!-- Enlarged & Enhanced Three Dots Menu Button -->
-                    <button onclick="openDrawerMenu()" class="bg-emerald-900 hover:bg-emerald-950 text-white px-3.5 py-1.5 rounded-xl text-base font-extrabold shadow-md flex items-center justify-center border border-emerald-600/50">
-                        <span>⋮</span>
                     </button>
                 </div>
             </div>
@@ -76,7 +78,7 @@
 
     <!-- Side Sliding Drawer Menu -->
     <div id="sideDrawer" class="fixed inset-0 bg-black/50 z-[9999] hidden transition-opacity">
-        <div class="absolute top-0 left-0 w-72 h-full bg-white shadow-2xl p-4 flex flex-col justify-between transform -translate-x-full transition-transform duration-300" id="drawerContent">
+        <div class="absolute top-0 left-0 w-72 h-full bg-white text-gray-900 shadow-2xl p-4 flex flex-col justify-between transform -translate-x-full transition-transform duration-300" id="drawerContent">
             <div>
                 <div class="flex justify-between items-center border-b pb-3 mb-4">
                     <div class="flex items-center gap-2">
@@ -112,7 +114,7 @@
             <div id="featuredShopsContainer" class="flex gap-3 overflow-x-auto hide-scrollbar pb-1 scroll-smooth"></div>
         </section>
 
-        <!-- 3. Permanent Firebase Local Videos & Reels Section -->
+        <!-- 3. Local Reels & Videos Section with Working Full-Screen Controls -->
         <div class="bg-emerald-950 text-white rounded-2xl p-3 shadow-md">
             <div class="flex justify-between items-center mb-2">
                 <h2 class="text-xs font-bold text-emerald-200 uppercase tracking-wide" id="secReelsTitle">🎬 Local Reels & Videos / വീഡിയോസ്</h2>
@@ -121,22 +123,28 @@
             <div id="shortsContainer" class="flex gap-3 overflow-x-auto hide-scrollbar pb-1"></div>
         </div>
 
-        <!-- 4. Calendar Widget -->
-        <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 p-3.5 rounded-2xl shadow-sm flex items-center justify-between">
+        <!-- 4. Interactive Calendar Widget (Clickable to Open Calendar Modal) -->
+        <div onclick="openCalendarModal()" class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 p-3.5 rounded-2xl shadow-sm flex items-center justify-between text-gray-900 cursor-pointer hover:bg-amber-100 transition">
             <div class="flex items-center gap-3">
                 <div class="bg-amber-600 text-white p-2.5 rounded-xl text-center font-bold text-sm shadow-xs">📅</div>
                 <div>
-                    <h4 class="font-bold text-xs text-amber-900" id="calTitle">Manjeri Date & Muhurat Hub</h4>
+                    <h4 class="font-bold text-xs text-amber-900" id="calTitle">Manjeri Date & Muhurat Hub (Tap to Open)</h4>
                     <p class="text-[11px] text-amber-800 mt-0.5">🇬🇧 Nov 17, 2026 | 🌴 Vrischikam 2, 1202 | 🕌 Jumada al-Thani 7, 1448</p>
                 </div>
             </div>
             <span class="text-[10px] bg-amber-200 text-amber-900 px-2 py-1 rounded-lg font-bold">Panchang</span>
         </div>
 
-        <!-- 5. Search Bar with Malayalam Script Support -->
-        <div class="relative mb-2.5">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">🔍</span>
-            <input type="text" id="searchInput" oninput="searchListings()" placeholder="Search room, biryani, footwear, റൂം, ബിരിയാണി..." class="w-full pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs shadow-xs focus:outline-emerald-600">
+        <!-- 5. Search Bar with Voice Mic & Malayalam Script Support -->
+        <div class="relative mb-2.5 flex items-center gap-2">
+            <div class="relative flex-1">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">🔍</span>
+                <input type="text" id="searchInput" oninput="searchListings()" placeholder="Search room, biryani, footwear, റൂം, ബിരിയാണി..." class="w-full pl-9 pr-4 py-2.5 bg-white text-gray-900 border border-gray-200 rounded-xl text-xs shadow-xs focus:outline-emerald-600">
+            </div>
+            <!-- Voice Search Mic Button -->
+            <button onclick="startVoiceSearch()" title="Search by Voice (Mic)" class="bg-emerald-600 hover:bg-emerald-700 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-md text-base flex-shrink-0 animate-pulse">
+                🎙️
+            </button>
         </div>
 
         <!-- 6. All 30 Swipeable Category Chips -->
@@ -168,17 +176,17 @@
     </div>
 
     <!-- Info View with Bilingual & Admin-Controlled Voluntary Support Box -->
-    <div id="infoDisclaimerView" class="max-w-md mx-auto p-4 space-y-4 hidden bg-white rounded-2xl shadow-sm m-3">
+    <div id="infoDisclaimerView" class="max-w-md mx-auto p-4 space-y-4 hidden bg-white text-gray-900 rounded-2xl shadow-sm m-3">
         <h3 class="font-bold text-sm text-emerald-800" id="infoTitle">ℹ️ Info & Disclaimer</h3>
         <div class="text-xs text-gray-600 space-y-2 leading-relaxed" id="infoDescText">
             <p><strong>Manjeri Local Bazaar (നാട്ടുചന്ത)</strong> is a 0% commission direct peer-to-peer trading and information platform connecting buyers and sellers across Manjeri, Nilambur, and Pandikkad.</p>
             <p><strong>Disclaimer:</strong> All ads, prices, timings, and services are posted directly by local vendors or administrators. Please verify product quality and vendor authenticity before making any financial transactions.</p>
         </div>
 
-        <!-- Voluntary Support Box (खुशी से सहयोग / സന്തോഷത്തോടെയുള്ള സഹായം) -->
+        <!-- Voluntary Support Box -->
         <div class="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 p-3.5 rounded-2xl space-y-2 text-xs">
             <h4 class="font-bold text-emerald-900 flex items-center gap-1.5" id="supportBoxTitle"><span>❤️</span> Support Manjeri Local Bazaar (खुशी से सहयोग)</h4>
-            <p class="text-gray-600 text-[11px]" id="supportBoxDesc">यह मंजीरी का अपना 0% कमीशन प्लेटफॉर्म है। अगर आपको इस बाज़ार से फायदा हुआ है और आप हमारे इस छोटे से परिवार और सर्वर खर्च में मदद करना चाहते हैं, तो आप अपनी मर्जी से जितना चाहें योगदान दे सकते हैं।</p>
+            <p class="text-gray-600 text-[11px]" id="supportBoxDesc">यह मंजीरी का अपना 0% कमीशन प्लेटफॉर्म है। अगर आपको इस बाज़ार से फायदा हुआ है और आप हमारे इस छोटे से परिवार और सर्वर खर्च में मदद करना चाहते हैं, तो आप अपनी मर्जी से जितना चाहें योगदान दे सकते हैं.</p>
             <div class="bg-white p-2 rounded-xl border border-emerald-200 text-center font-bold text-emerald-800">
                 UPI ID: <span id="displayUpiId" class="text-gray-700">manjeribazaar@upi</span>
             </div>
@@ -192,9 +200,34 @@
         <p class="text-white/80 text-xs mt-3">Tap anywhere outside to close</p>
     </div>
 
+    <!-- Calendar Modal (Opens when Calendar Widget is tapped) -->
+    <div id="calendarModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
+        <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 text-xs">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-amber-900">📅 Manjeri Panchang & Muhurat Hub</h3>
+                <button onclick="closeCalendarModal()" class="text-gray-400 font-bold text-sm">✕</button>
+            </div>
+            <div class="space-y-2 text-gray-700">
+                <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200">
+                    <p class="font-bold text-amber-900">🇬🇧 Gregorian Date:</p>
+                    <p>Tuesday, November 17, 2026</p>
+                </div>
+                <div class="bg-emerald-50 p-2.5 rounded-xl border border-emerald-200">
+                    <p class="font-bold text-emerald-900">🌴 Malayalam Era (Kollavarsham):</p>
+                    <p>Vrischikam 2, 1202</p>
+                </div>
+                <div class="bg-teal-50 p-2.5 rounded-xl border border-teal-200">
+                    <p class="font-bold text-teal-900">🕌 Hijri Date (Islamic Calendar):</p>
+                    <p>Jumada al-Thani 7, 1448 AH</p>
+                </div>
+            </div>
+            <button onclick="closeCalendarModal()" class="w-full bg-amber-600 text-white py-2 rounded-xl font-bold shadow">Close Calendar</button>
+        </div>
+    </div>
+
     <!-- Working QR Code Modal -->
     <div id="qrModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-xs w-full p-5 shadow-xl space-y-4 text-center">
+        <div class="bg-white text-gray-900 rounded-2xl max-w-xs w-full p-5 shadow-xl space-y-4 text-center">
             <div class="flex justify-between items-center border-b pb-2">
                 <h3 class="font-bold text-sm text-emerald-800">📱 Manjeri Local Bazaar QR</h3>
                 <button onclick="closeQrModal()" class="text-gray-400 font-bold text-sm">✕</button>
@@ -209,7 +242,7 @@
 
     <!-- SOS Modal -->
     <div id="sosModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3">
+        <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3">
             <div class="flex justify-between items-center border-b pb-2">
                 <h3 class="font-bold text-sm text-red-700">🚑 Manjeri Emergency Helpline</h3>
                 <button onclick="closeSosModal()" class="text-gray-400 font-bold text-sm">✕</button>
@@ -223,75 +256,66 @@
         </div>
     </div>
 
-    <!-- Smart AI Assistant Modal -->
+    <!-- Smart AI Assistant Modal with Voice / Text Chat -->
     <div id="aiAssistantModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3">
+        <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3">
             <div class="flex justify-between items-center border-b pb-2">
                 <h3 class="font-bold text-xs text-emerald-800">🧑‍🌾 Naadan AI (മലയാളം / हिंदी / English)</h3>
                 <button onclick="closeAiAssistant()" class="text-gray-400 font-bold text-sm">✕</button>
             </div>
             <div class="h-56 bg-gray-50 border rounded-xl p-2.5 overflow-y-auto text-xs space-y-2" id="aiChatBox">
                 <div class="bg-emerald-100 text-emerald-900 p-2 rounded-xl">
-                    Namaskaram! 🙏 आप मुझसे <b>Biryani, Furniture, Ambulance, Madrasa, Shaadi, Room, Auto</b> या किसी भी सामान के बारे में पूछ सकते हैं!
+                    Namaskaram! 🙏 आप मुझसे <b>Biryani, Furniture, Ambulance, Room, Auto</b> के बारे में पूछ सकते हैं!
                 </div>
             </div>
             <div class="flex gap-2">
-                <input type="text" id="aiUserInput" onkeydown="if(event.key==='Enter') sendAiMessage()" placeholder="Type Biryani, Furniture, Ambulance..." class="flex-1 p-2 border rounded-xl text-xs">
+                <input type="text" id="aiUserInput" onkeydown="if(event.key==='Enter') sendAiMessage()" placeholder="Type or ask..." class="flex-1 p-2 border rounded-xl text-xs bg-white text-gray-900">
                 <button onclick="sendAiMessage()" class="bg-emerald-600 text-white px-3 py-2 rounded-xl text-xs font-bold">Send</button>
             </div>
         </div>
     </div>
 
-    <!-- Upload Permanent Video Short Modal with Admin Approval & WhatsApp Alert -->
+    <!-- Upload Video Short Modal with WhatsApp Direct Submission -->
     <div id="addShortModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 text-xs">
+        <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 text-xs">
             <div class="flex justify-between items-center border-b pb-2">
-                <h3 class="font-bold text-emerald-800">🎬 Upload Video Reel (Admin Review)</h3>
+                <h3 class="font-bold text-emerald-800">🎬 Upload Video Reel via WhatsApp</h3>
                 <button onclick="closeAddShortModal()" class="text-gray-400 font-bold">✕</button>
             </div>
-            <input type="text" id="shortTitle" placeholder="Video Title (e.g. Manjeri Market)" class="w-full p-2 border rounded-xl">
-            <label class="block font-semibold text-gray-600">Select Video Option (Max 30s):</label>
-            <div class="grid grid-cols-2 gap-2">
-                <label class="bg-emerald-50 border border-emerald-300 text-emerald-800 p-2.5 rounded-xl text-center font-bold cursor-pointer flex flex-col items-center gap-1">
-                    <span class="text-lg">🎥</span> Record Camera
-                    <input type="file" id="shortVideoCamera" accept="video/*" capture="environment" class="hidden" onchange="previewShortVideo(this)">
-                </label>
-                <label class="bg-blue-50 border border-blue-300 text-blue-800 p-2.5 rounded-xl text-center font-bold cursor-pointer flex flex-col items-center gap-1">
-                    <span class="text-lg">📁</span> Video Gallery
-                    <input type="file" id="shortVideoGallery" accept="video/*" class="hidden" onchange="previewShortVideo(this)">
-                </label>
-            </div>
-            <p id="shortVideoStatus" class="text-[10px] text-emerald-700 font-semibold text-center"></p>
-            <button id="uploadVideoBtn" onclick="submitVideoForApproval()" class="w-full bg-emerald-600 text-white py-2 rounded-xl font-bold">Submit Video for Admin Review</button>
+            <input type="text" id="shortTitle" placeholder="Video Title (e.g. Manjeri Market)" class="w-full p-2 border rounded-xl bg-white text-gray-900">
+            <p class="text-[11px] text-gray-600">Enter title and click below to send video directly to Admin WhatsApp for instant review and publishing!</p>
+            <button onclick="submitVideoViaWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold shadow flex items-center justify-center gap-2">
+                <span>💬</span> Send Video to Admin WhatsApp
+            </button>
         </div>
     </div>
 
     <!-- Post Ad Modal -->
     <div id="postAdModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 max-h-[85vh] overflow-y-auto text-xs pb-6">
+        <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 max-h-[85vh] overflow-y-auto text-xs pb-6">
             <div class="flex justify-between items-center border-b pb-2">
                 <h3 class="font-bold text-emerald-800">➕ Post Ad (Admin Approval)</h3>
                 <button onclick="closePostAdModal()" class="text-gray-400 font-bold">✕</button>
             </div>
             <div>
                 <label class="font-semibold text-gray-600">Select Category:</label>
-                <select id="userAdCat" class="w-full p-2 border rounded-xl mt-1 bg-white"></select>
+                <select id="userAdCat" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900"></select>
             </div>
             <div>
                 <label class="font-semibold text-gray-600">Ad Title / Business Name:</label>
-                <input type="text" id="userAdTitle" placeholder="e.g. 2 BHK House for Rent in Manjeri" class="w-full p-2 border rounded-xl mt-1">
+                <input type="text" id="userAdTitle" placeholder="e.g. 2 BHK House for Rent in Manjeri" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900">
             </div>
             <div>
                 <label class="font-semibold text-gray-600">Price / Rate Tag:</label>
-                <input type="text" id="userAdPrice" placeholder="e.g. ₹6,500 / month" class="w-full p-2 border rounded-xl mt-1">
+                <input type="text" id="userAdPrice" placeholder="e.g. ₹6,500 / month" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900">
             </div>
             <div>
                 <label class="font-semibold text-gray-600">Description / Details:</label>
-                <textarea id="userAdDesc" placeholder="Write full details here..." class="w-full p-2 border rounded-xl mt-1 h-16"></textarea>
+                <textarea id="userAdDesc" placeholder="Write full details here..." class="w-full p-2 border rounded-xl mt-1 h-16 bg-white text-gray-900"></textarea>
             </div>
             <div>
                 <label class="font-semibold text-gray-600">WhatsApp Phone Number:</label>
-                <input type="text" id="userAdPhone" placeholder="919876543210" class="w-full p-2 border rounded-xl mt-1" value="919876543210">
+                <input type="text" id="userAdPhone" placeholder="919876543210" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900" value="919876543210">
             </div>
 
             <div>
@@ -317,26 +341,26 @@
         </div>
     </div>
 
-    <!-- Admin Control Center Modal with Video & Ad Approvals -->
+    <!-- Admin Control Center Modal -->
     <div id="adminApprovalModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-3">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-2xl space-y-3 max-h-[85vh] overflow-y-auto text-xs pb-12">
+        <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-2xl space-y-3 max-h-[85vh] overflow-y-auto text-xs pb-12">
             <div class="flex justify-between items-center border-b pb-2">
                 <h3 class="font-bold text-amber-900">⚙️ Secret Admin Control Center</h3>
                 <button onclick="closeAdminApprovalModal()" class="text-gray-400 font-bold">✕</button>
             </div>
 
-            <!-- Admin Settings: Donation UPI ID & Text Update -->
+            <!-- Admin Settings: Donation UPI ID -->
             <div class="bg-teal-50 p-3 rounded-xl border border-teal-200 space-y-2">
                 <h4 class="font-bold text-teal-900">💳 Manage Donation UPI ID</h4>
-                <input type="text" id="adminUpiInput" placeholder="e.g. manjeribazaar@upi" class="w-full p-1.5 border rounded-lg bg-white">
+                <input type="text" id="adminUpiInput" placeholder="e.g. manjeribazaar@upi" class="w-full p-1.5 border rounded-lg bg-white text-gray-900">
                 <button onclick="saveAdminUpi()" class="w-full bg-teal-700 text-white py-1.5 rounded-lg font-bold">Update UPI ID Live</button>
             </div>
 
             <!-- Add New Category -->
             <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 space-y-2">
                 <h4 class="font-bold text-amber-900">➕ Add New Category</h4>
-                <input type="text" id="adminCatName" placeholder="Category Name (e.g. Electronics)" class="w-full p-1.5 border rounded-lg bg-white">
-                <input type="text" id="adminCatIcon" placeholder="Emoji Icon (e.g. 💻)" class="w-full p-1.5 border rounded-lg bg-white">
+                <input type="text" id="adminCatName" placeholder="Category Name (e.g. Electronics)" class="w-full p-1.5 border rounded-lg bg-white text-gray-900">
+                <input type="text" id="adminCatIcon" placeholder="Emoji Icon (e.g. 💻)" class="w-full p-1.5 border rounded-lg bg-white text-gray-900">
                 <button onclick="adminAddCategory()" class="w-full bg-amber-600 text-white py-1.5 rounded-lg font-bold">Save Category Live</button>
             </div>
 
@@ -346,10 +370,10 @@
             <!-- Add Full-Image Scrolling Featured Poster -->
             <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 space-y-2 mt-2">
                 <h4 class="font-bold text-emerald-900">🌟 Add Full-Image Featured Banner</h4>
-                <input type="text" id="adminPosterTitle" placeholder="Poster Title (e.g. Rajadhani Manjeri)" class="w-full p-1.5 border rounded-lg bg-white">
-                <input type="text" id="adminPosterDesc" placeholder="Description / Offer" class="w-full p-1.5 border rounded-lg bg-white">
-                <input type="text" id="adminPosterPhone" placeholder="WhatsApp Phone (919876543210)" class="w-full p-1.5 border rounded-lg bg-white" value="919876543210">
-                <input type="text" id="adminPosterBadge" placeholder="Badge Text (e.g. FEATURED)" class="w-full p-1.5 border rounded-lg bg-white" value="FEATURED">
+                <input type="text" id="adminPosterTitle" placeholder="Poster Title (e.g. Rajadhani Manjeri)" class="w-full p-1.5 border rounded-lg bg-white text-gray-900">
+                <input type="text" id="adminPosterDesc" placeholder="Description / Offer" class="w-full p-1.5 border rounded-lg bg-white text-gray-900">
+                <input type="text" id="adminPosterPhone" placeholder="WhatsApp Phone (919876543210)" class="w-full p-1.5 border rounded-lg bg-white text-gray-900" value="919876543210">
+                <input type="text" id="adminPosterBadge" placeholder="Badge Text (e.g. FEATURED)" class="w-full p-1.5 border rounded-lg bg-white text-gray-900" value="FEATURED">
                 
                 <label class="block text-[10px] font-bold text-gray-700">Select Full Poster Photo:</label>
                 <div class="grid grid-cols-2 gap-2">
@@ -370,10 +394,6 @@
                 <button onclick="submitAdminPoster()" class="w-full bg-emerald-700 text-white py-2 rounded-lg font-bold shadow">Publish Full-Image Banner Live</button>
             </div>
 
-            <!-- Pending Videos Approval Section -->
-            <h4 class="font-bold text-gray-700 pt-2">🎬 Pending Video Reels for Approval:</h4>
-            <div id="pendingVideosContainer" class="space-y-2 pb-2"></div>
-
             <!-- Pending Ads Approval Section -->
             <h4 class="font-bold text-gray-700 pt-2">🔔 Pending User Ads for Approval:</h4>
             <div id="pendingAdsContainer" class="space-y-2 pb-4"></div>
@@ -382,14 +402,14 @@
 
     <!-- Clean Profile Modal -->
     <div id="profileModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 text-xs">
+        <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 text-xs">
             <div class="flex justify-between items-center border-b pb-2">
                 <h3 class="font-bold text-emerald-800">👤 User Profile & Login</h3>
                 <button onclick="closeProfileModal()" class="text-gray-400 font-bold">✕</button>
             </div>
             <div id="authContainer" class="space-y-2">
-                <input type="email" id="authEmail" placeholder="Email address" class="w-full p-2 border rounded-xl">
-                <input type="password" id="authPassword" placeholder="Password" class="w-full p-2 border rounded-xl">
+                <input type="email" id="authEmail" placeholder="Email address" class="w-full p-2 border rounded-xl bg-white text-gray-900">
+                <input type="password" id="authPassword" placeholder="Password" class="w-full p-2 border rounded-xl bg-white text-gray-900">
                 <button onclick="handleLogin()" class="w-full bg-emerald-700 text-white py-2 rounded-xl font-bold">Login</button>
             </div>
             <div id="userProfileInfo" class="hidden space-y-2">
@@ -402,7 +422,7 @@
     </div>
 
     <!-- Clean Bottom Navigation Bar -->
-    <nav class="fixed bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md border border-gray-200 p-2 shadow-2xl rounded-2xl z-30">
+    <nav class="fixed bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md border border-gray-200 p-2 shadow-2xl rounded-2xl z-35">
         <div class="max-w-md mx-auto flex justify-around text-center items-center">
             <button onclick="switchTab('home')" id="nav-home" class="text-emerald-700 text-xs font-bold flex flex-col items-center">
                 <span class="text-lg">🏠</span><span id="tabHome">Home</span>
@@ -448,7 +468,7 @@
         let cart = [];
         let globalUpiId = "manjeribazaar@upi";
         let autoSlideTimer = null;
-        let adminWhatsAppNumber = "919876543210"; // Admin phone for WhatsApp alerts
+        let adminWhatsAppNumber = "919876543210";
 
         // All 30 Original Categories
         let defaultCategories = [
@@ -484,7 +504,7 @@
             { id: 'namaz', name: 'Namaz Time', icon: '🕌' }
         ];
 
-        let savedCats = JSON.parse(localStorage.getItem('manjeri_categories_v3'));
+        let savedCats = JSON.parse(localStorage.getItem('manjeri_categories_v4'));
         let categories = (savedCats && savedCats.length >= 25) ? savedCats : defaultCategories;
 
         const malayalamKeywordMap = {
@@ -548,13 +568,11 @@
 
         let cachedListings = defaultListings;
         let cachedPending = [];
-        let cachedPendingVideos = [];
         let cachedShorts = defaultShorts;
         let activeCategory = 'all';
 
         let selectedUserPhotos = [];
         let selectedAdminPosterPhoto = "";
-        let selectedShortVideoUrl = "";
 
         function compressImageToBase64(file, callback) {
             let reader = new FileReader();
@@ -618,28 +636,51 @@
             }
         }
 
-        function previewShortVideo(input) {
-            if(input.files && input.files[0]) {
-                let file = input.files[0];
-                if(file.size > 15 * 1024 * 1024) {
-                    alert('⚠️ Video size is too large! Please select a short clip under 15MB (max 30s).');
-                    input.value = '';
-                    return;
-                }
-                let reader = new FileReader();
-                reader.onprogress = function(e) {
-                    if (e.lengthComputable) {
-                        let percentLoaded = Math.round((e.loaded / e.total) * 100);
-                        document.getElementById('shortVideoStatus').innerText = `🔄 Loading video: ${percentLoaded}%`;
-                    }
-                };
-                reader.onload = function(e) {
-                    selectedShortVideoUrl = e.target.result;
-                    document.getElementById('shortVideoStatus').innerText = "✅ Video ready for admin review!";
-                };
-                reader.readAsDataURL(file);
+        // Voice Search (Mic) using Web Speech API
+        function startVoiceSearch() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert('🎙️ Voice Search is not supported on this browser. Please type manually.');
+                return;
             }
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'ml-IN';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            recognition.onstart = function() {
+                document.getElementById('searchInput').placeholder = "Listening... സംസാരിക്കൂ...";
+            };
+
+            recognition.onresult = function(event) {
+                let speechResult = event.results[0][0].transcript;
+                document.getElementById('searchInput').value = speechResult;
+                searchListings();
+            };
+
+            recognition.onerror = function() {
+                recognition.lang = 'en-IN';
+                recognition.start();
+            };
+
+            recognition.onend = function() {
+                document.getElementById('searchInput').placeholder = "Search room, biryani, footwear, റൂം, ബിരിയാണി...";
+            };
+
+            recognition.start();
         }
+
+        // WhatsApp Direct Video Upload Submission
+        function submitVideoViaWhatsApp() {
+            let title = document.getElementById('shortTitle').value.trim() || 'Manjeri Video Reel';
+            let waMsg = `🎬 *New Video Reel Submission*\nTitle: ${title}\nUser: ${currentUser || 'Local Vendor'}\n*(Please attach your video file here and send to Admin)*`;
+            window.open(`https://wa.me/${adminWhatsAppNumber}?text=${encodeURIComponent(waMsg)}`, '_blank');
+            closeAddShortModal();
+            alert('WhatsApp opened! Attach your video and send it directly to the Admin.');
+        }
+
+        function openCalendarModal() { document.getElementById('calendarModal').classList.remove('hidden'); }
+        function closeCalendarModal() { document.getElementById('calendarModal').classList.add('hidden'); }
 
         function openImageViewer(src) {
             document.getElementById('fullScreenImage').src = src;
@@ -820,7 +861,6 @@
             }
             renderAdminCategoriesList();
             renderPendingAds();
-            renderPendingVideos();
             document.getElementById('adminUpiInput').value = globalUpiId;
             document.getElementById('adminApprovalModal').classList.remove('hidden');
         }
@@ -838,35 +878,6 @@
                     globalUpiId = newUpi;
                     document.getElementById('displayUpiId').innerText = newUpi;
                     alert('UPI ID updated live successfully!');
-                }
-            });
-        }
-
-        // Submit Video for Admin Review with WhatsApp Notification Alert
-        function submitVideoForApproval() {
-            let title = document.getElementById('shortTitle').value.trim() || 'Manjeri Short';
-            let videoUrl = selectedShortVideoUrl;
-            if(!videoUrl) { alert('Please select or record a video first!'); return; }
-
-            let statusEl = document.getElementById('shortVideoStatus');
-            let uploadBtn = document.getElementById('uploadVideoBtn');
-            statusEl.innerText = "⏳ Submitting video for admin review...";
-            uploadBtn.disabled = true;
-
-            db.ref('pending_videos').push({ title, videoUrl, uploader: currentUser || 'Local Vendor' }, (err) => {
-                uploadBtn.disabled = false;
-                if(!err) {
-                    selectedShortVideoUrl = "";
-                    statusEl.innerText = "";
-                    document.getElementById('shortTitle').value = "";
-                    closeAddShortModal();
-                    alert('Video submitted successfully! Waiting for Admin approval.');
-                    
-                    // Trigger WhatsApp notification link to Admin
-                    let waMsg = `🔔 *New Video Pending Approval!*\nTitle: ${title}\nCheck Manjeri Local Bazaar Admin Panel to Approve.`;
-                    window.open(`https://wa.me/${adminWhatsAppNumber}?text=${encodeURIComponent(waMsg)}`, '_blank');
-                } else {
-                    statusEl.innerText = "❌ Submission failed. Try smaller clip.";
                 }
             });
         }
@@ -936,7 +947,7 @@
             container.innerHTML = '';
             categories.forEach(c => {
                 let isActive = (c.id === activeCategory);
-                let btnClass = isActive ? "bg-emerald-700 text-white" : "bg-white border border-gray-200 text-gray-700";
+                let btnClass = isActive ? "bg-emerald-700 text-white" : "bg-white border border-gray-200 text-gray-800";
                 container.innerHTML += `
                     <button onclick="filterCategory('${c.id}')" id="cat-${c.id}" class="category-btn ${btnClass} text-xs px-3.5 py-2 rounded-xl font-semibold whitespace-nowrap shadow-xs">
                         ${c.icon} ${c.name}
@@ -980,7 +991,7 @@
             let temp = categories[index];
             categories[index] = categories[targetIndex];
             categories[targetIndex] = temp;
-            localStorage.setItem('manjeri_categories_v3', JSON.stringify(categories));
+            localStorage.setItem('manjeri_categories_v4', JSON.stringify(categories));
             renderCategoriesBar();
             renderAdminCategoriesList();
         }
@@ -991,7 +1002,7 @@
             if(!name) { alert('Enter category name'); return; }
             let id = name.toLowerCase().replace(/[^a-z0-9]/g, '_');
             categories.push({ id, name, icon });
-            localStorage.setItem('manjeri_categories_v3', JSON.stringify(categories));
+            localStorage.setItem('manjeri_categories_v4', JSON.stringify(categories));
             renderCategoriesBar();
             renderCategoryDropdowns();
             renderAdminCategoriesList();
@@ -1003,7 +1014,7 @@
         function adminDeleteCategory(id) {
             if(confirm('Delete this category?')) {
                 categories = categories.filter(c => c.id !== id);
-                localStorage.setItem('manjeri_categories_v3', JSON.stringify(categories));
+                localStorage.setItem('manjeri_categories_v4', JSON.stringify(categories));
                 renderCategoriesBar();
                 renderCategoryDropdowns();
                 renderAdminCategoriesList();
@@ -1014,7 +1025,7 @@
         function checkPendingCount() {
             let badge = document.getElementById('pendingCountBadge');
             let notifBtn = document.getElementById('adminNotifBtn');
-            let totalPending = cachedPending.length + cachedPendingVideos.length;
+            let totalPending = cachedPending.length;
             if(badge && notifBtn) {
                 badge.innerText = totalPending;
                 if(totalPending > 0 && isAdminLoggedIn) notifBtn.classList.remove('hidden');
@@ -1050,19 +1061,6 @@
                 checkPendingCount();
                 if(!document.getElementById('adminApprovalModal').classList.contains('hidden')) {
                     renderPendingAds();
-                }
-            });
-
-            db.ref('pending_videos').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    cachedPendingVideos = Object.keys(data).map(key => ({ id: key, ...data[key] }));
-                } else {
-                    cachedPendingVideos = [];
-                }
-                checkPendingCount();
-                if(!document.getElementById('adminApprovalModal').classList.contains('hidden')) {
-                    renderPendingVideos();
                 }
             });
         }
@@ -1130,11 +1128,12 @@
                 let shortsToDisplay = data ? [...Object.keys(data).map(k => ({ id: k, ...data[k] })).reverse(), ...defaultShorts] : defaultShorts;
                 container.innerHTML = '';
                 shortsToDisplay.forEach((s) => {
-                    let delShort = (isAdminLoggedIn) ? `<button onclick="deleteShort('${s.id}')" class="absolute top-1 right-1 bg-red-600 text-white text-[9px] px-1.5 py-0.5 rounded font-bold z-10">🗑️</button>` : '';
+                    let delShort = (isAdminLoggedIn && !s.id.startsWith('vs')) ? `<button onclick="deleteShort('${s.id}')" class="absolute top-1 right-1 bg-red-600 text-white text-[9px] px-1.5 py-0.5 rounded font-bold z-10">🗑️</button>` : '';
                     container.innerHTML += `
                         <div class="min-w-[150px] max-w-[150px] bg-emerald-900 rounded-xl p-2 relative flex-shrink-0">
                             ${delShort}
-                            <video src="${s.videoUrl}" class="w-full h-32 object-cover rounded-lg mb-1 bg-black cursor-pointer" controls onclick="openImageViewer(this.src)"></video>
+                            <!-- Fullscreen working controls and playsinline -->
+                            <video src="${s.videoUrl}" class="w-full h-32 object-cover rounded-lg mb-1 bg-black" controls playsinline controlslist="nodownload"></video>
                             <p class="font-bold text-[10px] truncate text-white">${s.title}</p>
                             <p class="text-[9px] text-emerald-300">By: ${s.uploader || 'Local'}</p>
                         </div>
@@ -1151,12 +1150,7 @@
 
         function deleteShort(id) {
             if(confirm('Delete this video?')) {
-                if(id.startsWith('vs')) {
-                    defaultShorts = defaultShorts.filter(s => s.id !== id);
-                    loadShorts();
-                } else {
-                    db.ref('shorts/' + id).remove();
-                }
+                db.ref('shorts/' + id).remove();
             }
         }
 
@@ -1223,44 +1217,6 @@
                     </div>
                 </div>
             `).join('');
-        }
-
-        function renderPendingVideos() {
-            let container = document.getElementById('pendingVideosContainer');
-            if(!container) return;
-            container.innerHTML = cachedPendingVideos.length === 0 ? `<p class="text-gray-400 text-[11px]">No pending videos waiting.</p>` : cachedPendingVideos.map(item => `
-                <div class="bg-white p-2.5 rounded border space-y-1.5 shadow-xs">
-                    <div class="flex items-center gap-2">
-                        <video src="${item.videoUrl}" class="w-12 h-12 rounded object-cover border bg-black" controls></video>
-                        <div>
-                            <h4 class="font-bold text-gray-900">${item.title}</h4>
-                            <span class="text-[9px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded uppercase font-bold">By: ${item.uploader}</span>
-                        </div>
-                    </div>
-                    <div class="flex gap-2 pt-1">
-                        <button onclick="approveVideo('${item.id}')" class="flex-1 bg-emerald-600 text-white py-1.5 rounded-lg font-bold">✅ Approve Video</button>
-                        <button onclick="rejectVideo('${item.id}')" class="flex-1 bg-red-100 text-red-700 py-1.5 rounded-lg font-bold">❌ Reject</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function approveVideo(id) {
-            let item = cachedPendingVideos.find(p => p.id === id);
-            if(!item) return;
-            let { id: _, ...data } = item;
-            db.ref('shorts').push(data, (err) => {
-                if(!err) {
-                    db.ref('pending_videos/' + id).remove();
-                    alert('Video Approved & Published Live!');
-                }
-            });
-        }
-
-        function rejectVideo(id) {
-            if(confirm('Reject this video?')) {
-                db.ref('pending_videos/' + id).remove();
-            }
         }
 
         function approveAd(id) {
