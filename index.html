@@ -103,10 +103,10 @@
     <!-- Main Container -->
     <main class="max-w-md mx-auto p-3.5 space-y-3.5" id="mainContentView">
 
-        <!-- 2. Full-Image Featured Ad Posters Section -->
+        <!-- 2. Auto-Sliding Full-Image Featured Ad Banners Section -->
         <section>
             <div class="flex justify-between items-center mb-1.5">
-                <h3 class="font-bold text-xs text-gray-600 uppercase" id="secFeatured">🌟 Full-Image Featured Banners</h3>
+                <h3 class="font-bold text-xs text-gray-600 uppercase" id="secFeatured">🌟 Auto-Sliding Featured Banners</h3>
             </div>
             <div id="featuredShopsContainer" class="flex gap-3 overflow-x-auto hide-scrollbar pb-1 scroll-smooth"></div>
         </section>
@@ -241,11 +241,11 @@
         </div>
     </div>
 
-    <!-- Upload Permanent Video Short Modal -->
+    <!-- Upload Permanent Video Short Modal with Progress Status -->
     <div id="addShortModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 text-xs">
             <div class="flex justify-between items-center border-b pb-2">
-                <h3 class="font-bold text-emerald-800">🎬 Upload Permanent Video Reel / ഷോർട്ട്സ്</h3>
+                <h3 class="font-bold text-emerald-800">🎬 Upload Permanent Video Reel (Max 30s)</h3>
                 <button onclick="closeAddShortModal()" class="text-gray-400 font-bold">✕</button>
             </div>
             <input type="text" id="shortTitle" placeholder="Video Title (e.g. Manjeri Market)" class="w-full p-2 border rounded-xl">
@@ -260,8 +260,8 @@
                     <input type="file" id="shortVideoGallery" accept="video/*" class="hidden" onchange="previewShortVideo(this)">
                 </label>
             </div>
-            <p id="shortVideoStatus" class="text-[10px] text-emerald-700 font-semibold"></p>
-            <button onclick="publishPermanentShortVideo()" class="w-full bg-emerald-600 text-white py-2 rounded-xl font-bold">Upload Permanent Video Live</button>
+            <p id="shortVideoStatus" class="text-[10px] text-emerald-700 font-semibold text-center"></p>
+            <button id="uploadVideoBtn" onclick="publishPermanentShortVideo()" class="w-full bg-emerald-600 text-white py-2 rounded-xl font-bold">Upload Permanent Video Live</button>
         </div>
     </div>
 
@@ -441,6 +441,7 @@
         let wishlist = [];
         let cart = [];
         let globalUpiId = "manjeribazaar@upi";
+        let autoSlideTimer = null;
 
         // All 30 Original Categories
         let defaultCategories = [
@@ -479,7 +480,6 @@
         let savedCats = JSON.parse(localStorage.getItem('manjeri_categories_v3'));
         let categories = (savedCats && savedCats.length >= 25) ? savedCats : defaultCategories;
 
-        // Malayalam Script Mapping Dictionary for Bilingual Search
         const malayalamKeywordMap = {
             'റൂം': 'rooms',
             'വീട്': 'rooms',
@@ -498,7 +498,6 @@
             'കട': 'groceries'
         };
 
-        // 4 Default Full-Image Featured Banners
         let defaultPosters = [
             { title: "Rajadhani Manjeri", desc: "Grand shopping, hypermarket & lifestyle hub!", phone: "919876543210", img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600", badge: "FEATURED 1" },
             { title: "Malabar Wedding Silks", desc: "Flat 20% off on bridal & wedding collections!", phone: "919876543210", img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600", badge: "SLIDE 2" },
@@ -506,13 +505,11 @@
             { title: "Manjeri Royal Caterings", desc: "Hot & Fresh Malabar Biriyani direct via WhatsApp", phone: "919876543210", img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600", badge: "SLIDE 4" }
         ];
 
-        // Default Permanent Shorts/Videos
         let defaultShorts = [
             { title: "Manjeri Fest Highlights", videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4", uploader: "Nadan Reels" },
             { title: "Manjeri Bazaar Tour", videoUrl: "https://www.w3schools.com/html/movie.mp4", uploader: "Local Shorts" }
         ];
 
-        // Rich Demo Listings for All Key Categories
         let defaultListings = [
             { id: 'd1', category: 'tuition', title: 'Darul Huda Madrasa & Ustad Tuition Hub', desc: 'Experienced Ustad teaching Qur\'an Tajweed, Madrasa subjects, and evening school tuition for kids.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1577896851231-70ef18881754?w=600', 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600'], price: '₹400 / mo' },
             { id: 'd2', category: 'matrimonial', title: 'Malabar Nikah & Matrimonial Bureau Manjeri', desc: 'Trusted wedding proposals for brides & grooms across Malappuram, Manjeri & Nilambur.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600', 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600'], price: 'Verified Profiles' },
@@ -616,10 +613,21 @@
         function previewShortVideo(input) {
             if(input.files && input.files[0]) {
                 let file = input.files[0];
+                if(file.size > 15 * 1024 * 1024) {
+                    alert('⚠️ Video size is too large! Please select a short clip under 15MB (max 30s).');
+                    input.value = '';
+                    return;
+                }
                 let reader = new FileReader();
+                reader.onprogress = function(e) {
+                    if (e.lengthComputable) {
+                        let percentLoaded = Math.round((e.loaded / e.total) * 100);
+                        document.getElementById('shortVideoStatus').innerText = `🔄 Loading video: ${percentLoaded}%`;
+                    }
+                };
                 reader.onload = function(e) {
-                    selectedShortVideoUrl = e.target.result; // Base64 for permanent Firebase storage
-                    document.getElementById('shortVideoStatus').innerText = "✅ Video ready: " + file.name;
+                    selectedShortVideoUrl = e.target.result;
+                    document.getElementById('shortVideoStatus').innerText = "✅ Video ready for permanent upload!";
                 };
                 reader.readAsDataURL(file);
             }
@@ -706,7 +714,6 @@
             }
         }
 
-        // Bilingual Language Toggle (English & Malayalam)
         function toggleLanguage() {
             currentLang = currentLang === 'en' ? 'ml' : 'en';
             let t = document.getElementById('headerTitle'), s = document.getElementById('headerSub'), f = document.getElementById('secFeatured');
@@ -721,7 +728,7 @@
                 langBtn.innerText = "English";
                 t.innerHTML = `നാട്ടുചന്ത <span class="text-emerald-200 font-normal text-[10px]">/ LocalBaazaar</span>`;
                 s.innerText = "മഞ്ചേരി, നിലമ്പൂർ, പാണ്ടിക്കാട്";
-                f.innerText = "🌟 ഫുൾ-ഇമേജ് ഫീച്ചേർഡ് പോസ്റ്ററുകൾ";
+                f.innerText = "🌟 ഓട്ടോ-സ്ലൈഡിംഗ് ഫീച്ചേർഡ് ബാനറുകൾ";
                 secReels.innerText = "🎬 നാട്ടു വീഡിയോസ് & ഷോർട്ട്സ്";
                 infoTitle.innerText = "ℹ️ വിവരങ്ങളും നിബന്ധനകളും";
                 infoDesc.innerHTML = `
@@ -733,7 +740,7 @@
                 langBtn.innerText = "മലയാളം";
                 t.innerHTML = `LocalBaazaar <span class="text-emerald-200 font-normal text-[10px]">/ നാട്ടുചന്ത</span>`;
                 s.innerText = "Manjeri, Nilambur, Pandikkad";
-                f.innerText = "🌟 Full-Image Featured Banners";
+                f.innerText = "🌟 Auto-Sliding Featured Banners";
                 secReels.innerText = "🎬 Local Reels & Videos / വീഡിയോസ്";
                 infoTitle.innerText = "ℹ️ Info & Disclaimer";
                 infoDesc.innerHTML = `
@@ -826,19 +833,27 @@
             });
         }
 
-        // Permanent Firebase Video Upload
+        // Permanent Firebase Video Upload with Loading Status
         function publishPermanentShortVideo() {
             let title = document.getElementById('shortTitle').value.trim() || 'Manjeri Short';
             let videoUrl = selectedShortVideoUrl;
             if(!videoUrl) { alert('Please select or record a video first!'); return; }
 
+            let statusEl = document.getElementById('shortVideoStatus');
+            let uploadBtn = document.getElementById('uploadVideoBtn');
+            statusEl.innerText = "⏳ Uploading video to Firebase... Please wait (Max 30s)";
+            uploadBtn.disabled = true;
+
             db.ref('shorts').push({ title, videoUrl, uploader: currentUser || 'Local Vendor' }, (err) => {
+                uploadBtn.disabled = false;
                 if(!err) {
                     selectedShortVideoUrl = "";
-                    document.getElementById('shortVideoStatus').innerText = "";
+                    statusEl.innerText = "";
                     document.getElementById('shortTitle').value = "";
                     closeAddShortModal();
                     alert('Video uploaded permanently live!');
+                } else {
+                    statusEl.innerText = "❌ Upload failed. Try smaller clip.";
                 }
             });
         }
@@ -1036,7 +1051,7 @@
             });
         }
 
-        // Full-Image Featured Posters Loader
+        // Full-Image Featured Posters with Auto-Slide Feature
         function loadPosters() {
             let container = document.getElementById('featuredShopsContainer');
             if(!container) return;
@@ -1064,10 +1079,24 @@
                         </div>
                     `;
                 });
+                startAutoSlide(container);
             });
         }
 
-        // Permanent Firebase Shorts/Videos Loader
+        // Auto-Slider Logic for Featured Banners
+        function startAutoSlide(container) {
+            if(autoSlideTimer) clearInterval(autoSlideTimer);
+            autoSlideTimer = setInterval(() => {
+                if(!container || container.hidden) return;
+                let maxScrollLeft = container.scrollWidth - container.clientWidth;
+                if(container.scrollLeft >= maxScrollLeft - 10) {
+                    container.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    container.scrollBy({ left: 280, behavior: 'smooth' });
+                }
+            }, 3500);
+        }
+
         function loadShorts() {
             let container = document.getElementById('shortsContainer');
             if(!container) return;
@@ -1080,7 +1109,7 @@
                     container.innerHTML += `
                         <div class="min-w-[150px] max-w-[150px] bg-emerald-900 rounded-xl p-2 relative flex-shrink-0">
                             ${delShort}
-                            <video src="${s.videoUrl}" class="w-full h-32 object-cover rounded-lg mb-1 bg-black" controls></video>
+                            <video src="${s.videoUrl}" class="w-full h-32 object-cover rounded-lg mb-1 bg-black cursor-pointer" controls onclick="openImageViewer(this.src)"></video>
                             <p class="font-bold text-[10px] truncate text-white">${s.title}</p>
                             <p class="text-[9px] text-emerald-300">By: ${s.uploader || 'Local'}</p>
                         </div>
@@ -1247,7 +1276,6 @@
             `).join('');
         }
 
-        // Bilingual Malayalam Search & Standard Listing Renderer
         function renderListings(cat = 'all', q = '') {
             activeCategory = cat;
             let container = document.getElementById('listingsContainer');
@@ -1323,6 +1351,14 @@
         function searchListings() {
             renderListings(activeCategory, document.getElementById('searchInput').value);
         }
+
+        // Auto-refresh state listener when user returns from background
+        window.addEventListener('focus', function() {
+            if(db) {
+                renderCategoriesBar();
+                renderListings(activeCategory, document.getElementById('searchInput').value);
+            }
+        });
 
         window.onload = function() {
             initFirebaseSync();
