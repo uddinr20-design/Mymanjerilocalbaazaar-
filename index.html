@@ -21,13 +21,13 @@
 <body class="text-gray-800 pb-36">
 
     <!-- 1. Top Header -->
-    <header class="bg-emerald-700 text-white p-2.5 shadow-md sticky top-0 z-40">
-        <div class="max-w-md mx-auto flex flex-col gap-2">
+    <header class="bg-emerald-700 text-white p-3 shadow-md sticky top-0 z-40">
+        <div class="max-w-md mx-auto flex flex-col gap-2.5">
             
             <!-- Top Row: Logo (Secret 3-Tap Admin Trigger) & Primary Buttons -->
             <div class="flex justify-between items-center">
                 <div class="flex items-center gap-2 cursor-pointer select-none" onclick="handleSecretAdminTrigger()" title="Bazaar Hub">
-                    <div class="bg-emerald-800 p-1.5 rounded-lg text-white text-base">
+                    <div class="bg-emerald-800 p-2 rounded-xl text-white text-base shadow-xs">
                         🏪
                     </div>
                     <div>
@@ -40,15 +40,16 @@
                     </div>
                 </div>
 
-                <!-- Right Side Buttons -->
-                <div class="flex items-center gap-1.5">
-                    <button onclick="openAiAssistant()" class="bg-emerald-800 hover:bg-emerald-900 text-white px-2.5 py-1 rounded-full text-[10px] font-bold shadow-xs flex items-center gap-0.5 animate-pulse">
+                <!-- Right Side Buttons with Larger Three Dots Menu Button -->
+                <div class="flex items-center gap-2">
+                    <button onclick="openAiAssistant()" class="bg-emerald-800 hover:bg-emerald-900 text-white px-2.5 py-1.5 rounded-full text-[10px] font-bold shadow-xs flex items-center gap-0.5 animate-pulse">
                         <span>🤖</span> AI
                     </button>
-                    <button onclick="openQrModal()" class="bg-emerald-800 hover:bg-emerald-900 text-white px-2 py-1 rounded-full text-[10px] font-bold shadow-xs flex items-center gap-0.5">
+                    <button onclick="openQrModal()" class="bg-emerald-800 hover:bg-emerald-900 text-white px-2.5 py-1.5 rounded-full text-[10px] font-bold shadow-xs flex items-center gap-0.5">
                         <span>📱</span> QR
                     </button>
-                    <button onclick="openDrawerMenu()" class="bg-emerald-900 hover:bg-emerald-950 text-white px-3 py-1.5 rounded-xl text-sm font-extrabold shadow flex items-center justify-center">
+                    <!-- Enlarged & Enhanced Three Dots Menu Button -->
+                    <button onclick="openDrawerMenu()" class="bg-emerald-900 hover:bg-emerald-950 text-white px-3.5 py-1.5 rounded-xl text-base font-extrabold shadow-md flex items-center justify-center border border-emerald-600/50">
                         <span>⋮</span>
                     </button>
                 </div>
@@ -241,15 +242,15 @@
         </div>
     </div>
 
-    <!-- Upload Permanent Video Short Modal with Progress Status -->
+    <!-- Upload Permanent Video Short Modal with Admin Approval & WhatsApp Alert -->
     <div id="addShortModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 text-xs">
             <div class="flex justify-between items-center border-b pb-2">
-                <h3 class="font-bold text-emerald-800">🎬 Upload Permanent Video Reel (Max 30s)</h3>
+                <h3 class="font-bold text-emerald-800">🎬 Upload Video Reel (Admin Review)</h3>
                 <button onclick="closeAddShortModal()" class="text-gray-400 font-bold">✕</button>
             </div>
             <input type="text" id="shortTitle" placeholder="Video Title (e.g. Manjeri Market)" class="w-full p-2 border rounded-xl">
-            <label class="block font-semibold text-gray-600">Select Video Option:</label>
+            <label class="block font-semibold text-gray-600">Select Video Option (Max 30s):</label>
             <div class="grid grid-cols-2 gap-2">
                 <label class="bg-emerald-50 border border-emerald-300 text-emerald-800 p-2.5 rounded-xl text-center font-bold cursor-pointer flex flex-col items-center gap-1">
                     <span class="text-lg">🎥</span> Record Camera
@@ -261,7 +262,7 @@
                 </label>
             </div>
             <p id="shortVideoStatus" class="text-[10px] text-emerald-700 font-semibold text-center"></p>
-            <button id="uploadVideoBtn" onclick="publishPermanentShortVideo()" class="w-full bg-emerald-600 text-white py-2 rounded-xl font-bold">Upload Permanent Video Live</button>
+            <button id="uploadVideoBtn" onclick="submitVideoForApproval()" class="w-full bg-emerald-600 text-white py-2 rounded-xl font-bold">Submit Video for Admin Review</button>
         </div>
     </div>
 
@@ -316,7 +317,7 @@
         </div>
     </div>
 
-    <!-- Admin Control Center Modal with Sorting & Category Ordering -->
+    <!-- Admin Control Center Modal with Video & Ad Approvals -->
     <div id="adminApprovalModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-2xl space-y-3 max-h-[85vh] overflow-y-auto text-xs pb-12">
             <div class="flex justify-between items-center border-b pb-2">
@@ -369,6 +370,11 @@
                 <button onclick="submitAdminPoster()" class="w-full bg-emerald-700 text-white py-2 rounded-lg font-bold shadow">Publish Full-Image Banner Live</button>
             </div>
 
+            <!-- Pending Videos Approval Section -->
+            <h4 class="font-bold text-gray-700 pt-2">🎬 Pending Video Reels for Approval:</h4>
+            <div id="pendingVideosContainer" class="space-y-2 pb-2"></div>
+
+            <!-- Pending Ads Approval Section -->
             <h4 class="font-bold text-gray-700 pt-2">🔔 Pending User Ads for Approval:</h4>
             <div id="pendingAdsContainer" class="space-y-2 pb-4"></div>
         </div>
@@ -442,6 +448,7 @@
         let cart = [];
         let globalUpiId = "manjeribazaar@upi";
         let autoSlideTimer = null;
+        let adminWhatsAppNumber = "919876543210"; // Admin phone for WhatsApp alerts
 
         // All 30 Original Categories
         let defaultCategories = [
@@ -506,8 +513,8 @@
         ];
 
         let defaultShorts = [
-            { title: "Manjeri Fest Highlights", videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4", uploader: "Nadan Reels" },
-            { title: "Manjeri Bazaar Tour", videoUrl: "https://www.w3schools.com/html/movie.mp4", uploader: "Local Shorts" }
+            { id: 'vs1', title: "Manjeri Fest Highlights", videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4", uploader: "Nadan Reels" },
+            { id: 'vs2', title: "Manjeri Bazaar Tour", videoUrl: "https://www.w3schools.com/html/movie.mp4", uploader: "Local Shorts" }
         ];
 
         let defaultListings = [
@@ -541,6 +548,7 @@
 
         let cachedListings = defaultListings;
         let cachedPending = [];
+        let cachedPendingVideos = [];
         let cachedShorts = defaultShorts;
         let activeCategory = 'all';
 
@@ -627,7 +635,7 @@
                 };
                 reader.onload = function(e) {
                     selectedShortVideoUrl = e.target.result;
-                    document.getElementById('shortVideoStatus').innerText = "✅ Video ready for permanent upload!";
+                    document.getElementById('shortVideoStatus').innerText = "✅ Video ready for admin review!";
                 };
                 reader.readAsDataURL(file);
             }
@@ -812,6 +820,7 @@
             }
             renderAdminCategoriesList();
             renderPendingAds();
+            renderPendingVideos();
             document.getElementById('adminUpiInput').value = globalUpiId;
             document.getElementById('adminApprovalModal').classList.remove('hidden');
         }
@@ -833,27 +842,31 @@
             });
         }
 
-        // Permanent Firebase Video Upload with Loading Status
-        function publishPermanentShortVideo() {
+        // Submit Video for Admin Review with WhatsApp Notification Alert
+        function submitVideoForApproval() {
             let title = document.getElementById('shortTitle').value.trim() || 'Manjeri Short';
             let videoUrl = selectedShortVideoUrl;
             if(!videoUrl) { alert('Please select or record a video first!'); return; }
 
             let statusEl = document.getElementById('shortVideoStatus');
             let uploadBtn = document.getElementById('uploadVideoBtn');
-            statusEl.innerText = "⏳ Uploading video to Firebase... Please wait (Max 30s)";
+            statusEl.innerText = "⏳ Submitting video for admin review...";
             uploadBtn.disabled = true;
 
-            db.ref('shorts').push({ title, videoUrl, uploader: currentUser || 'Local Vendor' }, (err) => {
+            db.ref('pending_videos').push({ title, videoUrl, uploader: currentUser || 'Local Vendor' }, (err) => {
                 uploadBtn.disabled = false;
                 if(!err) {
                     selectedShortVideoUrl = "";
                     statusEl.innerText = "";
                     document.getElementById('shortTitle').value = "";
                     closeAddShortModal();
-                    alert('Video uploaded permanently live!');
+                    alert('Video submitted successfully! Waiting for Admin approval.');
+                    
+                    // Trigger WhatsApp notification link to Admin
+                    let waMsg = `🔔 *New Video Pending Approval!*\nTitle: ${title}\nCheck Manjeri Local Bazaar Admin Panel to Approve.`;
+                    window.open(`https://wa.me/${adminWhatsAppNumber}?text=${encodeURIComponent(waMsg)}`, '_blank');
                 } else {
-                    statusEl.innerText = "❌ Upload failed. Try smaller clip.";
+                    statusEl.innerText = "❌ Submission failed. Try smaller clip.";
                 }
             });
         }
@@ -1001,9 +1014,10 @@
         function checkPendingCount() {
             let badge = document.getElementById('pendingCountBadge');
             let notifBtn = document.getElementById('adminNotifBtn');
+            let totalPending = cachedPending.length + cachedPendingVideos.length;
             if(badge && notifBtn) {
-                badge.innerText = cachedPending.length;
-                if(cachedPending.length > 0 && isAdminLoggedIn) notifBtn.classList.remove('hidden');
+                badge.innerText = totalPending;
+                if(totalPending > 0 && isAdminLoggedIn) notifBtn.classList.remove('hidden');
                 else notifBtn.classList.add('hidden');
             }
         }
@@ -1038,6 +1052,19 @@
                     renderPendingAds();
                 }
             });
+
+            db.ref('pending_videos').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    cachedPendingVideos = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                } else {
+                    cachedPendingVideos = [];
+                }
+                checkPendingCount();
+                if(!document.getElementById('adminApprovalModal').classList.contains('hidden')) {
+                    renderPendingVideos();
+                }
+            });
         }
 
         function loadSettings() {
@@ -1051,7 +1078,6 @@
             });
         }
 
-        // Full-Image Featured Posters with Auto-Slide Feature
         function loadPosters() {
             let container = document.getElementById('featuredShopsContainer');
             if(!container) return;
@@ -1083,7 +1109,6 @@
             });
         }
 
-        // Auto-Slider Logic for Featured Banners
         function startAutoSlide(container) {
             if(autoSlideTimer) clearInterval(autoSlideTimer);
             autoSlideTimer = setInterval(() => {
@@ -1105,7 +1130,7 @@
                 let shortsToDisplay = data ? [...Object.keys(data).map(k => ({ id: k, ...data[k] })).reverse(), ...defaultShorts] : defaultShorts;
                 container.innerHTML = '';
                 shortsToDisplay.forEach((s) => {
-                    let delShort = (isAdminLoggedIn && s.id) ? `<button onclick="deleteShort('${s.id}')" class="absolute top-1 right-1 bg-red-600 text-white text-[9px] px-1.5 py-0.5 rounded font-bold z-10">🗑️</button>` : '';
+                    let delShort = (isAdminLoggedIn) ? `<button onclick="deleteShort('${s.id}')" class="absolute top-1 right-1 bg-red-600 text-white text-[9px] px-1.5 py-0.5 rounded font-bold z-10">🗑️</button>` : '';
                     container.innerHTML += `
                         <div class="min-w-[150px] max-w-[150px] bg-emerald-900 rounded-xl p-2 relative flex-shrink-0">
                             ${delShort}
@@ -1125,8 +1150,13 @@
         }
 
         function deleteShort(id) {
-            if(confirm('Delete this permanent video?')) {
-                db.ref('shorts/' + id).remove();
+            if(confirm('Delete this video?')) {
+                if(id.startsWith('vs')) {
+                    defaultShorts = defaultShorts.filter(s => s.id !== id);
+                    loadShorts();
+                } else {
+                    db.ref('shorts/' + id).remove();
+                }
             }
         }
 
@@ -1177,7 +1207,7 @@
         function renderPendingAds() {
             let container = document.getElementById('pendingAdsContainer');
             if(!container) return;
-            container.innerHTML = cachedPending.length === 0 ? `<p class="text-gray-400">No pending ads waiting.</p>` : cachedPending.map(item => `
+            container.innerHTML = cachedPending.length === 0 ? `<p class="text-gray-400 text-[11px]">No pending ads waiting.</p>` : cachedPending.map(item => `
                 <div class="bg-white p-2.5 rounded border space-y-1.5 shadow-xs">
                     <div class="flex items-center gap-2">
                         <img src="${item.images ? item.images[0] : ''}" class="w-10 h-10 rounded object-cover border">
@@ -1195,6 +1225,44 @@
             `).join('');
         }
 
+        function renderPendingVideos() {
+            let container = document.getElementById('pendingVideosContainer');
+            if(!container) return;
+            container.innerHTML = cachedPendingVideos.length === 0 ? `<p class="text-gray-400 text-[11px]">No pending videos waiting.</p>` : cachedPendingVideos.map(item => `
+                <div class="bg-white p-2.5 rounded border space-y-1.5 shadow-xs">
+                    <div class="flex items-center gap-2">
+                        <video src="${item.videoUrl}" class="w-12 h-12 rounded object-cover border bg-black" controls></video>
+                        <div>
+                            <h4 class="font-bold text-gray-900">${item.title}</h4>
+                            <span class="text-[9px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded uppercase font-bold">By: ${item.uploader}</span>
+                        </div>
+                    </div>
+                    <div class="flex gap-2 pt-1">
+                        <button onclick="approveVideo('${item.id}')" class="flex-1 bg-emerald-600 text-white py-1.5 rounded-lg font-bold">✅ Approve Video</button>
+                        <button onclick="rejectVideo('${item.id}')" class="flex-1 bg-red-100 text-red-700 py-1.5 rounded-lg font-bold">❌ Reject</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function approveVideo(id) {
+            let item = cachedPendingVideos.find(p => p.id === id);
+            if(!item) return;
+            let { id: _, ...data } = item;
+            db.ref('shorts').push(data, (err) => {
+                if(!err) {
+                    db.ref('pending_videos/' + id).remove();
+                    alert('Video Approved & Published Live!');
+                }
+            });
+        }
+
+        function rejectVideo(id) {
+            if(confirm('Reject this video?')) {
+                db.ref('pending_videos/' + id).remove();
+            }
+        }
+
         function approveAd(id) {
             let item = cachedPending.find(p => p.id === id);
             if(!item) return;
@@ -1202,7 +1270,7 @@
             db.ref('listings').push(data, (err) => {
                 if(!err) {
                     db.ref('pending_ads/' + id).remove();
-                    alert('Approved & Published Live!');
+                    alert('Ad Approved & Published Live!');
                 }
             });
         }
@@ -1352,7 +1420,6 @@
             renderListings(activeCategory, document.getElementById('searchInput').value);
         }
 
-        // Auto-refresh state listener when user returns from background
         window.addEventListener('focus', function() {
             if(db) {
                 renderCategoriesBar();
