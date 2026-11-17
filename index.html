@@ -103,32 +103,21 @@
     <!-- Main Container -->
     <main class="max-w-md mx-auto p-3.5 space-y-3.5" id="mainContentView">
 
-        <!-- 2. Floating Featured Ad Posters -->
+        <!-- 2. Full-Image Featured Ad Posters Section -->
         <section>
             <div class="flex justify-between items-center mb-1.5">
-                <h3 class="font-bold text-xs text-gray-600 uppercase" id="secFeatured">🌟 Floating Featured Ad Posters</h3>
+                <h3 class="font-bold text-xs text-gray-600 uppercase" id="secFeatured">🌟 Full-Image Featured Banners</h3>
             </div>
             <div id="featuredShopsContainer" class="flex gap-3 overflow-x-auto hide-scrollbar pb-1 scroll-smooth"></div>
         </section>
 
-        <!-- 3. Local Videos & Reels Section -->
+        <!-- 3. Permanent Firebase Local Videos & Reels Section -->
         <div class="bg-emerald-950 text-white rounded-2xl p-3 shadow-md">
             <div class="flex justify-between items-center mb-2">
-                <h2 class="text-xs font-bold text-emerald-200 uppercase tracking-wide">🎬 Local Reels & Videos / വീഡിയോസ്</h2>
+                <h2 class="text-xs font-bold text-emerald-200 uppercase tracking-wide" id="secReelsTitle">🎬 Local Reels & Videos / വീഡിയോസ്</h2>
                 <button onclick="openAddShortModal()" class="bg-emerald-700 hover:bg-emerald-800 px-2.5 py-1 rounded text-[10px] font-bold shadow">+ Upload Video</button>
             </div>
-            <div id="shortsContainer" class="flex gap-3 overflow-x-auto hide-scrollbar pb-1">
-                <div class="min-w-[140px] bg-emerald-900 rounded-xl p-2 relative flex-shrink-0">
-                    <video src="https://www.w3schools.com/html/mov_bbb.mp4" class="w-full h-32 object-cover rounded-lg mb-1" controls></video>
-                    <p class="font-bold text-[10px] truncate">Manjeri Fest Highlights</p>
-                    <p class="text-[9px] text-emerald-300">Nadan Reels</p>
-                </div>
-                <div class="min-w-[140px] bg-emerald-900 rounded-xl p-2 relative flex-shrink-0">
-                    <video src="https://www.w3schools.com/html/movie.mp4" class="w-full h-32 object-cover rounded-lg mb-1" controls></video>
-                    <p class="font-bold text-[10px] truncate">Manjeri Bazaar Tour</p>
-                    <p class="text-[9px] text-emerald-300">Local Shorts</p>
-                </div>
-            </div>
+            <div id="shortsContainer" class="flex gap-3 overflow-x-auto hide-scrollbar pb-1"></div>
         </div>
 
         <!-- 4. Calendar Widget -->
@@ -177,20 +166,20 @@
         <div class="space-y-3" id="cartContainer"></div>
     </div>
 
-    <!-- Info View with Voluntary Support (खुशी से सहयोग) Box -->
+    <!-- Info View with Bilingual & Admin-Controlled Voluntary Support Box -->
     <div id="infoDisclaimerView" class="max-w-md mx-auto p-4 space-y-4 hidden bg-white rounded-2xl shadow-sm m-3">
-        <h3 class="font-bold text-sm text-emerald-800">ℹ️ Info & Disclaimer</h3>
-        <div class="text-xs text-gray-600 space-y-2 leading-relaxed">
+        <h3 class="font-bold text-sm text-emerald-800" id="infoTitle">ℹ️ Info & Disclaimer</h3>
+        <div class="text-xs text-gray-600 space-y-2 leading-relaxed" id="infoDescText">
             <p><strong>Manjeri Local Bazaar (നാട്ടുചന്ത)</strong> is a 0% commission direct peer-to-peer trading and information platform connecting buyers and sellers across Manjeri, Nilambur, and Pandikkad.</p>
             <p><strong>Disclaimer:</strong> All ads, prices, timings, and services are posted directly by local vendors or administrators. Please verify product quality and vendor authenticity before making any financial transactions.</p>
         </div>
 
-        <!-- Voluntary Support Box (खुशी से सहयोग) -->
+        <!-- Voluntary Support Box (खुशी से सहयोग / സന്തോഷത്തോടെയുള്ള സഹായം) -->
         <div class="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 p-3.5 rounded-2xl space-y-2 text-xs">
-            <h4 class="font-bold text-emerald-900 flex items-center gap-1.5"><span>❤️</span> Support Manjeri Local Bazaar (खुशी से सहयोग)</h4>
-            <p class="text-gray-600 text-[11px]">यह मंजीरी का अपना 0% कमीशन प्लेटफॉर्म है। अगर आपको इस बाज़ार से फायदा हुआ है और आप हमारे इस छोटे से परिवार और सर्वर खर्च में मदद करना चाहते हैं, तो आप अपनी मर्जी से जितना चाहें योगदान दे सकते हैं।</p>
+            <h4 class="font-bold text-emerald-900 flex items-center gap-1.5" id="supportBoxTitle"><span>❤️</span> Support Manjeri Local Bazaar (खुशी से सहयोग)</h4>
+            <p class="text-gray-600 text-[11px]" id="supportBoxDesc">यह मंजीरी का अपना 0% कमीशन प्लेटफॉर्म है। अगर आपको इस बाज़ार से फायदा हुआ है और आप हमारे इस छोटे से परिवार और सर्वर खर्च में मदद करना चाहते हैं, तो आप अपनी मर्जी से जितना चाहें योगदान दे सकते हैं।</p>
             <div class="bg-white p-2 rounded-xl border border-emerald-200 text-center font-bold text-emerald-800">
-                UPI ID: <span class="text-gray-700">manjeribazaar@upi</span> (Optional)
+                UPI ID: <span id="displayUpiId" class="text-gray-700">manjeribazaar@upi</span>
             </div>
         </div>
     </div>
@@ -252,11 +241,11 @@
         </div>
     </div>
 
-    <!-- Upload Video Short Modal -->
+    <!-- Upload Permanent Video Short Modal -->
     <div id="addShortModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 text-xs">
             <div class="flex justify-between items-center border-b pb-2">
-                <h3 class="font-bold text-emerald-800">🎬 Upload Video Reel / ഷോർട്ട്സ്</h3>
+                <h3 class="font-bold text-emerald-800">🎬 Upload Permanent Video Reel / ഷോർട്ട്സ്</h3>
                 <button onclick="closeAddShortModal()" class="text-gray-400 font-bold">✕</button>
             </div>
             <input type="text" id="shortTitle" placeholder="Video Title (e.g. Manjeri Market)" class="w-full p-2 border rounded-xl">
@@ -272,7 +261,7 @@
                 </label>
             </div>
             <p id="shortVideoStatus" class="text-[10px] text-emerald-700 font-semibold"></p>
-            <button onclick="publishShortVideo()" class="w-full bg-emerald-600 text-white py-2 rounded-xl font-bold">Upload Video Live</button>
+            <button onclick="publishPermanentShortVideo()" class="w-full bg-emerald-600 text-white py-2 rounded-xl font-bold">Upload Permanent Video Live</button>
         </div>
     </div>
 
@@ -335,6 +324,13 @@
                 <button onclick="closeAdminApprovalModal()" class="text-gray-400 font-bold">✕</button>
             </div>
 
+            <!-- Admin Settings: Donation UPI ID & Text Update -->
+            <div class="bg-teal-50 p-3 rounded-xl border border-teal-200 space-y-2">
+                <h4 class="font-bold text-teal-900">💳 Manage Donation UPI ID</h4>
+                <input type="text" id="adminUpiInput" placeholder="e.g. manjeribazaar@upi" class="w-full p-1.5 border rounded-lg bg-white">
+                <button onclick="saveAdminUpi()" class="w-full bg-teal-700 text-white py-1.5 rounded-lg font-bold">Update UPI ID Live</button>
+            </div>
+
             <!-- Add New Category -->
             <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 space-y-2">
                 <h4 class="font-bold text-amber-900">➕ Add New Category</h4>
@@ -346,15 +342,15 @@
             <h4 class="font-bold text-gray-700">Manage Categories (Order Up/Down):</h4>
             <div id="adminCategoriesList" class="space-y-1 max-h-36 overflow-y-auto p-1 bg-gray-50 rounded border"></div>
 
-            <!-- Add Scrolling Featured Poster -->
+            <!-- Add Full-Image Scrolling Featured Poster -->
             <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 space-y-2 mt-2">
-                <h4 class="font-bold text-emerald-900">🌟 Add Scrolling Featured Ad Poster</h4>
+                <h4 class="font-bold text-emerald-900">🌟 Add Full-Image Featured Banner</h4>
                 <input type="text" id="adminPosterTitle" placeholder="Poster Title (e.g. Rajadhani Manjeri)" class="w-full p-1.5 border rounded-lg bg-white">
                 <input type="text" id="adminPosterDesc" placeholder="Description / Offer" class="w-full p-1.5 border rounded-lg bg-white">
                 <input type="text" id="adminPosterPhone" placeholder="WhatsApp Phone (919876543210)" class="w-full p-1.5 border rounded-lg bg-white" value="919876543210">
                 <input type="text" id="adminPosterBadge" placeholder="Badge Text (e.g. FEATURED)" class="w-full p-1.5 border rounded-lg bg-white" value="FEATURED">
                 
-                <label class="block text-[10px] font-bold text-gray-700">Select Poster Photo:</label>
+                <label class="block text-[10px] font-bold text-gray-700">Select Full Poster Photo:</label>
                 <div class="grid grid-cols-2 gap-2">
                     <label class="bg-white border border-emerald-400 text-emerald-800 p-2 rounded-lg text-center font-bold cursor-pointer flex items-center justify-center gap-1">
                         <span>📷</span> Camera
@@ -367,10 +363,10 @@
                 </div>
                 <div id="adminPosterPreviewBox" class="hidden flex items-center gap-2 pt-1">
                     <img id="adminPosterPreviewImg" src="" class="w-12 h-12 rounded-lg object-cover border">
-                    <span class="text-[10px] text-emerald-700 font-bold">Photo Ready!</span>
+                    <span class="text-[10px] text-emerald-700 font-bold">Banner Photo Ready!</span>
                 </div>
 
-                <button onclick="submitAdminPoster()" class="w-full bg-emerald-700 text-white py-2 rounded-lg font-bold shadow">Publish Poster Live</button>
+                <button onclick="submitAdminPoster()" class="w-full bg-emerald-700 text-white py-2 rounded-lg font-bold shadow">Publish Full-Image Banner Live</button>
             </div>
 
             <h4 class="font-bold text-gray-700 pt-2">🔔 Pending User Ads for Approval:</h4>
@@ -444,6 +440,7 @@
         let currentLang = 'en';
         let wishlist = [];
         let cart = [];
+        let globalUpiId = "manjeribazaar@upi";
 
         // All 30 Original Categories
         let defaultCategories = [
@@ -501,12 +498,18 @@
             'കട': 'groceries'
         };
 
-        // 4 Default Scrolling Featured Posters
+        // 4 Default Full-Image Featured Banners
         let defaultPosters = [
-            { title: "Rajadhani Manjeri", desc: "Grand shopping, hypermarket & lifestyle hub!", phone: "919876543210", img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500", badge: "FEATURED 1" },
-            { title: "Malabar Wedding Silks", desc: "Flat 20% off on bridal & wedding collections!", phone: "919876543210", img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=500", badge: "SLIDE 2" },
-            { title: "Al-Haya Madrasa & Tuition", desc: "Admission open for Qur'an, Arabic & School Subjects", phone: "919876543210", img: "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=500", badge: "SLIDE 3" },
-            { title: "Manjeri Royal Caterings", desc: "Hot & Fresh Malabar Biriyani direct via WhatsApp", phone: "919876543210", img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500", badge: "SLIDE 4" }
+            { title: "Rajadhani Manjeri", desc: "Grand shopping, hypermarket & lifestyle hub!", phone: "919876543210", img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600", badge: "FEATURED 1" },
+            { title: "Malabar Wedding Silks", desc: "Flat 20% off on bridal & wedding collections!", phone: "919876543210", img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600", badge: "SLIDE 2" },
+            { title: "Al-Haya Madrasa & Tuition", desc: "Admission open for Qur'an, Arabic & School Subjects", phone: "919876543210", img: "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=600", badge: "SLIDE 3" },
+            { title: "Manjeri Royal Caterings", desc: "Hot & Fresh Malabar Biriyani direct via WhatsApp", phone: "919876543210", img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600", badge: "SLIDE 4" }
+        ];
+
+        // Default Permanent Shorts/Videos
+        let defaultShorts = [
+            { title: "Manjeri Fest Highlights", videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4", uploader: "Nadan Reels" },
+            { title: "Manjeri Bazaar Tour", videoUrl: "https://www.w3schools.com/html/movie.mp4", uploader: "Local Shorts" }
         ];
 
         // Rich Demo Listings for All Key Categories
@@ -541,6 +544,7 @@
 
         let cachedListings = defaultListings;
         let cachedPending = [];
+        let cachedShorts = defaultShorts;
         let activeCategory = 'all';
 
         let selectedUserPhotos = [];
@@ -611,8 +615,13 @@
 
         function previewShortVideo(input) {
             if(input.files && input.files[0]) {
-                selectedShortVideoUrl = URL.createObjectURL(input.files[0]);
-                document.getElementById('shortVideoStatus').innerText = "✅ Video ready: " + input.files[0].name;
+                let file = input.files[0];
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedShortVideoUrl = e.target.result; // Base64 for permanent Firebase storage
+                    document.getElementById('shortVideoStatus').innerText = "✅ Video ready: " + file.name;
+                };
+                reader.readAsDataURL(file);
             }
         }
 
@@ -654,7 +663,6 @@
             window.open(`https://wa.me/?text=${encodeURIComponent('🌟 Manjeri Local Bazaar: ' + appUrl)}`, '_blank');
         }
         
-        // Safety Record: Logs every WhatsApp Inquiry into Firebase
         function logBookingInquiry(title, price, phone) {
             let inquiryData = {
                 title: title,
@@ -698,17 +706,41 @@
             }
         }
 
+        // Bilingual Language Toggle (English & Malayalam)
         function toggleLanguage() {
             currentLang = currentLang === 'en' ? 'ml' : 'en';
             let t = document.getElementById('headerTitle'), s = document.getElementById('headerSub'), f = document.getElementById('secFeatured');
+            let langBtn = document.getElementById('langBtn');
+            let secReels = document.getElementById('secReelsTitle');
+            let infoTitle = document.getElementById('infoTitle');
+            let infoDesc = document.getElementById('infoDescText');
+            let supportTitle = document.getElementById('supportBoxTitle');
+            let supportDesc = document.getElementById('supportBoxDesc');
+
             if(currentLang === 'ml') {
+                langBtn.innerText = "English";
                 t.innerHTML = `നാട്ടുചന്ത <span class="text-emerald-200 font-normal text-[10px]">/ LocalBaazaar</span>`;
                 s.innerText = "മഞ്ചേരി, നിലമ്പൂർ, പാണ്ടിക്കാട്";
-                f.innerText = "🌟 ഫീച്ചേർഡ് പരസ്യങ്ങൾ";
+                f.innerText = "🌟 ഫുൾ-ഇമേജ് ഫീച്ചേർഡ് പോസ്റ്ററുകൾ";
+                secReels.innerText = "🎬 നാട്ടു വീഡിയോസ് & ഷോർട്ട്സ്";
+                infoTitle.innerText = "ℹ️ വിവരങ്ങളും നിബന്ധനകളും";
+                infoDesc.innerHTML = `
+                    <p><strong>മഞ്ചേരി ലോക്കൽ ബസാർ (നാട്ടുചന്ത)</strong> എന്നത് മഞ്ചേരി, നിലമ്പൂർ, പാണ്ടിക്കാട് മേഖലകളിലെ വ്യാപാരികളെയും ഉപഭോക്താക്കളെയും ബന്ധിപ്പിക്കുന്ന 0% കമ്മീഷൻ പ്ലാറ്റ്‌ഫോമാണ്.</p>
+                    <p><strong>നിരാകരണം:</strong> എല്ലാ പരസ്യങ്ങളും വിലവിവരങ്ങളും അതത് കടയുടമകൾ നേരിട്ട് നൽകുന്നതാണ്. ഇടപാടുകൾ നടത്തുമ്പോൾ ഉൽപ്പന്നത്തിന്റെ ഗുണനിലവാരം ഉറപ്പുവരുത്തുക.</p>`;
+                supportTitle.innerHTML = `<span>❤️</span> മഞ്ചേരി ലോക്കൽ ബസാറിനെ സഹായിക്കൂ (സന്തോഷത്തോടെയുള്ള സഹായം)`;
+                supportDesc.innerText = "ഇത് മഞ്ചേരിയുടെ സ്വന്തം 0% കമ്മീഷൻ പ്ലാറ്റ്‌ഫോമാണ്. ഈ ബസാർ വഴി നിങ്ങൾക്ക് പ്രയോജനം ലഭിച്ചിട്ടുണ്ടെങ്കിൽ, ഞങ്ങളുടെ ഈ ചെറിയ സംരംഭത്തിനും സർവർ ചെലവുകൾക്കും നിങ്ങളുടെ ഇഷ്ടപ്രകാരം സംഭാവന നൽകാം.";
             } else {
+                langBtn.innerText = "മലയാളം";
                 t.innerHTML = `LocalBaazaar <span class="text-emerald-200 font-normal text-[10px]">/ നാട്ടുചന്ത</span>`;
                 s.innerText = "Manjeri, Nilambur, Pandikkad";
-                f.innerText = "🌟 Floating Featured Ad Posters";
+                f.innerText = "🌟 Full-Image Featured Banners";
+                secReels.innerText = "🎬 Local Reels & Videos / വീഡിയോസ്";
+                infoTitle.innerText = "ℹ️ Info & Disclaimer";
+                infoDesc.innerHTML = `
+                    <p><strong>Manjeri Local Bazaar (നാട്ടുചന്ത)</strong> is a 0% commission direct peer-to-peer trading and information platform connecting buyers and sellers across Manjeri, Nilambur, and Pandikkad.</p>
+                    <p><strong>Disclaimer:</strong> All ads, prices, timings, and services are posted directly by local vendors or administrators. Please verify product quality and vendor authenticity before making any financial transactions.</p>`;
+                supportTitle.innerHTML = `<span>❤️</span> Support Manjeri Local Bazaar (खुशी से सहयोग)`;
+                supportDesc.innerText = "यह मंजीरी का अपना 0% कमीशन प्लेटफॉर्म है। अगर आपको इस बाज़ार से फायदा हुआ है और आप हमारे इस छोटे से परिवार और सर्वर खर्च में मदद करना चाहते हैं, तो आप अपनी मर्जी से जितना चाहें योगदान दे सकते हैं।";
             }
         }
 
@@ -773,6 +805,7 @@
             }
             renderAdminCategoriesList();
             renderPendingAds();
+            document.getElementById('adminUpiInput').value = globalUpiId;
             document.getElementById('adminApprovalModal').classList.remove('hidden');
         }
         function closeAdminApprovalModal() { document.getElementById('adminApprovalModal').classList.add('hidden'); }
@@ -781,19 +814,33 @@
         function openAddShortModal() { document.getElementById('addShortModal').classList.remove('hidden'); }
         function closeAddShortModal() { document.getElementById('addShortModal').classList.add('hidden'); }
 
-        function publishShortVideo() {
+        function saveAdminUpi() {
+            let newUpi = document.getElementById('adminUpiInput').value.trim();
+            if(!newUpi) { alert('Enter valid UPI ID'); return; }
+            db.ref('settings/upiId').set(newUpi, (err) => {
+                if(!err) {
+                    globalUpiId = newUpi;
+                    document.getElementById('displayUpiId').innerText = newUpi;
+                    alert('UPI ID updated live successfully!');
+                }
+            });
+        }
+
+        // Permanent Firebase Video Upload
+        function publishPermanentShortVideo() {
             let title = document.getElementById('shortTitle').value.trim() || 'Manjeri Short';
-            let videoUrl = selectedShortVideoUrl || "https://www.w3schools.com/html/mov_bbb.mp4";
-            document.getElementById('shortsContainer').innerHTML += `
-                <div class="min-w-[140px] bg-emerald-900 rounded-xl p-2 relative flex-shrink-0">
-                    <video src="${videoUrl}" class="w-full h-32 object-cover rounded-lg mb-1" controls></video>
-                    <p class="font-bold text-[10px] truncate">${title}</p>
-                    <p class="text-[9px] text-emerald-300">Live Short</p>
-                </div>`;
-            selectedShortVideoUrl = "";
-            document.getElementById('shortVideoStatus').innerText = "";
-            closeAddShortModal();
-            alert('Video uploaded!');
+            let videoUrl = selectedShortVideoUrl;
+            if(!videoUrl) { alert('Please select or record a video first!'); return; }
+
+            db.ref('shorts').push({ title, videoUrl, uploader: currentUser || 'Local Vendor' }, (err) => {
+                if(!err) {
+                    selectedShortVideoUrl = "";
+                    document.getElementById('shortVideoStatus').innerText = "";
+                    document.getElementById('shortTitle').value = "";
+                    closeAddShortModal();
+                    alert('Video uploaded permanently live!');
+                }
+            });
         }
 
         function sendAiMessage() {
@@ -884,7 +931,6 @@
             select.innerHTML = categories.filter(c => c.id !== 'all').map(c => `<option value="${c.id}">${c.icon} ${c.name}</option>`).join('');
         }
 
-        // Admin Category Sorting / Ordering (Move Up / Down)
         function renderAdminCategoriesList() {
             let list = document.getElementById('adminCategoriesList');
             if(!list) return;
@@ -950,6 +996,8 @@
         function initFirebaseSync() {
             renderCategoriesBar();
             loadPosters();
+            loadShorts();
+            loadSettings();
             renderListings(activeCategory);
 
             db.ref('listings').on('value', (snapshot) => {
@@ -977,6 +1025,18 @@
             });
         }
 
+        function loadSettings() {
+            db.ref('settings/upiId').on('value', (snapshot) => {
+                let val = snapshot.val();
+                if(val) {
+                    globalUpiId = val;
+                    let el = document.getElementById('displayUpiId');
+                    if(el) el.innerText = val;
+                }
+            });
+        }
+
+        // Full-Image Featured Posters Loader
         function loadPosters() {
             let container = document.getElementById('featuredShopsContainer');
             if(!container) return;
@@ -985,23 +1045,21 @@
                 let postersToDisplay = data ? [...Object.keys(data).map(k => ({ id: k, ...data[k] })).reverse(), ...defaultPosters] : defaultPosters;
                 container.innerHTML = '';
                 postersToDisplay.forEach((p) => {
-                    let delBtn = (isAdminLoggedIn && p.id) ? `<button onclick="deletePoster('${p.id}')" class="bg-red-600 text-white text-[9px] px-1.5 py-0.5 rounded font-bold">🗑️</button>` : '';
+                    let delBtn = (isAdminLoggedIn && p.id) ? `<button onclick="deletePoster('${p.id}')" class="absolute top-2 right-2 bg-red-600 text-white text-[10px] px-2 py-1 rounded-lg font-bold shadow z-10">🗑️ Delete</button>` : '';
                     container.innerHTML += `
-                        <div class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-3.5 rounded-2xl shadow-sm min-w-[255px] max-w-[255px] flex-shrink-0 relative overflow-hidden flex flex-col justify-between">
-                            <div>
+                        <div class="relative min-w-[270px] max-w-[270px] h-44 rounded-2xl overflow-hidden shadow-md flex-shrink-0 bg-gray-900 group">
+                            ${delBtn}
+                            <img src="${p.img}" onclick="openImageViewer('${p.img}')" class="w-full h-full object-cover cursor-pointer transition-transform duration-300 group-hover:scale-105" alt="Banner">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-3 text-white">
                                 <div class="flex justify-between items-center">
-                                    <span class="text-[9px] bg-white/20 px-2 py-0.5 rounded font-bold uppercase">${p.badge || 'PROMO'}</span>
-                                    <div class="flex items-center gap-1">
-                                        ${delBtn}
-                                        <span class="text-[10px] text-emerald-100">📞 ${p.phone}</span>
-                                    </div>
+                                    <span class="text-[9px] bg-emerald-600 px-2 py-0.5 rounded font-bold uppercase">${p.badge || 'FEATURED'}</span>
+                                    <span class="text-[10px] text-emerald-200 font-semibold">📞 ${p.phone}</span>
                                 </div>
-                                <h3 class="font-bold text-sm mt-1.5 truncate">${p.title}</h3>
-                                <p class="text-[11px] text-emerald-100 mt-0.5 line-clamp-2">${p.desc}</p>
-                            </div>
-                            <div class="mt-3 flex justify-between items-center">
-                                <img src="${p.img}" onclick="openImageViewer('${p.img}')" class="w-11 h-11 rounded-xl object-cover border border-white/30 cursor-pointer" alt="Ad">
-                                <a href="https://wa.me/${p.phone}?text=Hello" target="_blank" onclick="logBookingInquiry('${p.title}', 'Poster', '${p.phone}')" class="bg-white text-emerald-700 text-[10px] px-3 py-1.5 rounded-lg font-bold">💬 Chat</a>
+                                <h3 class="font-bold text-sm mt-1 truncate">${p.title}</h3>
+                                <p class="text-[10px] text-gray-200 line-clamp-1">${p.desc}</p>
+                                <div class="mt-2 flex justify-end">
+                                    <a href="https://wa.me/${p.phone}?text=Hello" target="_blank" onclick="logBookingInquiry('${p.title}', 'Banner', '${p.phone}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] px-3 py-1 rounded-lg font-bold shadow">💬 WhatsApp Chat</a>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -1009,9 +1067,37 @@
             });
         }
 
+        // Permanent Firebase Shorts/Videos Loader
+        function loadShorts() {
+            let container = document.getElementById('shortsContainer');
+            if(!container) return;
+            db.ref('shorts').on('value', (snapshot) => {
+                let data = snapshot.val();
+                let shortsToDisplay = data ? [...Object.keys(data).map(k => ({ id: k, ...data[k] })).reverse(), ...defaultShorts] : defaultShorts;
+                container.innerHTML = '';
+                shortsToDisplay.forEach((s) => {
+                    let delShort = (isAdminLoggedIn && s.id) ? `<button onclick="deleteShort('${s.id}')" class="absolute top-1 right-1 bg-red-600 text-white text-[9px] px-1.5 py-0.5 rounded font-bold z-10">🗑️</button>` : '';
+                    container.innerHTML += `
+                        <div class="min-w-[150px] max-w-[150px] bg-emerald-900 rounded-xl p-2 relative flex-shrink-0">
+                            ${delShort}
+                            <video src="${s.videoUrl}" class="w-full h-32 object-cover rounded-lg mb-1 bg-black" controls></video>
+                            <p class="font-bold text-[10px] truncate text-white">${s.title}</p>
+                            <p class="text-[9px] text-emerald-300">By: ${s.uploader || 'Local'}</p>
+                        </div>
+                    `;
+                });
+            });
+        }
+
         function deletePoster(id) {
-            if(confirm('Delete this featured poster?')) {
+            if(confirm('Delete this featured banner?')) {
                 db.ref('posters/' + id).remove();
+            }
+        }
+
+        function deleteShort(id) {
+            if(confirm('Delete this permanent video?')) {
+                db.ref('shorts/' + id).remove();
             }
         }
 
@@ -1022,11 +1108,11 @@
             let badge = document.getElementById('adminPosterBadge').value.trim() || "FEATURED";
 
             if(!title) { alert('Enter poster title!'); return; }
-            let imageUrl = selectedAdminPosterPhoto || "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500";
+            let imageUrl = selectedAdminPosterPhoto || "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600";
 
             db.ref('posters').push({ title, desc, phone, img: imageUrl, badge }, (err) => {
                 if(!err) {
-                    alert('Poster published live!');
+                    alert('Full-Image Banner published live!');
                     document.getElementById('adminPosterTitle').value = '';
                     document.getElementById('adminPosterDesc').value = '';
                     selectedAdminPosterPhoto = "";
@@ -1171,7 +1257,6 @@
             container.innerHTML = '';
             
             let queryLower = q.toLowerCase().trim();
-            // Check if query is in Malayalam script dictionary
             let mappedCat = malayalamKeywordMap[queryLower] || null;
 
             let filtered = cachedListings.filter(item => {
