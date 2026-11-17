@@ -9,6 +9,7 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -114,7 +115,7 @@
             <div id="featuredShopsContainer" class="flex gap-3 overflow-x-auto hide-scrollbar pb-1 scroll-smooth"></div>
         </section>
 
-        <!-- 3. Local Reels & Videos Section with Working Full-Screen Controls -->
+        <!-- 3. Local Reels & Videos Section with Full-Screen Options -->
         <div class="bg-emerald-950 text-white rounded-2xl p-3 shadow-md">
             <div class="flex justify-between items-center mb-2">
                 <h2 class="text-xs font-bold text-emerald-200 uppercase tracking-wide" id="secReelsTitle">🎬 Local Reels & Videos / വീഡിയോസ്</h2>
@@ -123,13 +124,13 @@
             <div id="shortsContainer" class="flex gap-3 overflow-x-auto hide-scrollbar pb-1"></div>
         </div>
 
-        <!-- 4. Interactive Calendar Widget (Clickable to Open Calendar Modal) -->
+        <!-- 4. Interactive Calendar Widget -->
         <div onclick="openCalendarModal()" class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 p-3.5 rounded-2xl shadow-sm flex items-center justify-between text-gray-900 cursor-pointer hover:bg-amber-100 transition">
             <div class="flex items-center gap-3">
                 <div class="bg-amber-600 text-white p-2.5 rounded-xl text-center font-bold text-sm shadow-xs">📅</div>
                 <div>
                     <h4 class="font-bold text-xs text-amber-900" id="calTitle">Manjeri Date & Muhurat Hub (Tap to Open)</h4>
-                    <p class="text-[11px] text-amber-800 mt-0.5">🇬🇧 Nov 17, 2026 | 🌴 Vrischikam 2, 1202 | 🕌 Jumada al-Thani 7, 1448</p>
+                    <p class="text-[11px] text-amber-800 mt-0.5">🇬🇧 Nov 18, 2026 | 🌴 Vrischikam 3, 1202 | 🕌 Jumada al-Thani 8, 1448</p>
                 </div>
             </div>
             <span class="text-[10px] bg-amber-200 text-amber-900 px-2 py-1 rounded-lg font-bold">Panchang</span>
@@ -186,7 +187,7 @@
         <!-- Voluntary Support Box -->
         <div class="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 p-3.5 rounded-2xl space-y-2 text-xs">
             <h4 class="font-bold text-emerald-900 flex items-center gap-1.5" id="supportBoxTitle"><span>❤️</span> Support Manjeri Local Bazaar (खुशी से सहयोग)</h4>
-            <p class="text-gray-600 text-[11px]" id="supportBoxDesc">यह मंजीरी का अपना 0% कमीशन प्लेटफॉर्म है। अगर आपको इस बाज़ार से फायदा हुआ है और आप हमारे इस छोटे से परिवार और सर्वर खर्च में मदद करना चाहते हैं, तो आप अपनी मर्जी से जितना चाहें योगदान दे सकते हैं.</p>
+            <p class="text-gray-600 text-[11px]" id="supportBoxDesc">यह मंजीरी का अपना 0% कमीशन प्लेटफॉर्म है। अगर आपको इस बाज़ार से फायदा हुआ है और आप हमारे इस छोटे से परिवार और सर्वर खर्च में मदद करना चाहते हैं, तो आप अपनी मर्जी से जितना चाहें योगदान दे सकते हैं।</p>
             <div class="bg-white p-2 rounded-xl border border-emerald-200 text-center font-bold text-emerald-800">
                 UPI ID: <span id="displayUpiId" class="text-gray-700">manjeribazaar@upi</span>
             </div>
@@ -200,7 +201,7 @@
         <p class="text-white/80 text-xs mt-3">Tap anywhere outside to close</p>
     </div>
 
-    <!-- Calendar Modal (Opens when Calendar Widget is tapped) -->
+    <!-- Calendar Modal -->
     <div id="calendarModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
         <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 text-xs">
             <div class="flex justify-between items-center border-b pb-2">
@@ -210,15 +211,15 @@
             <div class="space-y-2 text-gray-700">
                 <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200">
                     <p class="font-bold text-amber-900">🇬🇧 Gregorian Date:</p>
-                    <p>Tuesday, November 17, 2026</p>
+                    <p>Wednesday, November 18, 2026</p>
                 </div>
                 <div class="bg-emerald-50 p-2.5 rounded-xl border border-emerald-200">
                     <p class="font-bold text-emerald-900">🌴 Malayalam Era (Kollavarsham):</p>
-                    <p>Vrischikam 2, 1202</p>
+                    <p>Vrischikam 3, 1202</p>
                 </div>
                 <div class="bg-teal-50 p-2.5 rounded-xl border border-teal-200">
-                    <p class="font-bold text-teal-900">🕌 Hijri Date (Islamic Calendar):</p>
-                    <p>Jumada al-Thani 7, 1448 AH</p>
+                    <p class="font-bold text-emerald-900">🕌 Hijri Date (Islamic Calendar):</p>
+                    <p>Jumada al-Thani 8, 1448 AH</p>
                 </div>
             </div>
             <button onclick="closeCalendarModal()" class="w-full bg-amber-600 text-white py-2 rounded-xl font-bold shadow">Close Calendar</button>
@@ -256,7 +257,7 @@
         </div>
     </div>
 
-    <!-- Smart AI Assistant Modal with Voice / Text Chat -->
+    <!-- Smart AI Assistant Modal -->
     <div id="aiAssistantModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
         <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3">
             <div class="flex justify-between items-center border-b pb-2">
@@ -275,17 +276,22 @@
         </div>
     </div>
 
-    <!-- Upload Video Short Modal with WhatsApp Direct Submission -->
+    <!-- Upload Full HD Video Short Modal with Firebase Storage -->
     <div id="addShortModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
         <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 text-xs">
             <div class="flex justify-between items-center border-b pb-2">
-                <h3 class="font-bold text-emerald-800">🎬 Upload Video Reel via WhatsApp</h3>
+                <h3 class="font-bold text-emerald-800">🎬 Upload Full HD Video Reel</h3>
                 <button onclick="closeAddShortModal()" class="text-gray-400 font-bold">✕</button>
             </div>
-            <input type="text" id="shortTitle" placeholder="Video Title (e.g. Manjeri Market)" class="w-full p-2 border rounded-xl bg-white text-gray-900">
-            <p class="text-[11px] text-gray-600">Enter title and click below to send video directly to Admin WhatsApp for instant review and publishing!</p>
-            <button onclick="submitVideoViaWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold shadow flex items-center justify-center gap-2">
-                <span>💬</span> Send Video to Admin WhatsApp
+            <input type="text" id="shortTitle" placeholder="Video Title (e.g. Manjeri Fest)" class="w-full p-2 border rounded-xl bg-white text-gray-900">
+            
+            <label class="block font-semibold text-gray-600">Select Video File (Any Size / HD):</label>
+            <input type="file" id="shortVideoFileInput" accept="video/*" class="w-full p-2 border rounded-xl bg-gray-50 text-xs">
+            
+            <p id="videoUploadStatus" class="text-[10px] text-emerald-700 font-bold text-center"></p>
+
+            <button onclick="submitFullHdVideo()" id="uploadVideoBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-bold shadow">
+                Upload & Submit for Admin Review
             </button>
         </div>
     </div>
@@ -319,7 +325,7 @@
             </div>
 
             <div>
-                <label class="font-semibold text-gray-600 block mb-1">Add Photos (Up to 4 Photos - Camera or Gallery):</label>
+                <label class="font-semibold text-gray-600 block mb-1">Add Photos (Up to 4 Photos):</label>
                 <div class="grid grid-cols-2 gap-2">
                     <label class="bg-emerald-50 border border-emerald-300 text-emerald-800 p-2.5 rounded-xl text-center font-bold cursor-pointer flex flex-col items-center gap-1 hover:bg-emerald-100">
                         <span class="text-lg">📷</span> Take Photo (Camera)
@@ -341,7 +347,7 @@
         </div>
     </div>
 
-    <!-- Admin Control Center Modal -->
+    <!-- Admin Control Center Modal with Video & Ad Approvals -->
     <div id="adminApprovalModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-3">
         <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-2xl space-y-3 max-h-[85vh] overflow-y-auto text-xs pb-12">
             <div class="flex justify-between items-center border-b pb-2">
@@ -393,6 +399,10 @@
 
                 <button onclick="submitAdminPoster()" class="w-full bg-emerald-700 text-white py-2 rounded-lg font-bold shadow">Publish Full-Image Banner Live</button>
             </div>
+
+            <!-- Pending Videos Approval Section -->
+            <h4 class="font-bold text-gray-700 pt-2">🎬 Pending Video Reels for Approval:</h4>
+            <div id="pendingVideosContainer" class="space-y-2 pb-2"></div>
 
             <!-- Pending Ads Approval Section -->
             <h4 class="font-bold text-gray-700 pt-2">🔔 Pending User Ads for Approval:</h4>
@@ -459,6 +469,7 @@
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+        const storage = firebase.storage();
 
         let currentUser = localStorage.getItem('manjeri_user') || null;
         const SUPER_ADMIN = "uddinr20@gmail.com";
@@ -468,7 +479,6 @@
         let cart = [];
         let globalUpiId = "manjeribazaar@upi";
         let autoSlideTimer = null;
-        let adminWhatsAppNumber = "919876543210";
 
         // All 30 Original Categories
         let defaultCategories = [
@@ -504,7 +514,7 @@
             { id: 'namaz', name: 'Namaz Time', icon: '🕌' }
         ];
 
-        let savedCats = JSON.parse(localStorage.getItem('manjeri_categories_v4'));
+        let savedCats = JSON.parse(localStorage.getItem('manjeri_categories_v5'));
         let categories = (savedCats && savedCats.length >= 25) ? savedCats : defaultCategories;
 
         const malayalamKeywordMap = {
@@ -568,6 +578,7 @@
 
         let cachedListings = defaultListings;
         let cachedPending = [];
+        let cachedPendingVideos = [];
         let cachedShorts = defaultShorts;
         let activeCategory = 'all';
 
@@ -636,10 +647,63 @@
             }
         }
 
-        // Voice Search (Mic) using Web Speech API
+        // Full HD Video Upload to Firebase Storage with Progress Bar & Admin Review Queue
+        function submitFullHdVideo() {
+            let title = document.getElementById('shortTitle').value.trim() || 'Manjeri HD Reel';
+            let fileInput = document.getElementById('shortVideoFileInput');
+            if(!fileInput.files || fileInput.files.length === 0) {
+                alert('Please select a video file first!');
+                return;
+            }
+            let file = fileInput.files[0];
+            let statusEl = document.getElementById('videoUploadStatus');
+            let uploadBtn = document.getElementById('uploadVideoBtn');
+
+            uploadBtn.disabled = true;
+            statusEl.innerText = "⏳ Uploading Full HD Video (0%)...";
+
+            let storageRef = storage.ref('videos/' + Date.now() + '_' + file.name);
+            let uploadTask = storageRef.put(file);
+
+            uploadTask.on('state_changed', 
+                (snapshot) => {
+                    let progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                    statusEl.innerText = `⏳ Uploading Full HD Video (${progress}%)... Please wait.`;
+                }, 
+                (error) => {
+                    uploadBtn.disabled = false;
+                    statusEl.innerText = "❌ Upload failed. Try again or check size.";
+                    alert('Upload error: ' + error.message);
+                }, 
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        // Save to pending_videos in Realtime Database for Admin approval
+                        db.ref('pending_videos').push({
+                            title: title,
+                            videoUrl: downloadURL,
+                            uploader: currentUser || 'Local Vendor'
+                        }, (err) => {
+                            uploadBtn.disabled = false;
+                            if(!err) {
+                                statusEl.innerText = "✅ Video uploaded & sent for Admin approval!";
+                                document.getElementById('shortTitle').value = '';
+                                fileInput.value = '';
+                                setTimeout(() => {
+                                    closeAddShortModal();
+                                    statusEl.innerText = "";
+                                    alert('Video submitted successfully! It will appear live after Admin review.');
+                                }, 1500);
+                            }
+                        });
+                    });
+                }
+            );
+        }
+
+        // Voice Search (Mic)
         function startVoiceSearch() {
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                alert('🎙️ Voice Search is not supported on this browser. Please type manually.');
+                alert('🎙️ Voice Search is not supported on this browser.');
                 return;
             }
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -651,32 +715,19 @@
             recognition.onstart = function() {
                 document.getElementById('searchInput').placeholder = "Listening... സംസാരിക്കൂ...";
             };
-
             recognition.onresult = function(event) {
                 let speechResult = event.results[0][0].transcript;
                 document.getElementById('searchInput').value = speechResult;
                 searchListings();
             };
-
             recognition.onerror = function() {
                 recognition.lang = 'en-IN';
                 recognition.start();
             };
-
             recognition.onend = function() {
                 document.getElementById('searchInput').placeholder = "Search room, biryani, footwear, റൂം, ബിരിയാണി...";
             };
-
             recognition.start();
-        }
-
-        // WhatsApp Direct Video Upload Submission
-        function submitVideoViaWhatsApp() {
-            let title = document.getElementById('shortTitle').value.trim() || 'Manjeri Video Reel';
-            let waMsg = `🎬 *New Video Reel Submission*\nTitle: ${title}\nUser: ${currentUser || 'Local Vendor'}\n*(Please attach your video file here and send to Admin)*`;
-            window.open(`https://wa.me/${adminWhatsAppNumber}?text=${encodeURIComponent(waMsg)}`, '_blank');
-            closeAddShortModal();
-            alert('WhatsApp opened! Attach your video and send it directly to the Admin.');
         }
 
         function openCalendarModal() { document.getElementById('calendarModal').classList.remove('hidden'); }
@@ -861,6 +912,7 @@
             }
             renderAdminCategoriesList();
             renderPendingAds();
+            renderPendingVideos();
             document.getElementById('adminUpiInput').value = globalUpiId;
             document.getElementById('adminApprovalModal').classList.remove('hidden');
         }
@@ -991,7 +1043,7 @@
             let temp = categories[index];
             categories[index] = categories[targetIndex];
             categories[targetIndex] = temp;
-            localStorage.setItem('manjeri_categories_v4', JSON.stringify(categories));
+            localStorage.setItem('manjeri_categories_v5', JSON.stringify(categories));
             renderCategoriesBar();
             renderAdminCategoriesList();
         }
@@ -1002,7 +1054,7 @@
             if(!name) { alert('Enter category name'); return; }
             let id = name.toLowerCase().replace(/[^a-z0-9]/g, '_');
             categories.push({ id, name, icon });
-            localStorage.setItem('manjeri_categories_v4', JSON.stringify(categories));
+            localStorage.setItem('manjeri_categories_v5', JSON.stringify(categories));
             renderCategoriesBar();
             renderCategoryDropdowns();
             renderAdminCategoriesList();
@@ -1014,7 +1066,7 @@
         function adminDeleteCategory(id) {
             if(confirm('Delete this category?')) {
                 categories = categories.filter(c => c.id !== id);
-                localStorage.setItem('manjeri_categories_v4', JSON.stringify(categories));
+                localStorage.setItem('manjeri_categories_v5', JSON.stringify(categories));
                 renderCategoriesBar();
                 renderCategoryDropdowns();
                 renderAdminCategoriesList();
@@ -1025,7 +1077,7 @@
         function checkPendingCount() {
             let badge = document.getElementById('pendingCountBadge');
             let notifBtn = document.getElementById('adminNotifBtn');
-            let totalPending = cachedPending.length;
+            let totalPending = cachedPending.length + cachedPendingVideos.length;
             if(badge && notifBtn) {
                 badge.innerText = totalPending;
                 if(totalPending > 0 && isAdminLoggedIn) notifBtn.classList.remove('hidden');
@@ -1061,6 +1113,19 @@
                 checkPendingCount();
                 if(!document.getElementById('adminApprovalModal').classList.contains('hidden')) {
                     renderPendingAds();
+                }
+            });
+
+            db.ref('pending_videos').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    cachedPendingVideos = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                } else {
+                    cachedPendingVideos = [];
+                }
+                checkPendingCount();
+                if(!document.getElementById('adminApprovalModal').classList.contains('hidden')) {
+                    renderPendingVideos();
                 }
             });
         }
@@ -1132,7 +1197,7 @@
                     container.innerHTML += `
                         <div class="min-w-[150px] max-w-[150px] bg-emerald-900 rounded-xl p-2 relative flex-shrink-0">
                             ${delShort}
-                            <!-- Fullscreen working controls and playsinline -->
+                            <!-- Fullscreen controls enabled -->
                             <video src="${s.videoUrl}" class="w-full h-32 object-cover rounded-lg mb-1 bg-black" controls playsinline controlslist="nodownload"></video>
                             <p class="font-bold text-[10px] truncate text-white">${s.title}</p>
                             <p class="text-[9px] text-emerald-300">By: ${s.uploader || 'Local'}</p>
@@ -1217,6 +1282,44 @@
                     </div>
                 </div>
             `).join('');
+        }
+
+        function renderPendingVideos() {
+            let container = document.getElementById('pendingVideosContainer');
+            if(!container) return;
+            container.innerHTML = cachedPendingVideos.length === 0 ? `<p class="text-gray-400 text-[11px]">No pending videos waiting.</p>` : cachedPendingVideos.map(item => `
+                <div class="bg-white p-2.5 rounded border space-y-1.5 shadow-xs">
+                    <div class="flex items-center gap-2">
+                        <video src="${item.videoUrl}" class="w-12 h-12 rounded object-cover border bg-black" controls></video>
+                        <div>
+                            <h4 class="font-bold text-gray-900">${item.title}</h4>
+                            <span class="text-[9px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded uppercase font-bold">By: ${item.uploader}</span>
+                        </div>
+                    </div>
+                    <div class="flex gap-2 pt-1">
+                        <button onclick="approveVideo('${item.id}')" class="flex-1 bg-emerald-600 text-white py-1.5 rounded-lg font-bold">✅ Approve Video</button>
+                        <button onclick="rejectVideo('${item.id}')" class="flex-1 bg-red-100 text-red-700 py-1.5 rounded-lg font-bold">❌ Reject</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function approveVideo(id) {
+            let item = cachedPendingVideos.find(p => p.id === id);
+            if(!item) return;
+            let { id: _, ...data } = item;
+            db.ref('shorts').push(data, (err) => {
+                if(!err) {
+                    db.ref('pending_videos/' + id).remove();
+                    alert('Video Approved & Published Live!');
+                }
+            });
+        }
+
+        function rejectVideo(id) {
+            if(confirm('Reject this video?')) {
+                db.ref('pending_videos/' + id).remove();
+            }
         }
 
         function approveAd(id) {
