@@ -9,7 +9,6 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -21,14 +20,12 @@
 </head>
 <body class="bg-gray-100 text-gray-900 pb-36">
 
-    <!-- 1. Top Header with 3-Lines Menu Button next to Logo -->
-    <header class="bg-emerald-700 text-white p-3 shadow-md sticky top-0 z-45">
+    <!-- Top Header -->
+    <header class="bg-emerald-700 text-white p-3 shadow-md sticky top-0 z-50">
         <div class="max-w-md mx-auto flex flex-col gap-2.5">
             
-            <!-- Top Row: 3-Lines Menu Button & Logo/Brand -->
             <div class="flex justify-between items-center">
                 <div class="flex items-center gap-2.5">
-                    <!-- 3-Lines (Hamburger) Menu Button placed right next to logo -->
                     <button onclick="openDrawerMenu()" class="bg-emerald-800 hover:bg-emerald-900 text-white w-9 h-9 rounded-xl text-lg font-bold shadow-md flex items-center justify-center border border-emerald-600/50">
                         ☰
                     </button>
@@ -47,7 +44,6 @@
                     </div>
                 </div>
 
-                <!-- Right Side Quick Buttons -->
                 <div class="flex items-center gap-2">
                     <button onclick="openAiAssistant()" class="bg-emerald-800 hover:bg-emerald-900 text-white px-2.5 py-1.5 rounded-full text-[10px] font-bold shadow-xs flex items-center gap-0.5 animate-pulse">
                         <span>🤖</span> AI
@@ -58,7 +54,6 @@
                 </div>
             </div>
 
-            <!-- Bottom Row inside Header -->
             <div class="flex justify-between items-center pt-1.5 border-t border-emerald-600/60 text-[10px]">
                 <span class="text-emerald-100 font-medium">📍 Manjeri Market Hub</span>
                 <div class="flex items-center gap-1.5">
@@ -77,7 +72,7 @@
         </div>
     </header>
 
-    <!-- Side Sliding Drawer Menu -->
+    <!-- Side Sliding Drawer Menu (Calendar Moved Here) -->
     <div id="sideDrawer" class="fixed inset-0 bg-black/50 z-[9999] hidden transition-opacity">
         <div class="absolute top-0 left-0 w-72 h-full bg-white text-gray-900 shadow-2xl p-4 flex flex-col justify-between transform -translate-x-full transition-transform duration-300" id="drawerContent">
             <div>
@@ -91,6 +86,19 @@
                     </div>
                     <button onclick="closeDrawerMenu()" class="text-gray-400 font-bold text-lg p-1">✕</button>
                 </div>
+
+                <!-- Mini Calendar Date Box inside Menu -->
+                <div onclick="openCalendarModal(); closeDrawerMenu();" class="bg-amber-50 border border-amber-200 p-2.5 rounded-xl mb-4 cursor-pointer hover:bg-amber-100 transition flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="text-base">📅</span>
+                        <div>
+                            <p class="text-[10px] font-bold text-amber-900">Today Date / पंचांग</p>
+                            <p class="text-[11px] font-semibold text-amber-800">Nov 18, 2026 | Vrischikam 3</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-amber-600 text-white px-2 py-0.5 rounded font-bold">View</span>
+                </div>
+
                 <div class="space-y-2 text-xs font-semibold text-gray-700">
                     <a href="#" onclick="switchTab('home'); closeDrawerMenu();" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-50"><span>🏠</span> Home / ഹോം</a>
                     <a href="#" onclick="openProfileModal(); closeDrawerMenu();" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-50"><span>👤</span> Profile & Account</a>
@@ -104,54 +112,32 @@
         </div>
     </div>
 
+    <!-- Sticky Auto-Sliding Featured Banners (Always stays on top during scroll) -->
+    <div class="sticky top-[96px] z-40 bg-gray-100 pt-2 pb-1 px-3 max-w-md mx-auto">
+        <div class="flex justify-between items-center mb-1">
+            <h3 class="font-bold text-xs text-gray-600 uppercase" id="secFeatured">🌟 Auto-Sliding Featured Banners</h3>
+        </div>
+        <div id="featuredShopsContainer" class="flex gap-3 overflow-x-auto hide-scrollbar pb-1 scroll-smooth"></div>
+    </div>
+
     <!-- Main Container -->
     <main class="max-w-md mx-auto p-3.5 space-y-3.5" id="mainContentView">
 
-        <!-- 2. Auto-Sliding Full-Image Featured Ad Banners Section -->
-        <section>
-            <div class="flex justify-between items-center mb-1.5">
-                <h3 class="font-bold text-xs text-gray-600 uppercase" id="secFeatured">🌟 Auto-Sliding Featured Banners</h3>
-            </div>
-            <div id="featuredShopsContainer" class="flex gap-3 overflow-x-auto hide-scrollbar pb-1 scroll-smooth"></div>
-        </section>
+        <!-- Larger Swipeable Category Chips -->
+        <div class="flex gap-2.5 overflow-x-auto hide-scrollbar py-1 mb-1" id="categoryContainer"></div>
 
-        <!-- 3. Local Reels & Videos Section with Dedicated Full-Screen Button -->
-        <div class="bg-emerald-950 text-white rounded-2xl p-3 shadow-md">
-            <div class="flex justify-between items-center mb-2">
-                <h2 class="text-xs font-bold text-emerald-200 uppercase tracking-wide" id="secReelsTitle">🎬 Local Reels & Videos / വീഡിയോസ്</h2>
-                <button onclick="openAddShortModal()" class="bg-emerald-700 hover:bg-emerald-800 px-2.5 py-1 rounded text-[10px] font-bold shadow">+ Upload Video</button>
-            </div>
-            <div id="shortsContainer" class="flex gap-3 overflow-x-auto hide-scrollbar pb-1"></div>
-        </div>
-
-        <!-- 4. Interactive Calendar Widget -->
-        <div onclick="openCalendarModal()" class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 p-3.5 rounded-2xl shadow-sm flex items-center justify-between text-gray-900 cursor-pointer hover:bg-amber-100 transition">
-            <div class="flex items-center gap-3">
-                <div class="bg-amber-600 text-white p-2.5 rounded-xl text-center font-bold text-sm shadow-xs">📅</div>
-                <div>
-                    <h4 class="font-bold text-xs text-amber-900" id="calTitle">Manjeri Date & Muhurat Hub (Tap to Open)</h4>
-                    <p class="text-[11px] text-amber-800 mt-0.5">🇬🇧 Nov 18, 2026 | 🌴 Vrischikam 3, 1202 | 🕌 Jumada al-Thani 8, 1448</p>
-                </div>
-            </div>
-            <span class="text-[10px] bg-amber-200 text-amber-900 px-2 py-1 rounded-lg font-bold">Panchang</span>
-        </div>
-
-        <!-- 5. Search Bar with Voice Mic & Malayalam Script Support -->
+        <!-- Search Bar with Voice Mic & Malayalam Script Support -->
         <div class="relative mb-2.5 flex items-center gap-2">
             <div class="relative flex-1">
                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">🔍</span>
                 <input type="text" id="searchInput" oninput="searchListings()" placeholder="Search room, biryani, footwear, റൂം, ബിരിയാണി..." class="w-full pl-9 pr-4 py-2.5 bg-white text-gray-900 border border-gray-200 rounded-xl text-xs shadow-xs focus:outline-emerald-600">
             </div>
-            <!-- Voice Search Mic Button -->
             <button onclick="startVoiceSearch()" title="Search by Voice (Mic)" class="bg-emerald-600 hover:bg-emerald-700 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-md text-base flex-shrink-0 animate-pulse">
                 🎙️
             </button>
         </div>
 
-        <!-- 6. All 30 Swipeable Category Chips -->
-        <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1 mb-3" id="categoryContainer"></div>
-
-        <!-- 7. Category Listings -->
+        <!-- Category Listings -->
         <div class="mt-4 mb-6">
             <div class="flex justify-between items-center mb-2">
                 <h3 class="font-bold text-xs text-gray-700 uppercase" id="categoryTitleHeading">📋 All Category Listings</h3>
@@ -176,7 +162,7 @@
         <div class="space-y-3" id="cartContainer"></div>
     </div>
 
-    <!-- Info View with Bilingual & Admin-Controlled Voluntary Support Box -->
+    <!-- Info View -->
     <div id="infoDisclaimerView" class="max-w-md mx-auto p-4 space-y-4 hidden bg-white text-gray-900 rounded-2xl shadow-sm m-3">
         <h3 class="font-bold text-sm text-emerald-800" id="infoTitle">ℹ️ Info & Disclaimer</h3>
         <div class="text-xs text-gray-600 space-y-2 leading-relaxed" id="infoDescText">
@@ -184,7 +170,6 @@
             <p><strong>Disclaimer:</strong> All ads, prices, timings, and services are posted directly by local vendors or administrators. Please verify product quality and vendor authenticity before making any financial transactions.</p>
         </div>
 
-        <!-- Voluntary Support Box -->
         <div class="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 p-3.5 rounded-2xl space-y-2 text-xs">
             <h4 class="font-bold text-emerald-900 flex items-center gap-1.5" id="supportBoxTitle"><span>❤️</span> Support Manjeri Local Bazaar (खुशी से सहयोग)</h4>
             <p class="text-gray-600 text-[11px]" id="supportBoxDesc">यह मंजीरी का अपना 0% कमीशन प्लेटफॉर्म है। अगर आपको इस बाज़ार से फायदा हुआ है और आप हमारे इस छोटे से परिवार और सर्वर खर्च में मदद करना चाहते हैं, तो आप अपनी मर्जी से जितना चाहें योगदान दे सकते हैं।</p>
@@ -219,7 +204,7 @@
                 </div>
                 <div class="bg-teal-50 p-2.5 rounded-xl border border-teal-200">
                     <p class="font-bold text-emerald-900">🕌 Hijri Date (Islamic Calendar):</p>
-                    <p>Jumada al-Thani 8, 1448 AH</p>
+                    <p>Jumada al-Thani 8, 1448 AH (Ramadan & Muhurat tracking)</p>
                 </div>
             </div>
             <button onclick="closeCalendarModal()" class="w-full bg-amber-600 text-white py-2 rounded-xl font-bold shadow">Close Calendar</button>
@@ -273,30 +258,6 @@
                 <input type="text" id="aiUserInput" onkeydown="if(event.key==='Enter') sendAiMessage()" placeholder="Type or ask..." class="flex-1 p-2 border rounded-xl text-xs bg-white text-gray-900">
                 <button onclick="sendAiMessage()" class="bg-emerald-600 text-white px-3 py-2 rounded-xl text-xs font-bold">Send</button>
             </div>
-        </div>
-    </div>
-
-    <!-- Direct Phone Video Upload Modal (Direct Storage Bucket to Admin Queue) -->
-    <div id="addShortModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
-        <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 text-xs">
-            <div class="flex justify-between items-center border-b pb-2">
-                <h3 class="font-bold text-emerald-800">🎬 Upload Video Reel (Direct from Phone)</h3>
-                <button onclick="closeAddShortModal()" class="text-gray-400 font-bold">✕</button>
-            </div>
-            <input type="text" id="shortTitle" placeholder="Shop Name / Video Title (e.g. Fresh Fish Manjeri)" class="w-full p-2 border rounded-xl bg-white text-gray-900">
-            
-            <div>
-                <label class="block font-semibold text-gray-600 mb-1">Select Video from Gallery / Camera:</label>
-                <input type="file" id="shortVideoFileInput" accept="video/*" class="w-full p-2 border rounded-xl bg-gray-50 text-xs">
-            </div>
-            
-            <p class="text-[10px] text-gray-500">Shopkeepers can pick any phone video. It will be uploaded securely and sent to Admin for approval.</p>
-            
-            <p id="videoUploadStatus" class="text-[10px] text-emerald-700 font-bold text-center"></p>
-
-            <button onclick="uploadPhoneVideoToStorage()" id="uploadVideoBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-bold shadow">
-                Upload & Submit for Admin Review
-            </button>
         </div>
     </div>
 
@@ -359,14 +320,12 @@
                 <button onclick="closeAdminApprovalModal()" class="text-gray-400 font-bold">✕</button>
             </div>
 
-            <!-- Admin Settings: Donation UPI ID -->
             <div class="bg-teal-50 p-3 rounded-xl border border-teal-200 space-y-2">
                 <h4 class="font-bold text-teal-900">💳 Manage Donation UPI ID</h4>
                 <input type="text" id="adminUpiInput" placeholder="e.g. manjeribazaar@upi" class="w-full p-1.5 border rounded-lg bg-white text-gray-900">
                 <button onclick="saveAdminUpi()" class="w-full bg-teal-700 text-white py-1.5 rounded-lg font-bold">Update UPI ID Live</button>
             </div>
 
-            <!-- Add New Category -->
             <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 space-y-2">
                 <h4 class="font-bold text-amber-900">➕ Add New Category</h4>
                 <input type="text" id="adminCatName" placeholder="Category Name (e.g. Electronics)" class="w-full p-1.5 border rounded-lg bg-white text-gray-900">
@@ -377,7 +336,6 @@
             <h4 class="font-bold text-gray-700">Manage Categories (Order Up/Down):</h4>
             <div id="adminCategoriesList" class="space-y-1 max-h-36 overflow-y-auto p-1 bg-gray-50 rounded border"></div>
 
-            <!-- Add Full-Image Scrolling Featured Poster -->
             <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 space-y-2 mt-2">
                 <h4 class="font-bold text-emerald-900">🌟 Add Full-Image Featured Banner</h4>
                 <input type="text" id="adminPosterTitle" placeholder="Poster Title (e.g. Rajadhani Manjeri)" class="w-full p-1.5 border rounded-lg bg-white text-gray-900">
@@ -404,11 +362,6 @@
                 <button onclick="submitAdminPoster()" class="w-full bg-emerald-700 text-white py-2 rounded-lg font-bold shadow">Publish Full-Image Banner Live</button>
             </div>
 
-            <!-- Pending Videos Approval Section -->
-            <h4 class="font-bold text-gray-700 pt-2">🎬 Pending Video Reels for Approval:</h4>
-            <div id="pendingVideosContainer" class="space-y-2 pb-2"></div>
-
-            <!-- Pending Ads Approval Section -->
             <h4 class="font-bold text-gray-700 pt-2">🔔 Pending User Ads for Approval:</h4>
             <div id="pendingAdsContainer" class="space-y-2 pb-4"></div>
         </div>
@@ -473,7 +426,6 @@
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-        const storage = firebase.storage();
         
         let currentUser = localStorage.getItem('manjeri_user') || null;
         const SUPER_ADMIN = "uddinr20@gmail.com";
@@ -545,11 +497,6 @@
             { title: "Manjeri Royal Caterings", desc: "Hot & Fresh Malabar Biriyani direct via WhatsApp", phone: "919876543210", img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600", badge: "SLIDE 4" }
         ];
 
-        let defaultShorts = [
-            { id: 'vs1', title: "Manjeri Fest Highlights", videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4", uploader: "Nadan Reels" },
-            { id: 'vs2', title: "Manjeri Bazaar Tour", videoUrl: "https://www.w3schools.com/html/movie.mp4", uploader: "Local Shorts" }
-        ];
-
         let defaultListings = [
             { id: 'd1', category: 'tuition', title: 'Darul Huda Madrasa & Ustad Tuition Hub', desc: 'Experienced Ustad teaching Qur\'an Tajweed, Madrasa subjects, and evening school tuition for kids.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1577896851231-70ef18881754?w=600', 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600'], price: '₹400 / mo' },
             { id: 'd2', category: 'matrimonial', title: 'Malabar Nikah & Matrimonial Bureau Manjeri', desc: 'Trusted wedding proposals for brides & grooms across Malappuram, Manjeri & Nilambur.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600', 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600'], price: 'Verified Profiles' },
@@ -581,8 +528,6 @@
 
         let cachedListings = defaultListings;
         let cachedPending = [];
-        let cachedPendingVideos = [];
-        let cachedShorts = defaultShorts;
         let activeCategory = 'all';
 
         let selectedUserPhotos = [];
@@ -647,84 +592,6 @@
                     document.getElementById('adminPosterPreviewImg').src = base64Url;
                     document.getElementById('adminPosterPreviewBox').classList.remove('hidden');
                 });
-            }
-        }
-
-        // Direct Phone Gallery/Camera Video Upload to Firebase Storage Bucket
-        function uploadPhoneVideoToStorage() {
-            let title = document.getElementById('shortTitle').value.trim() || 'Manjeri Shop Reel';
-            let fileInput = document.getElementById('shortVideoFileInput');
-            let statusEl = document.getElementById('videoUploadStatus');
-            let uploadBtn = document.getElementById('uploadVideoBtn');
-
-            if(!fileInput.files || fileInput.files.length === 0) {
-                alert('Please select a video file from your phone gallery or camera!');
-                return;
-            }
-            let file = fileInput.files[0];
-            uploadBtn.disabled = true;
-            statusEl.innerText = "⏳ Uploading Video to Cloud Storage...";
-
-            let storageRef = storage.ref('reels/' + Date.now() + '_' + file.name);
-            let uploadTask = storageRef.put(file);
-
-            uploadTask.on('state_changed', 
-                (snapshot) => {
-                    let progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                    statusEl.innerText = `⏳ Uploading (${progress}%)... Please wait.`;
-                }, 
-                (error) => {
-                    uploadBtn.disabled = false;
-                    statusEl.innerText = "❌ Upload failed. Check storage rules.";
-                    alert('Upload Error: ' + error.message);
-                }, 
-                () => {
-                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                        statusEl.innerText = "✅ Upload complete! Sending to Admin...";
-                        
-                        db.ref('pending_videos').push({
-                            title: title,
-                            videoUrl: downloadURL,
-                            uploader: currentUser || 'Local Shopkeeper',
-                            timestamp: new Date().toLocaleString()
-                        }, (err) => {
-                            uploadBtn.disabled = false;
-                            if(!err) {
-                                statusEl.innerText = "✅ Sent to Admin for review successfully!";
-                                document.getElementById('shortTitle').value = '';
-                                fileInput.value = '';
-                                setTimeout(() => {
-                                    closeAddShortModal();
-                                    statusEl.innerText = "";
-                                    alert('Video submitted successfully! It will appear in Admin panel for approval.');
-                                }, 1200);
-                            } else {
-                                uploadBtn.disabled = false;
-                                statusEl.innerText = "❌ Error saving to database.";
-                            }
-                        });
-                    });
-                }
-            );
-        }
-
-        // Dedicated Full-Screen Trigger Function for Videos
-        function makeVideoFullscreen(videoId) {
-            let videoElement = document.getElementById(videoId);
-            if (!videoElement) return;
-
-            if (videoElement.requestFullscreen) {
-                videoElement.requestFullscreen();
-            } else if (videoElement.webkitRequestFullscreen) { /* Safari */
-                videoElement.webkitRequestFullscreen();
-            } else if (videoElement.msRequestFullscreen) { /* IE11 */
-                videoElement.msRequestFullscreen();
-            } else if (videoElement.webkitEnterFullscreen) { /* iPhone Safari native */
-                videoElement.webkitEnterFullscreen();
-            } else {
-                if (videoElement.parentElement.requestFullscreen) {
-                    videoElement.parentElement.requestFullscreen();
-                }
             }
         }
 
@@ -846,7 +713,6 @@
             currentLang = currentLang === 'en' ? 'ml' : 'en';
             let t = document.getElementById('headerTitle'), s = document.getElementById('headerSub'), f = document.getElementById('secFeatured');
             let langBtn = document.getElementById('langBtn');
-            let secReels = document.getElementById('secReelsTitle');
             let infoTitle = document.getElementById('infoTitle');
             let infoDesc = document.getElementById('infoDescText');
             let supportTitle = document.getElementById('supportBoxTitle');
@@ -857,7 +723,6 @@
                 t.innerHTML = `നാട്ടുചന്ത <span class="text-emerald-200 font-normal text-[10px]">/ LocalBaazaar</span>`;
                 s.innerText = "മഞ്ചേരി, നിലമ്പൂർ, പാണ്ടിക്കാട്";
                 f.innerText = "🌟 ഓട്ടോ-സ്ലൈഡിംഗ് ഫീച്ചേർഡ് ബാനറുകൾ";
-                secReels.innerText = "🎬 നാട്ടു വീഡിയോസ് & ഷോർട്ട്സ്";
                 infoTitle.innerText = "ℹ️ വിവരങ്ങളും നിബന്ധനകളും";
                 infoDesc.innerHTML = `
                     <p><strong>മഞ്ചേരി ലോക്കൽ ബസാർ (നാട്ടുചന്ത)</strong> എന്നത് മഞ്ചേരി, നിലമ്പൂർ, പാണ്ടിക്കാട് മേഖലകളിലെ വ്യാപാരികളെയും ഉപഭോക്താക്കളെയും ബന്ധിപ്പിക്കുന്ന 0% കമ്മീഷൻ പ്ലാറ്റ്‌ഫോമാണ്.</p>
@@ -869,7 +734,6 @@
                 t.innerHTML = `LocalBaazaar <span class="text-emerald-200 font-normal text-[10px]">/ നാട്ടുചന്ത</span>`;
                 s.innerText = "Manjeri, Nilambur, Pandikkad";
                 f.innerText = "🌟 Auto-Sliding Featured Banners";
-                secReels.innerText = "🎬 Local Reels & Videos / വീഡിയോസ്";
                 infoTitle.innerText = "ℹ️ Info & Disclaimer";
                 infoDesc.innerHTML = `
                     <p><strong>Manjeri Local Bazaar (നാട്ടുചന്ത)</strong> is a 0% commission direct peer-to-peer trading and information platform connecting buyers and sellers across Manjeri, Nilambur, and Pandikkad.</p>
@@ -940,15 +804,12 @@
             }
             renderAdminCategoriesList();
             renderPendingAds();
-            renderPendingVideos();
             document.getElementById('adminUpiInput').value = globalUpiId;
             document.getElementById('adminApprovalModal').classList.remove('hidden');
         }
         function closeAdminApprovalModal() { document.getElementById('adminApprovalModal').classList.add('hidden'); }
         function openAiAssistant() { document.getElementById('aiAssistantModal').classList.remove('hidden'); }
         function closeAiAssistant() { document.getElementById('aiAssistantModal').classList.add('hidden'); }
-        function openAddShortModal() { document.getElementById('addShortModal').classList.remove('hidden'); }
-        function closeAddShortModal() { document.getElementById('addShortModal').classList.add('hidden'); }
 
         function saveAdminUpi() {
             let newUpi = document.getElementById('adminUpiInput').value.trim();
@@ -1029,7 +890,7 @@
                 let isActive = (c.id === activeCategory);
                 let btnClass = isActive ? "bg-emerald-700 text-white" : "bg-white border border-gray-200 text-gray-800";
                 container.innerHTML += `
-                    <button onclick="filterCategory('${c.id}')" id="cat-${c.id}" class="category-btn ${btnClass} text-xs px-3.5 py-2 rounded-xl font-semibold whitespace-nowrap shadow-xs">
+                    <button onclick="filterCategory('${c.id}')" id="cat-${c.id}" class="category-btn ${btnClass} text-xs px-4 py-3 rounded-2xl font-bold whitespace-nowrap shadow-sm flex-shrink-0 transition hover:bg-emerald-600 hover:text-white">
                         ${c.icon} ${c.name}
                     </button>
                 `;
@@ -1037,7 +898,7 @@
 
             if(currentUser === SUPER_ADMIN) {
                 container.innerHTML += `
-                    <button onclick="openAdminApprovalModal()" class="bg-amber-600 text-white text-xs px-3.5 py-2 rounded-xl font-bold whitespace-nowrap shadow-sm flex items-center gap-1">
+                    <button onclick="openAdminApprovalModal()" class="bg-amber-600 text-white text-xs px-4 py-3 rounded-2xl font-bold whitespace-nowrap shadow-sm flex items-center gap-1 flex-shrink-0">
                         <span>➕</span> Add Category
                     </button>
                 `;
@@ -1105,7 +966,7 @@
         function checkPendingCount() {
             let badge = document.getElementById('pendingCountBadge');
             let notifBtn = document.getElementById('adminNotifBtn');
-            let totalPending = cachedPending.length + cachedPendingVideos.length;
+            let totalPending = cachedPending.length;
             if(badge && notifBtn) {
                 badge.innerText = totalPending;
                 if(totalPending > 0 && isAdminLoggedIn) notifBtn.classList.remove('hidden');
@@ -1116,7 +977,6 @@
         function initFirebaseSync() {
             renderCategoriesBar();
             loadPosters();
-            loadShorts();
             loadSettings();
             renderListings(activeCategory);
 
@@ -1141,19 +1001,6 @@
                 checkPendingCount();
                 if(!document.getElementById('adminApprovalModal').classList.contains('hidden')) {
                     renderPendingAds();
-                }
-            });
-
-            db.ref('pending_videos').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    cachedPendingVideos = Object.keys(data).map(key => ({ id: key, ...data[key] }));
-                } else {
-                    cachedPendingVideos = [];
-                }
-                checkPendingCount();
-                if(!document.getElementById('adminApprovalModal').classList.contains('hidden')) {
-                    renderPendingVideos();
                 }
             });
         }
@@ -1213,44 +1060,9 @@
             }, 3500);
         }
 
-        function loadShorts() {
-            let container = document.getElementById('shortsContainer');
-            if(!container) return;
-            db.ref('shorts').on('value', (snapshot) => {
-                let data = snapshot.val();
-                let shortsToDisplay = data ? [...Object.keys(data).map(k => ({ id: k, ...data[k] })).reverse(), ...defaultShorts] : defaultShorts;
-                container.innerHTML = '';
-                shortsToDisplay.forEach((s, index) => {
-                    let vidId = 'short-video-' + (s.id || index);
-                    let delShort = (isAdminLoggedIn && s.id && !s.id.startsWith('vs')) ? `<button onclick="deleteShort('${s.id}')" class="absolute top-1 right-1 bg-red-600 text-white text-[9px] px-1.5 py-0.5 rounded font-bold z-10">🗑️</button>` : '';
-                    container.innerHTML += `
-                        <div class="min-w-[155px] max-w-[155px] bg-emerald-900 rounded-xl p-2 relative flex-shrink-0 flex flex-col justify-between">
-                            ${delShort}
-                            <div>
-                                <video id="${vidId}" src="${s.videoUrl}" class="w-full h-28 object-cover rounded-lg mb-1 bg-black" controls playsinline webkit-playsinline></video>
-                                <button onclick="makeVideoFullscreen('${vidId}')" class="w-full bg-emerald-700 hover:bg-emerald-600 text-white text-[10px] py-1 rounded-md font-bold mb-1 shadow-xs flex items-center justify-center gap-1">
-                                    <span>📺</span> Full Screen
-                                </button>
-                            </div>
-                            <div>
-                                <p class="font-bold text-[10px] truncate text-white">${s.title}</p>
-                                <p class="text-[9px] text-emerald-300">By: ${s.uploader || 'Local'}</p>
-                            </div>
-                        </div>
-                    `;
-                });
-            });
-        }
-
         function deletePoster(id) {
             if(confirm('Delete this featured banner?')) {
                 db.ref('posters/' + id).remove();
-            }
-        }
-
-        function deleteShort(id) {
-            if(confirm('Delete this video?')) {
-                db.ref('shorts/' + id).remove();
             }
         }
 
@@ -1317,44 +1129,6 @@
                     </div>
                 </div>
             `).join('');
-        }
-
-        function renderPendingVideos() {
-            let container = document.getElementById('pendingVideosContainer');
-            if(!container) return;
-            container.innerHTML = cachedPendingVideos.length === 0 ? `<p class="text-gray-400 text-[11px]">No pending videos waiting.</p>` : cachedPendingVideos.map(item => `
-                <div class="bg-white p-2.5 rounded border space-y-1.5 shadow-xs">
-                    <div class="flex items-center gap-2">
-                        <video src="${item.videoUrl}" class="w-12 h-12 rounded object-cover border bg-black" controls playsinline></video>
-                        <div>
-                            <h4 class="font-bold text-gray-900">${item.title}</h4>
-                            <span class="text-[9px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded uppercase font-bold">By: ${item.uploader}</span>
-                        </div>
-                    </div>
-                    <div class="flex gap-2 pt-1">
-                        <button onclick="approveVideo('${item.id}')" class="flex-1 bg-emerald-600 text-white py-1.5 rounded-lg font-bold">✅ Approve Video</button>
-                        <button onclick="rejectVideo('${item.id}')" class="flex-1 bg-red-100 text-red-700 py-1.5 rounded-lg font-bold">❌ Reject</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function approveVideo(id) {
-            let item = cachedPendingVideos.find(p => p.id === id);
-            if(!item) return;
-            let { id: _, ...data } = item;
-            db.ref('shorts').push(data, (err) => {
-                if(!err) {
-                    db.ref('pending_videos/' + id).remove();
-                    alert('Video Approved & Published Live!');
-                }
-            });
-        }
-
-        function rejectVideo(id) {
-            if(confirm('Reject this video?')) {
-                db.ref('pending_videos/' + id).remove();
-            }
         }
 
         function approveAd(id) {
