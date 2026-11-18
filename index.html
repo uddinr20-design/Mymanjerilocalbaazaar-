@@ -214,7 +214,7 @@
                     <p>Wednesday, November 18, 2026</p>
                 </div>
                 <div class="bg-emerald-50 p-2.5 rounded-xl border border-emerald-200">
-                    <p class="font-bold text-emerald-900">🌴 Malayalam Era (Kollavarsham):</p>
+                    <p class="font-bold text-amber-900">🌴 Malayalam Era (Kollavarsham):</p>
                     <p>Vrischikam 3, 1202</p>
                 </div>
                 <div class="bg-teal-50 p-2.5 rounded-xl border border-teal-200">
@@ -276,21 +276,25 @@
         </div>
     </div>
 
-    <!-- Upload Full HD Video Short Modal -->
+    <!-- Direct Phone Video Upload Modal (Direct Storage Bucket to Admin Queue) -->
     <div id="addShortModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
         <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 text-xs">
             <div class="flex justify-between items-center border-b pb-2">
-                <h3 class="font-bold text-emerald-800">🎬 Upload Full HD Video Reel</h3>
+                <h3 class="font-bold text-emerald-800">🎬 Upload Video Reel (Direct from Phone)</h3>
                 <button onclick="closeAddShortModal()" class="text-gray-400 font-bold">✕</button>
             </div>
-            <input type="text" id="shortTitle" placeholder="Video Title (e.g. Manjeri Fest)" class="w-full p-2 border rounded-xl bg-white text-gray-900">
+            <input type="text" id="shortTitle" placeholder="Shop Name / Video Title (e.g. Fresh Fish Manjeri)" class="w-full p-2 border rounded-xl bg-white text-gray-900">
             
-            <label class="block font-semibold text-gray-600">Select Video File (Any Size / HD):</label>
-            <input type="file" id="shortVideoFileInput" accept="video/*" class="w-full p-2 border rounded-xl bg-gray-50 text-xs">
+            <div>
+                <label class="block font-semibold text-gray-600 mb-1">Select Video from Gallery / Camera:</label>
+                <input type="file" id="shortVideoFileInput" accept="video/*" class="w-full p-2 border rounded-xl bg-gray-50 text-xs">
+            </div>
+            
+            <p class="text-[10px] text-gray-500">Shopkeepers can pick any phone video. It will be uploaded securely and sent to Admin for approval.</p>
             
             <p id="videoUploadStatus" class="text-[10px] text-emerald-700 font-bold text-center"></p>
 
-            <button onclick="submitFullHdVideo()" id="uploadVideoBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-bold shadow">
+            <button onclick="uploadPhoneVideoToStorage()" id="uploadVideoBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-bold shadow">
                 Upload & Submit for Admin Review
             </button>
         </div>
@@ -469,6 +473,7 @@
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+        const storage = firebase.storage();
         
         let currentUser = localStorage.getItem('manjeri_user') || null;
         const SUPER_ADMIN = "uddinr20@gmail.com";
@@ -645,53 +650,62 @@
             }
         }
 
-        // Foolproof Video Upload to Admin Queue
-        function submitFullHdVideo() {
-            let title = document.getElementById('shortTitle').value.trim() || 'Manjeri HD Reel';
+        // Direct Phone Gallery/Camera Video Upload to Firebase Storage Bucket
+        function uploadPhoneVideoToStorage() {
+            let title = document.getElementById('shortTitle').value.trim() || 'Manjeri Shop Reel';
             let fileInput = document.getElementById('shortVideoFileInput');
             let statusEl = document.getElementById('videoUploadStatus');
             let uploadBtn = document.getElementById('uploadVideoBtn');
 
             if(!fileInput.files || fileInput.files.length === 0) {
-                alert('Please select a video file first!');
+                alert('Please select a video file from your phone gallery or camera!');
                 return;
             }
             let file = fileInput.files[0];
             uploadBtn.disabled = true;
-            statusEl.innerText = "⏳ Processing Video...";
+            statusEl.innerText = "⏳ Uploading Video to Cloud Storage...";
 
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let videoBase64 = e.target.result;
-                statusEl.innerText = "⏳ Sending to Admin Queue...";
+            let storageRef = storage.ref('reels/' + Date.now() + '_' + file.name);
+            let uploadTask = storageRef.put(file);
 
-                db.ref('pending_videos').push({
-                    title: title,
-                    videoUrl: videoBase64,
-                    uploader: currentUser || 'Local Vendor',
-                    timestamp: new Date().toLocaleString()
-                }, (err) => {
+            uploadTask.on('state_changed', 
+                (snapshot) => {
+                    let progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                    statusEl.innerText = `⏳ Uploading (${progress}%)... Please wait.`;
+                }, 
+                (error) => {
                     uploadBtn.disabled = false;
-                    if(!err) {
-                        statusEl.innerText = "✅ Video sent for Admin review successfully!";
-                        document.getElementById('shortTitle').value = '';
-                        fileInput.value = '';
-                        setTimeout(() => {
-                            closeAddShortModal();
-                            statusEl.innerText = "";
-                            alert('Video submitted successfully! It will appear in Admin panel for approval.');
-                        }, 1200);
-                    } else {
-                        statusEl.innerText = "❌ Error submitting video.";
-                        alert('Error: ' + err.message);
-                    }
-                });
-            };
-            reader.onerror = function() {
-                uploadBtn.disabled = false;
-                statusEl.innerText = "❌ Failed to read file.";
-            };
-            reader.readAsDataURL(file);
+                    statusEl.innerText = "❌ Upload failed. Check storage rules.";
+                    alert('Upload Error: ' + error.message);
+                }, 
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        statusEl.innerText = "✅ Upload complete! Sending to Admin...";
+                        
+                        db.ref('pending_videos').push({
+                            title: title,
+                            videoUrl: downloadURL,
+                            uploader: currentUser || 'Local Shopkeeper',
+                            timestamp: new Date().toLocaleString()
+                        }, (err) => {
+                            uploadBtn.disabled = false;
+                            if(!err) {
+                                statusEl.innerText = "✅ Sent to Admin for review successfully!";
+                                document.getElementById('shortTitle').value = '';
+                                fileInput.value = '';
+                                setTimeout(() => {
+                                    closeAddShortModal();
+                                    statusEl.innerText = "";
+                                    alert('Video submitted successfully! It will appear in Admin panel for approval.');
+                                }, 1200);
+                            } else {
+                                uploadBtn.disabled = false;
+                                statusEl.innerText = "❌ Error saving to database.";
+                            }
+                        });
+                    });
+                }
+            );
         }
 
         // Dedicated Full-Screen Trigger Function for Videos
@@ -708,7 +722,6 @@
             } else if (videoElement.webkitEnterFullscreen) { /* iPhone Safari native */
                 videoElement.webkitEnterFullscreen();
             } else {
-                // Fallback: try container fullscreen
                 if (videoElement.parentElement.requestFullscreen) {
                     videoElement.parentElement.requestFullscreen();
                 }
