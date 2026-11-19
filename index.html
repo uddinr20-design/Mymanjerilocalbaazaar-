@@ -93,7 +93,7 @@
                         <span class="text-base">📅</span>
                         <div>
                             <p class="text-[10px] font-bold text-amber-900">Today Date / पंचांग</p>
-                            <p class="text-[11px] font-semibold text-amber-800">Nov 18, 2026 | Vrischikam 3</p>
+                            <p class="text-[11px] font-semibold text-amber-800">Nov 19, 2026 | Vrischikam 4</p>
                         </div>
                     </div>
                     <span class="text-[10px] bg-amber-600 text-white px-2 py-0.5 rounded font-bold">View</span>
@@ -101,6 +101,7 @@
 
                 <div class="space-y-2 text-xs font-semibold text-gray-700">
                     <a href="#" onclick="switchTab('home'); closeDrawerMenu();" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-50"><span>🏠</span> Home / ഹോം</a>
+                    <a href="#" onclick="switchTab('reels'); closeDrawerMenu();" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-50"><span>🎬</span> Local Reels / വീഡിയോ</a>
                     <a href="#" onclick="openProfileModal(); closeDrawerMenu();" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-50"><span>👤</span> Profile & Account</a>
                     <a href="#" onclick="installAppPrompt(); closeDrawerMenu();" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-50"><span>📥</span> Install App</a>
                     <a href="#" onclick="shareApp(); closeDrawerMenu();" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-50"><span>🔗</span> Share Bazaar</a>
@@ -113,7 +114,7 @@
     </div>
 
     <!-- Sticky Auto-Sliding Featured Banners (Always stays on top during scroll) -->
-    <div class="sticky top-[96px] z-40 bg-gray-100 pt-2 pb-1 px-3 max-w-md mx-auto">
+    <div id="featuredBannerWrapper" class="sticky top-[96px] z-40 bg-gray-100 pt-2 pb-1 px-3 max-w-md mx-auto">
         <div class="flex justify-between items-center mb-1">
             <h3 class="font-bold text-xs text-gray-600 uppercase" id="secFeatured">🌟 Auto-Sliding Featured Banners</h3>
         </div>
@@ -149,6 +150,60 @@
         </div>
 
     </main>
+
+    <!-- Local Video Reels Section -->
+    <div id="reelsView" class="max-w-md mx-auto p-3.5 space-y-4 hidden">
+        <div class="bg-emerald-700 text-white p-3.5 rounded-2xl shadow flex justify-between items-center">
+            <div>
+                <h3 class="font-bold text-sm">🎬 Manjeri Local Reels</h3>
+                <p class="text-[10px] text-emerald-100">30s shop & offer videos (Camera / Gallery)</p>
+            </div>
+            <button onclick="openVideoUploadModal()" class="bg-white text-emerald-800 text-[11px] font-bold px-3 py-1.5 rounded-xl shadow">
+                🎥 Upload Video
+            </button>
+        </div>
+
+        <!-- Approved Reels List -->
+        <div id="approvedReelsContainer" class="space-y-4"></div>
+    </div>
+
+    <!-- Video Upload Modal (Camera or Gallery, Max 30s) -->
+    <div id="videoUploadModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
+        <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 max-h-[85vh] overflow-y-auto text-xs">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-emerald-800">🎥 Upload Short Video (Max 30s)</h3>
+                <button onclick="closeVideoUploadModal()" class="text-gray-400 font-bold">✕</button>
+            </div>
+
+            <div>
+                <label class="font-semibold text-gray-600">Shop / Reel Title:</label>
+                <input type="text" id="reelTitleInput" placeholder="e.g. Special Offer at Manjeri Store" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900">
+            </div>
+
+            <div>
+                <label class="font-semibold text-gray-600">WhatsApp / Phone Number:</label>
+                <input type="text" id="reelPhoneInput" placeholder="919876543210" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900" value="919876543210">
+            </div>
+
+            <div>
+                <label class="font-semibold text-gray-600 block mb-1">Record or Pick Video (≤ 30 sec):</label>
+                <input type="file" id="reelFileInput" accept="video/*" capture="environment" onchange="validateReelDuration(this)"
+                    class="w-full text-xs file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700">
+                <p id="reelDurationStatus" class="text-[11px] text-gray-500 mt-1">Select a video up to 30 seconds.</p>
+            </div>
+
+            <div id="reelProgressBox" class="hidden space-y-1">
+                <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                    <div id="reelProgressBar" class="bg-emerald-600 h-2 w-0 transition-all"></div>
+                </div>
+                <p id="reelProgressText" class="text-[11px] text-emerald-700 font-semibold">Uploading...</p>
+            </div>
+
+            <button id="reelSubmitBtn" onclick="uploadReelToCloudinary()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-bold shadow">
+                Submit Video for Admin Approval
+            </button>
+        </div>
+    </div>
 
     <!-- Wishlist View -->
     <div id="wishlistView" class="max-w-md mx-auto p-3.5 space-y-3.5 hidden">
@@ -196,15 +251,15 @@
             <div class="space-y-2 text-gray-700">
                 <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200">
                     <p class="font-bold text-amber-900">🇬🇧 Gregorian Date:</p>
-                    <p>Wednesday, November 18, 2026</p>
+                    <p>Thursday, November 19, 2026</p>
                 </div>
                 <div class="bg-emerald-50 p-2.5 rounded-xl border border-emerald-200">
                     <p class="font-bold text-amber-900">🌴 Malayalam Era (Kollavarsham):</p>
-                    <p>Vrischikam 3, 1202</p>
+                    <p>Vrischikam 4, 1202</p>
                 </div>
                 <div class="bg-teal-50 p-2.5 rounded-xl border border-teal-200">
                     <p class="font-bold text-emerald-900">🕌 Hijri Date (Islamic Calendar):</p>
-                    <p>Jumada al-Thani 8, 1448 AH (Ramadan & Muhurat tracking)</p>
+                    <p>Jumada al-Thani 9, 1448 AH (Ramadan & Muhurat tracking)</p>
                 </div>
             </div>
             <button onclick="closeCalendarModal()" class="w-full bg-amber-600 text-white py-2 rounded-xl font-bold shadow">Close Calendar</button>
@@ -242,7 +297,7 @@
         </div>
     </div>
 
-    <!-- Smart AI Assistant Modal -->
+    <!-- Smart AI Assistant Modal (Direct Conversational Helper) -->
     <div id="aiAssistantModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
         <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3">
             <div class="flex justify-between items-center border-b pb-2">
@@ -251,11 +306,11 @@
             </div>
             <div class="h-56 bg-gray-50 border rounded-xl p-2.5 overflow-y-auto text-xs space-y-2" id="aiChatBox">
                 <div class="bg-emerald-100 text-emerald-900 p-2 rounded-xl">
-                    Namaskaram! 🙏 आप मुझसे <b>Biryani, Furniture, Ambulance, Room, Auto</b> के बारे में पूछ सकते हैं!
+                    Namaskaram! 🙏 मुझसे सीधे बात करें—<b>Biryani, Room, Auto, Furniture, Ambulance, Reels</b> या किसी भी दुकान के बारे में पूछें!
                 </div>
             </div>
             <div class="flex gap-2">
-                <input type="text" id="aiUserInput" onkeydown="if(event.key==='Enter') sendAiMessage()" placeholder="Type or ask..." class="flex-1 p-2 border rounded-xl text-xs bg-white text-gray-900">
+                <input type="text" id="aiUserInput" onkeydown="if(event.key==='Enter') sendAiMessage()" placeholder="सीधे पूछें / Ask directly..." class="flex-1 p-2 border rounded-xl text-xs bg-white text-gray-900">
                 <button onclick="sendAiMessage()" class="bg-emerald-600 text-white px-3 py-2 rounded-xl text-xs font-bold">Send</button>
             </div>
         </div>
@@ -362,6 +417,9 @@
                 <button onclick="submitAdminPoster()" class="w-full bg-emerald-700 text-white py-2 rounded-lg font-bold shadow">Publish Full-Image Banner Live</button>
             </div>
 
+            <h4 class="font-bold text-gray-700 pt-2">🎬 Pending Video Reels for Approval:</h4>
+            <div id="pendingVideosContainer" class="space-y-2 pb-2"></div>
+
             <h4 class="font-bold text-gray-700 pt-2">🔔 Pending User Ads for Approval:</h4>
             <div id="pendingAdsContainer" class="space-y-2 pb-4"></div>
         </div>
@@ -388,11 +446,14 @@
         </div>
     </div>
 
-    <!-- Clean Bottom Navigation Bar -->
+    <!-- Bottom Navigation Bar (Reels added right after Home) -->
     <nav class="fixed bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md border border-gray-200 p-2 shadow-2xl rounded-2xl z-35">
         <div class="max-w-md mx-auto flex justify-around text-center items-center">
             <button onclick="switchTab('home')" id="nav-home" class="text-emerald-700 text-xs font-bold flex flex-col items-center">
                 <span class="text-lg">🏠</span><span id="tabHome">Home</span>
+            </button>
+            <button onclick="switchTab('reels')" id="nav-reels" class="text-gray-500 text-xs font-medium flex flex-col items-center">
+                <span class="text-lg">🎬</span><span id="tabReels">Reels</span>
             </button>
             <button onclick="switchTab('wishlist')" id="nav-wishlist" class="text-gray-500 text-xs font-medium flex flex-col items-center relative">
                 <span class="text-lg">❤️</span><span id="tabWishlist">Wishlist</span>
@@ -402,16 +463,13 @@
                 <span class="text-lg">🛒</span><span id="tabCart">Cart</span>
                 <span id="cartBadge" class="absolute -top-1 right-2 bg-emerald-600 text-white text-[9px] px-1 rounded-full hidden">0</span>
             </button>
-            <button onclick="openPostAdModal()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-md flex flex-col items-center justify-center cursor-pointer">
-                <span class="text-base">➕</span><span id="tabPost">Publish</span>
-            </button>
             <button onclick="switchTab('info')" id="nav-info" class="text-gray-500 text-xs font-medium flex flex-col items-center">
                 <span class="text-lg">ℹ️</span><span id="tabInfo">Info</span>
             </button>
         </div>
     </nav>
 
-    <!-- JavaScript & Firebase Logic -->
+    <!-- JavaScript & Firebase + Cloudinary Logic -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyAoR6XBi3InYe-cGkkyGRLGBX6MmqKhWbo",
@@ -426,6 +484,11 @@
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+
+        // Cloudinary Config for 30s Direct Video Uploads
+        const CLOUDINARY_CLOUD_NAME = "i1u3mwzg";
+        const CLOUDINARY_UPLOAD_PRESET = "zvnsmynv";
+        const MAX_REEL_SECONDS = 30;
         
         let currentUser = localStorage.getItem('manjeri_user') || null;
         const SUPER_ADMIN = "uddinr20@gmail.com";
@@ -435,6 +498,10 @@
         let cart = [];
         let globalUpiId = "manjeribazaar@upi";
         let autoSlideTimer = null;
+
+        let validReelFile = null;
+        let cachedPendingVideos = [];
+        let cachedApprovedVideos = [];
 
         let defaultCategories = [
             { id: 'all', name: 'All Ads', icon: '🌟' },
@@ -532,6 +599,202 @@
 
         let selectedUserPhotos = [];
         let selectedAdminPosterPhoto = "";
+
+        // Video Reels Upload & Approval Functions
+        function openVideoUploadModal() {
+            document.getElementById('videoUploadModal').classList.remove('hidden');
+        }
+        function closeVideoUploadModal() {
+            document.getElementById('videoUploadModal').classList.add('hidden');
+        }
+
+        function validateReelDuration(input) {
+            const file = input.files && input.files[0];
+            const statusEl = document.getElementById('reelDurationStatus');
+            validReelFile = null;
+
+            if (!file) {
+                statusEl.textContent = "Select a video up to 30 seconds.";
+                statusEl.className = "text-[11px] text-gray-500 mt-1";
+                return;
+            }
+
+            const vid = document.createElement('video');
+            vid.preload = 'metadata';
+            vid.onloadedmetadata = function () {
+                window.URL.revokeObjectURL(vid.src);
+                const secs = Math.round(vid.duration);
+                if (secs > MAX_REEL_SECONDS) {
+                    input.value = "";
+                    statusEl.textContent = `Video is ${secs}s long. Max allowed is ${MAX_REEL_SECONDS}s.`;
+                    statusEl.className = "text-[11px] text-red-600 font-bold mt-1";
+                } else {
+                    validReelFile = file;
+                    statusEl.textContent = `Valid video (${secs}s). Ready to upload!`;
+                    statusEl.className = "text-[11px] text-emerald-700 font-bold mt-1";
+                }
+            };
+            vid.src = URL.createObjectURL(file);
+        }
+
+        function uploadReelToCloudinary() {
+            const title = document.getElementById('reelTitleInput').value.trim();
+            const phone = document.getElementById('reelPhoneInput').value.trim() || '919876543210';
+
+            if (!title) {
+                alert("Please enter a shop or video title.");
+                return;
+            }
+            if (!validReelFile) {
+                alert("Please select a valid video of 30 seconds or less.");
+                return;
+            }
+
+            const btn = document.getElementById('reelSubmitBtn');
+            const box = document.getElementById('reelProgressBox');
+            const bar = document.getElementById('reelProgressBar');
+            const txt = document.getElementById('reelProgressText');
+
+            btn.disabled = true;
+            btn.classList.add('opacity-60');
+            box.classList.remove('hidden');
+            bar.style.width = "15%";
+            txt.textContent = "Uploading to Cloudinary...";
+
+            const fd = new FormData();
+            fd.append("file", validReelFile);
+            fd.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+            fd.append("resource_type", "video");
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/video/upload`);
+
+            xhr.upload.onprogress = function (e) {
+                if (e.lengthComputable) {
+                    const pct = Math.min(95, Math.round((e.loaded / e.total) * 100));
+                    bar.style.width = pct + "%";
+                    txt.textContent = `Uploading... ${pct}%`;
+                }
+            };
+
+            xhr.onload = function () {
+                btn.disabled = false;
+                btn.classList.remove('opacity-60');
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    const res = JSON.parse(xhr.responseText);
+                    bar.style.width = "100%";
+                    txt.textContent = "Uploaded! Sent for Admin Approval.";
+
+                    db.ref('pending_videos').push({
+                        title,
+                        phone,
+                        url: res.secure_url,
+                        createdAt: new Date().toLocaleString()
+                    }, (err) => {
+                        if (!err) {
+                            alert("Video submitted! It will appear in Reels after Admin approval.");
+                            document.getElementById('reelTitleInput').value = "";
+                            document.getElementById('reelFileInput').value = "";
+                            validReelFile = null;
+                            setTimeout(() => {
+                                box.classList.add('hidden');
+                                bar.style.width = "0%";
+                                closeVideoUploadModal();
+                            }, 1200);
+                        }
+                    });
+                } else {
+                    txt.textContent = "Upload failed. Check Cloudinary preset.";
+                    alert("Video upload failed (" + xhr.status + ").");
+                }
+            };
+
+            xhr.onerror = function () {
+                btn.disabled = false;
+                btn.classList.remove('opacity-60');
+                txt.textContent = "Network error while uploading.";
+            };
+
+            xhr.send(fd);
+        }
+
+        function renderPendingVideos() {
+            const container = document.getElementById('pendingVideosContainer');
+            if (!container) return;
+            if (!cachedPendingVideos.length) {
+                container.innerHTML = `<p class="text-gray-400 text-[11px]">No pending videos waiting.</p>`;
+                return;
+            }
+            container.innerHTML = cachedPendingVideos.map(v => `
+                <div class="bg-white p-2.5 rounded border space-y-1.5 shadow-xs">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-gray-900">${v.title}</h4>
+                        <span class="text-[10px] text-gray-500">📞 ${v.phone}</span>
+                    </div>
+                    <video src="${v.url}" controls playsinline class="w-full max-h-48 rounded-lg bg-black"></video>
+                    <div class="flex gap-2 pt-1">
+                        <button onclick="approveVideoReel('${v.id}')" class="flex-1 bg-emerald-600 text-white py-1.5 rounded-lg font-bold">✅ Approve Reel</button>
+                        <button onclick="rejectVideoReel('${v.id}')" class="flex-1 bg-red-100 text-red-700 py-1.5 rounded-lg font-bold">❌ Reject</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function approveVideoReel(id) {
+            const item = cachedPendingVideos.find(v => v.id === id);
+            if (!item) return;
+            const { id: _, ...videoData } = item;
+            db.ref('approved_videos').push(videoData, (err) => {
+                if (!err) {
+                    db.ref('pending_videos/' + id).remove();
+                    alert("Video Reel Approved & Live!");
+                }
+            });
+        }
+
+        function rejectVideoReel(id) {
+            if (confirm("Reject this video?")) {
+                db.ref('pending_videos/' + id).remove();
+            }
+        }
+
+        function deleteApprovedReel(id) {
+            if (!isAdminLoggedIn) return;
+            if (confirm("Delete this video reel?")) {
+                db.ref('approved_videos/' + id).remove();
+            }
+        }
+
+        function renderApprovedReels() {
+            const container = document.getElementById('approvedReelsContainer');
+            if (!container) return;
+            if (!cachedApprovedVideos.length) {
+                container.innerHTML = `
+                    <div class="bg-white p-6 rounded-2xl text-center space-y-2 border">
+                        <p class="text-xs text-gray-500">No approved local reels yet.</p>
+                        <button onclick="openVideoUploadModal()" class="bg-emerald-600 text-white text-xs px-4 py-2 rounded-xl font-bold">🎥 Upload First Reel</button>
+                    </div>`;
+                return;
+            }
+            container.innerHTML = cachedApprovedVideos.map(v => {
+                const delBtn = isAdminLoggedIn ? `<button onclick="deleteApprovedReel('${v.id}')" class="text-red-600 text-[11px] font-bold">🗑️ Delete</button>` : '';
+                return `
+                    <div class="bg-white rounded-2xl shadow-sm border p-3 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h4 class="font-bold text-xs text-gray-900">${v.title}</h4>
+                                <p class="text-[10px] text-gray-500">📞 ${v.phone || ''}</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                ${delBtn}
+                                <a href="https://wa.me/${v.phone || '919876543210'}?text=Hello" target="_blank" class="bg-emerald-600 text-white text-[10px] px-2.5 py-1 rounded-lg font-bold">WhatsApp</a>
+                            </div>
+                        </div>
+                        <video src="${v.url}" controls playsinline class="w-full max-h-96 rounded-xl bg-black"></video>
+                    </div>
+                `;
+            }).join('');
+        }
 
         function compressImageToBase64(file, callback) {
             let reader = new FileReader();
@@ -803,6 +1066,7 @@
                 return;
             }
             renderAdminCategoriesList();
+            renderPendingVideos();
             renderPendingAds();
             document.getElementById('adminUpiInput').value = globalUpiId;
             document.getElementById('adminApprovalModal').classList.remove('hidden');
@@ -835,7 +1099,10 @@
 
             setTimeout(() => {
                 let reply = "";
-                if(q.includes('biryani') || q.includes('biriyani') || q.includes('food') || q.includes('hotel') || q.includes('khana') || q.includes('बिरयानी')) {
+                if(q.includes('reel') || q.includes('video') || q.includes('वीडियो') || q.includes('रील')) {
+                    reply = "🎬 <b>Local Video Reels:</b><br>नीचे बॉटम बार में <b>Reels</b> बटन दबाएं—वहाँ से आप 30 सेकंड के अंदर वाला लोकल वीडियो देख या अपलोड कर सकते हैं!";
+                }
+                else if(q.includes('biryani') || q.includes('biriyani') || q.includes('food') || q.includes('hotel') || q.includes('khana') || q.includes('बिरयानी')) {
                     reply = "🍗 <b>Manjeri Food & Biriyani:</b><br>• Thalassery Dum Chicken Biriyani (@ ₹150) & Malabar Beef Roast available!<br>• Pure Veg Sadhya & Masala Dosa (@ ₹80).<br>📞 Order on WhatsApp from Food category!";
                 } 
                 else if(q.includes('furniture') || q.includes('sofa') || q.includes('cot') || q.includes('wood') || q.includes('फर्नीचर')) {
@@ -865,21 +1132,54 @@
                     if(match) {
                         reply = `✅ <b>Found in Bazaar:</b> ${match.title}<br>💰 Rate: <b>${match.price}</b><br>📝 ${match.desc}<br>📞 Contact: ${match.phone}`;
                     } else {
-                        reply = "🙏 <b>Namaskaram / सलाम!</b><br>आप मुझसे <b>Biryani, Furniture, Ambulance, Room, Madrasa, Shaadi, Auto, Bus</b> या किसी भी दुकान के बारे में पूछ सकते हैं!";
+                        reply = "🙏 <b>Namaskaram / सलाम!</b><br>आप मुझसे <b>Biryani, Furniture, Ambulance, Room, Madrasa, Shaadi, Auto, Bus, Reels</b> या किसी भी दुकान के बारे में सीधे पूछ सकते हैं!";
                     }
                 }
                 box.innerHTML += `<div class="bg-emerald-100 text-emerald-900 p-2 rounded-xl">${reply}</div>`;
                 box.scrollTop = box.scrollHeight;
-            }, 400);
+            }, 300);
         }
 
         function switchTab(tab) {
-            let h = document.getElementById('mainContentView'), w = document.getElementById('wishlistView'), c = document.getElementById('cartView'), i = document.getElementById('infoDisclaimerView');
-            h.classList.add('hidden'); w.classList.add('hidden'); c.classList.add('hidden'); i.classList.add('hidden');
-            if(tab === 'home') h.classList.remove('hidden');
-            else if(tab === 'wishlist') { w.classList.remove('hidden'); renderWishlist(); }
-            else if(tab === 'cart') { c.classList.remove('hidden'); renderCart(); }
-            else if(tab === 'info') i.classList.remove('hidden');
+            let h = document.getElementById('mainContentView'),
+                r = document.getElementById('reelsView'),
+                w = document.getElementById('wishlistView'),
+                c = document.getElementById('cartView'),
+                i = document.getElementById('infoDisclaimerView'),
+                banner = document.getElementById('featuredBannerWrapper');
+
+            h.classList.add('hidden');
+            r.classList.add('hidden');
+            w.classList.add('hidden');
+            c.classList.add('hidden');
+            i.classList.add('hidden');
+
+            ['home', 'reels', 'wishlist', 'cart', 'info'].forEach(t => {
+                let el = document.getElementById('nav-' + t);
+                if (el) el.className = (t === tab)
+                    ? "text-emerald-700 text-xs font-bold flex flex-col items-center relative"
+                    : "text-gray-500 text-xs font-medium flex flex-col items-center relative";
+            });
+
+            if(tab === 'home') {
+                h.classList.remove('hidden');
+                if (banner) banner.classList.remove('hidden');
+            } else if(tab === 'reels') {
+                r.classList.remove('hidden');
+                if (banner) banner.classList.add('hidden');
+                renderApprovedReels();
+            } else if(tab === 'wishlist') {
+                w.classList.remove('hidden');
+                if (banner) banner.classList.remove('hidden');
+                renderWishlist();
+            } else if(tab === 'cart') {
+                c.classList.remove('hidden');
+                if (banner) banner.classList.remove('hidden');
+                renderCart();
+            } else if(tab === 'info') {
+                i.classList.remove('hidden');
+                if (banner) banner.classList.add('hidden');
+            }
         }
 
         function renderCategoriesBar() {
@@ -966,7 +1266,7 @@
         function checkPendingCount() {
             let badge = document.getElementById('pendingCountBadge');
             let notifBtn = document.getElementById('adminNotifBtn');
-            let totalPending = cachedPending.length;
+            let totalPending = cachedPending.length + cachedPendingVideos.length;
             if(badge && notifBtn) {
                 badge.innerText = totalPending;
                 if(totalPending > 0 && isAdminLoggedIn) notifBtn.classList.remove('hidden');
@@ -1001,6 +1301,23 @@
                 checkPendingCount();
                 if(!document.getElementById('adminApprovalModal').classList.contains('hidden')) {
                     renderPendingAds();
+                }
+            });
+
+            db.ref('pending_videos').on('value', (snapshot) => {
+                const data = snapshot.val();
+                cachedPendingVideos = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })).reverse() : [];
+                checkPendingCount();
+                if(!document.getElementById('adminApprovalModal').classList.contains('hidden')) {
+                    renderPendingVideos();
+                }
+            });
+
+            db.ref('approved_videos').on('value', (snapshot) => {
+                const data = snapshot.val();
+                cachedApprovedVideos = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })).reverse() : [];
+                if(!document.getElementById('reelsView').classList.contains('hidden')) {
+                    renderApprovedReels();
                 }
             });
         }
