@@ -4,6 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manjeri Local Bazaar - മഞ്ചേരി ലോക്കൽ ബസാർ</title>
+    <meta name="description" content="Manjeri Local Bazaar (നാട്ടുചന്ത) - 0% commission local marketplace and directory for Manjeri, Nilambur, and Pandikkad. Find rooms, food, biriyani, auto, taxi, furniture, jobs, and local reels.">
+    <meta name="keywords" content="Manjeri Local Bazaar, മഞ്ചേരി ലോക്കൽ ബസാർ, നാട്ടുചന്ത, Manjeri, Nilambur, Pandikkad, Malappuram, local bazaar, reels, rooms, biriyani">
+    <meta name="robots" content="index, follow">
+    <meta name="application-name" content="Manjeri Local Bazaar">
+    <meta name="apple-mobile-web-app-title" content="Manjeri Local Bazaar">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#047857">
+    <meta property="og:title" content="Manjeri Local Bazaar - മഞ്ചേരി ലോക്കൽ ബസാർ">
+    <meta property="og:description" content="0% commission local marketplace and reels hub for Manjeri, Nilambur, and Pandikkad.">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%23047857'/%3E%3Cpath d='M48 74h96l-8-26H56l-8 26zm6 8h84v56H54V82zm22 14v42h40V96H76z' fill='%23f59e0b'/%3E%3Ctext x='96' y='168' font-family='Arial,sans-serif' font-size='22' font-weight='bold' fill='%23ffffff' text-anchor='middle'%3EManjeri Bazaar%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%23047857'/%3E%3Cpath d='M48 74h96l-8-26H56l-8 26zm6 8h84v56H54V82zm22 14v42h40V96H76z' fill='%23f59e0b'/%3E%3Ctext x='96' y='168' font-family='Arial,sans-serif' font-size='22' font-weight='bold' fill='%23ffffff' text-anchor='middle'%3EManjeri Bazaar%3C/text%3E%3C/svg%3E">
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Manjeri Local Bazaar","short_name":"Manjeri Bazaar","start_url":".","display":"standalone","background_color":"#047857","theme_color":"#047857","icons":[{"src":"data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 192 192%27%3E%3Crect width=%27192%27 height=%27192%27 rx=%2736%27 fill=%27%23047857%27/%3E%3Cpath d=%27M48 74h96l-8-26H56l-8 26zm6 8h84v56H54V82zm22 14v42h40V96H76z%27 fill=%27%23f59e0b%27/%3E%3Ctext x=%2796%27 y=%27168%27 font-family=%27Arial,sans-serif%27 font-size=%2722%27 font-weight=%27bold%27 fill=%27%23ffffff%27 text-anchor=%27middle%27%3EManjeri Bazaar%3C/text%3E%3C/svg%3E","sizes":"192x192","type":"image/svg+xml"}]}'>
     <!-- Tailwind CSS v3 CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase SDKs -->
@@ -658,7 +672,6 @@
                 }
             };
             vid.onerror = function () {
-                // Fallback if browser cannot read metadata quickly
                 validReelFile = file;
                 statusEl.textContent = `Selected: ${file.name || 'Video'}. Ready to upload!`;
                 statusEl.className = "text-[11px] text-emerald-700 font-bold mt-1.5";
@@ -731,13 +744,11 @@
                         createdAt: new Date().toLocaleString()
                     };
 
-                    // Add immediately to local pending cache so it shows right away
                     cachedPendingVideos.unshift(newVideoObj);
                     saveReelCache();
                     checkPendingCount();
                     renderPendingVideos();
 
-                    // Push to Firebase pending_videos as well
                     db.ref('pending_videos').push({
                         title,
                         phone,
@@ -932,8 +943,8 @@
             const isFood = q.includes('biryani') || q.includes('biriyani') || q.includes('food') || q.includes('ബിരിയാണി') || q.includes('ഭക്ഷണം') || q.includes('बिरयानी');
             const isRoom = q.includes('room') || q.includes('rent') || q.includes('house') || q.includes('റൂം') || q.includes('വീട്') || q.includes('रूम');
             const isAuto = q.includes('auto') || q.includes('taxi') || q.includes('bus') || q.includes('ഓട്ടോ') || q.includes('ബസ്') || q.includes('ऑटो');
-            const isFurn = q.includes('furniture') || q.includes('sofa') || q.includes('cot') || q.includes('ഫർണിച്ചർ') || q.includes('ഫർണിച്ചർ') || q.includes('फर्ണിച്ചർ') || q.includes('फर्नीचर');
-            const isEmer = q.includes('ambulance') || q.includes('emergency') || q.includes('hospital') || q.includes('ആംബുലൻസ്') || q.includes('എम्बुलेंस');
+            const isFurn = q.includes('furniture') || q.includes('sofa') || q.includes('cot') || q.includes('ഫർണിച്ചർ') || q.includes('फर्नीचर');
+            const isEmer = q.includes('ambulance') || q.includes('emergency') || q.includes('hospital') || q.includes('ആംബുലൻസ്') || q.includes('एम्बुलेंस');
 
             if (maveliLang === 'ml') {
                 if (isReel) return "🎬 <b>മഞ്ചേരി ലോക്കൽ റീൽസ്:</b> താഴെ മെനുവിലെ <b>Reels</b> ബട്ടൺ അമർത്തുക—ക്യാമറയിൽ നിന്നോ ഗാലറിയിൽ നിന്നോ 30 സെക്കൻഡ് വരെയുള്ള വീഡിയോ അപ്‌ലോഡ് ചെയ്യാം!";
