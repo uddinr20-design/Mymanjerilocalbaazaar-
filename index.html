@@ -45,8 +45,8 @@
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <button onclick="openAiAssistant()" class="bg-emerald-800 hover:bg-emerald-900 text-white px-2.5 py-1.5 rounded-full text-[10px] font-bold shadow-xs flex items-center gap-0.5 animate-pulse">
-                        <span>🤖</span> AI
+                    <button onclick="openAiAssistant()" class="bg-emerald-800 hover:bg-emerald-900 text-white px-2.5 py-1.5 rounded-full text-[10px] font-bold shadow-xs flex items-center gap-1 animate-pulse">
+                        <span>🤖</span> Maveli AI
                     </button>
                     <button onclick="openQrModal()" class="bg-emerald-800 hover:bg-emerald-900 text-white px-2.5 py-1.5 rounded-full text-[10px] font-bold shadow-xs flex items-center gap-0.5">
                         <span>📱</span> QR
@@ -72,7 +72,7 @@
         </div>
     </header>
 
-    <!-- Side Sliding Drawer Menu (Calendar Moved Here) -->
+    <!-- Side Sliding Drawer Menu -->
     <div id="sideDrawer" class="fixed inset-0 bg-black/50 z-[9999] hidden transition-opacity">
         <div class="absolute top-0 left-0 w-72 h-full bg-white text-gray-900 shadow-2xl p-4 flex flex-col justify-between transform -translate-x-full transition-transform duration-300" id="drawerContent">
             <div>
@@ -113,7 +113,7 @@
         </div>
     </div>
 
-    <!-- Sticky Auto-Sliding Featured Banners (Always stays on top during scroll) -->
+    <!-- Sticky Auto-Sliding Featured Banners -->
     <div id="featuredBannerWrapper" class="sticky top-[96px] z-40 bg-gray-100 pt-2 pb-1 px-3 max-w-md mx-auto">
         <div class="flex justify-between items-center mb-1">
             <h3 class="font-bold text-xs text-gray-600 uppercase" id="secFeatured">🌟 Auto-Sliding Featured Banners</h3>
@@ -138,12 +138,12 @@
             </button>
         </div>
 
-        <!-- Category Listings -->
+        <!-- Category Listings with Prominent Post Ad Button -->
         <div class="mt-4 mb-6">
-            <div class="flex justify-between items-center mb-2">
+            <div class="flex justify-between items-center gap-2 mb-3">
                 <h3 class="font-bold text-xs text-gray-700 uppercase" id="categoryTitleHeading">📋 All Category Listings</h3>
-                <button onclick="openPostAdModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold px-3 py-1.5 rounded-xl shadow-sm transition flex items-center gap-1">
-                    <span>➕</span> Post Ad
+                <button onclick="openPostAdModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-2xl shadow-md transition flex items-center gap-1.5 flex-shrink-0">
+                    <span class="text-sm">➕</span> <span>Post Ad</span>
                 </button>
             </div>
             <div id="listingsContainer" class="space-y-4"></div>
@@ -153,12 +153,12 @@
 
     <!-- Local Video Reels Section -->
     <div id="reelsView" class="max-w-md mx-auto p-3.5 space-y-4 hidden">
-        <div class="bg-emerald-700 text-white p-3.5 rounded-2xl shadow flex justify-between items-center">
+        <div class="bg-emerald-700 text-white p-3.5 rounded-2xl shadow flex justify-between items-center gap-2">
             <div>
                 <h3 class="font-bold text-sm">🎬 Manjeri Local Reels</h3>
-                <p class="text-[10px] text-emerald-100">30s shop & offer videos (Camera / Gallery)</p>
+                <p class="text-[10px] text-emerald-100">30s shop videos — Camera or Gallery</p>
             </div>
-            <button onclick="openVideoUploadModal()" class="bg-white text-emerald-800 text-[11px] font-bold px-3 py-1.5 rounded-xl shadow">
+            <button onclick="openVideoUploadModal()" class="bg-white text-emerald-800 text-xs font-bold px-3.5 py-2 rounded-xl shadow flex-shrink-0">
                 🎥 Upload Video
             </button>
         </div>
@@ -167,11 +167,11 @@
         <div id="approvedReelsContainer" class="space-y-4"></div>
     </div>
 
-    <!-- Video Upload Modal (Camera or Gallery, Max 30s) -->
+    <!-- Video Upload Modal (Separate Camera & Gallery Buttons, Max 30s) -->
     <div id="videoUploadModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
         <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 max-h-[85vh] overflow-y-auto text-xs">
             <div class="flex justify-between items-center border-b pb-2">
-                <h3 class="font-bold text-emerald-800">🎥 Upload Short Video (Max 30s)</h3>
+                <h3 class="font-bold text-emerald-800">🎥 Upload Video (Max 30s)</h3>
                 <button onclick="closeVideoUploadModal()" class="text-gray-400 font-bold">✕</button>
             </div>
 
@@ -186,10 +186,18 @@
             </div>
 
             <div>
-                <label class="font-semibold text-gray-600 block mb-1">Record or Pick Video (≤ 30 sec):</label>
-                <input type="file" id="reelFileInput" accept="video/*" capture="environment" onchange="validateReelDuration(this)"
-                    class="w-full text-xs file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700">
-                <p id="reelDurationStatus" class="text-[11px] text-gray-500 mt-1">Select a video up to 30 seconds.</p>
+                <label class="font-semibold text-gray-600 block mb-1.5">Choose Source (≤ 30 sec):</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <label class="bg-emerald-50 border border-emerald-300 text-emerald-800 p-2.5 rounded-xl text-center font-bold cursor-pointer flex flex-col items-center gap-1 hover:bg-emerald-100">
+                        <span class="text-lg">📹</span> Record Camera
+                        <input id="reelCameraInput" type="file" accept="video/*" capture="environment" onchange="validateReelDuration(this)" class="hidden">
+                    </label>
+                    <label class="bg-blue-50 border border-blue-300 text-blue-800 p-2.5 rounded-xl text-center font-bold cursor-pointer flex flex-col items-center gap-1 hover:bg-blue-100">
+                        <span class="text-lg">🎞️</span> Pick from Gallery
+                        <input id="reelGalleryInput" type="file" accept="video/*" onchange="validateReelDuration(this)" class="hidden">
+                    </label>
+                </div>
+                <p id="reelDurationStatus" class="text-[11px] text-gray-500 mt-1.5">Tap "Record Camera" or "Pick from Gallery" (Max 30s).</p>
             </div>
 
             <div id="reelProgressBox" class="hidden space-y-1">
@@ -297,20 +305,28 @@
         </div>
     </div>
 
-    <!-- Smart AI Assistant Modal (Direct Conversational Helper) -->
+    <!-- Maveli AI Modal (Working Language Switch + Malayalam Script + Built-in Mic) -->
     <div id="aiAssistantModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
         <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3">
-            <div class="flex justify-between items-center border-b pb-2">
-                <h3 class="font-bold text-xs text-emerald-800">🧑‍🌾 Naadan AI (മലയാളം / हिंदी / English)</h3>
-                <button onclick="closeAiAssistant()" class="text-gray-400 font-bold text-sm">✕</button>
-            </div>
-            <div class="h-56 bg-gray-50 border rounded-xl p-2.5 overflow-y-auto text-xs space-y-2" id="aiChatBox">
-                <div class="bg-emerald-100 text-emerald-900 p-2 rounded-xl">
-                    Namaskaram! 🙏 मुझसे सीधे बात करें—<b>Biryani, Room, Auto, Furniture, Ambulance, Reels</b> या किसी भी दुकान के बारे में पूछें!
+            <div class="flex justify-between items-center border-b pb-2 gap-2">
+                <h3 class="font-bold text-xs text-emerald-800">👑 Maveli AI (മാവേലി AI)</h3>
+                <div class="flex items-center gap-1">
+                    <button onclick="setMaveliLang('ml')" id="maveliLang-ml" class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-700 text-white">മലയാളം</button>
+                    <button onclick="setMaveliLang('hi')" id="maveliLang-hi" class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-gray-100 text-gray-700">हिंदी</button>
+                    <button onclick="setMaveliLang('en')" id="maveliLang-en" class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-gray-100 text-gray-700">EN</button>
+                    <button onclick="closeAiAssistant()" class="text-gray-400 font-bold text-sm ml-1">✕</button>
                 </div>
             </div>
-            <div class="flex gap-2">
-                <input type="text" id="aiUserInput" onkeydown="if(event.key==='Enter') sendAiMessage()" placeholder="सीधे पूछें / Ask directly..." class="flex-1 p-2 border rounded-xl text-xs bg-white text-gray-900">
+            <div class="h-56 bg-gray-50 border rounded-xl p-2.5 overflow-y-auto text-xs space-y-2" id="aiChatBox">
+                <div class="bg-emerald-100 text-emerald-900 p-2 rounded-xl" id="maveliWelcomeMsg">
+                    നമസ്കാരം! 🙏 ഞാൻ <b>മാവേലി AI</b> ആണ്. ബിരിയാണി, റൂം, ഓട്ടോ, ഫർണിച്ചർ, റീൽസ് അല്ലെങ്കിൽ ഏത് കടയെക്കുറിച്ചും ചോദിക്കാം!
+                </div>
+            </div>
+            <div class="flex gap-1.5 items-center">
+                <button onclick="startMaveliVoice()" title="Speak to Maveli AI" class="bg-amber-600 hover:bg-amber-700 text-white w-9 h-9 rounded-xl flex items-center justify-center text-sm flex-shrink-0 shadow">
+                    🎙️
+                </button>
+                <input type="text" id="aiUserInput" onkeydown="if(event.key==='Enter') sendAiMessage()" placeholder="ചോദിക്കൂ / Ask Maveli AI..." class="flex-1 p-2 border rounded-xl text-xs bg-white text-gray-900">
                 <button onclick="sendAiMessage()" class="bg-emerald-600 text-white px-3 py-2 rounded-xl text-xs font-bold">Send</button>
             </div>
         </div>
@@ -485,7 +501,6 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // Cloudinary Config for 30s Direct Video Uploads
         const CLOUDINARY_CLOUD_NAME = "i1u3mwzg";
         const CLOUDINARY_UPLOAD_PRESET = "zvnsmynv";
         const MAX_REEL_SECONDS = 30;
@@ -494,14 +509,15 @@
         const SUPER_ADMIN = "uddinr20@gmail.com";
         let isAdminLoggedIn = (currentUser === SUPER_ADMIN);
         let currentLang = 'en';
+        let maveliLang = 'ml';
         let wishlist = [];
         let cart = [];
         let globalUpiId = "manjeribazaar@upi";
         let autoSlideTimer = null;
 
         let validReelFile = null;
-        let cachedPendingVideos = [];
-        let cachedApprovedVideos = [];
+        let cachedPendingVideos = JSON.parse(localStorage.getItem('mlb_pending_videos_v1') || '[]');
+        let cachedApprovedVideos = JSON.parse(localStorage.getItem('mlb_approved_videos_v1') || '[]');
 
         let defaultCategories = [
             { id: 'all', name: 'All Ads', icon: '🌟' },
@@ -600,6 +616,13 @@
         let selectedUserPhotos = [];
         let selectedAdminPosterPhoto = "";
 
+        function saveReelCache() {
+            try {
+                localStorage.setItem('mlb_pending_videos_v1', JSON.stringify(cachedPendingVideos));
+                localStorage.setItem('mlb_approved_videos_v1', JSON.stringify(cachedApprovedVideos));
+            } catch (e) {}
+        }
+
         // Video Reels Upload & Approval Functions
         function openVideoUploadModal() {
             document.getElementById('videoUploadModal').classList.remove('hidden');
@@ -614,8 +637,8 @@
             validReelFile = null;
 
             if (!file) {
-                statusEl.textContent = "Select a video up to 30 seconds.";
-                statusEl.className = "text-[11px] text-gray-500 mt-1";
+                statusEl.textContent = 'Tap "Record Camera" or "Pick from Gallery" (Max 30s).';
+                statusEl.className = "text-[11px] text-gray-500 mt-1.5";
                 return;
             }
 
@@ -627,12 +650,18 @@
                 if (secs > MAX_REEL_SECONDS) {
                     input.value = "";
                     statusEl.textContent = `Video is ${secs}s long. Max allowed is ${MAX_REEL_SECONDS}s.`;
-                    statusEl.className = "text-[11px] text-red-600 font-bold mt-1";
+                    statusEl.className = "text-[11px] text-red-600 font-bold mt-1.5";
                 } else {
                     validReelFile = file;
-                    statusEl.textContent = `Valid video (${secs}s). Ready to upload!`;
-                    statusEl.className = "text-[11px] text-emerald-700 font-bold mt-1";
+                    statusEl.textContent = `Selected: ${file.name || 'Video'} (${secs}s). Ready to upload!`;
+                    statusEl.className = "text-[11px] text-emerald-700 font-bold mt-1.5";
                 }
+            };
+            vid.onerror = function () {
+                // Fallback if browser cannot read metadata quickly
+                validReelFile = file;
+                statusEl.textContent = `Selected: ${file.name || 'Video'}. Ready to upload!`;
+                statusEl.className = "text-[11px] text-emerald-700 font-bold mt-1.5";
             };
             vid.src = URL.createObjectURL(file);
         }
@@ -646,7 +675,7 @@
                 return;
             }
             if (!validReelFile) {
-                alert("Please select a valid video of 30 seconds or less.");
+                alert("Please choose a video from Camera or Gallery (30s or less).");
                 return;
             }
 
@@ -658,61 +687,92 @@
             btn.disabled = true;
             btn.classList.add('opacity-60');
             box.classList.remove('hidden');
-            bar.style.width = "15%";
-            txt.textContent = "Uploading to Cloudinary...";
+            bar.style.width = "10%";
+            txt.textContent = "Starting upload to Cloudinary...";
 
             const fd = new FormData();
             fd.append("file", validReelFile);
             fd.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-            fd.append("resource_type", "video");
 
             const xhr = new XMLHttpRequest();
+            xhr.timeout = 120000;
             xhr.open("POST", `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/video/upload`);
 
             xhr.upload.onprogress = function (e) {
-                if (e.lengthComputable) {
-                    const pct = Math.min(95, Math.round((e.loaded / e.total) * 100));
+                if (e.lengthComputable && e.total > 0) {
+                    const pct = Math.min(96, Math.max(10, Math.round((e.loaded / e.total) * 100)));
                     bar.style.width = pct + "%";
-                    txt.textContent = `Uploading... ${pct}%`;
+                    txt.textContent = `Uploading video... ${pct}%`;
                 }
             };
 
             xhr.onload = function () {
                 btn.disabled = false;
                 btn.classList.remove('opacity-60');
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    const res = JSON.parse(xhr.responseText);
-                    bar.style.width = "100%";
-                    txt.textContent = "Uploaded! Sent for Admin Approval.";
 
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    let res = {};
+                    try { res = JSON.parse(xhr.responseText); } catch (e) {}
+                    const videoUrl = res.secure_url || res.url;
+                    if (!videoUrl) {
+                        txt.textContent = "Upload completed but no URL returned.";
+                        return;
+                    }
+
+                    bar.style.width = "100%";
+                    txt.textContent = "Uploaded! Saving to Admin Approval Queue...";
+
+                    const localId = "vid_" + Date.now();
+                    const newVideoObj = {
+                        id: localId,
+                        title,
+                        phone,
+                        url: videoUrl,
+                        createdAt: new Date().toLocaleString()
+                    };
+
+                    // Add immediately to local pending cache so it shows right away
+                    cachedPendingVideos.unshift(newVideoObj);
+                    saveReelCache();
+                    checkPendingCount();
+                    renderPendingVideos();
+
+                    // Push to Firebase pending_videos as well
                     db.ref('pending_videos').push({
                         title,
                         phone,
-                        url: res.secure_url,
-                        createdAt: new Date().toLocaleString()
-                    }, (err) => {
-                        if (!err) {
-                            alert("Video submitted! It will appear in Reels after Admin approval.");
-                            document.getElementById('reelTitleInput').value = "";
-                            document.getElementById('reelFileInput').value = "";
-                            validReelFile = null;
-                            setTimeout(() => {
-                                box.classList.add('hidden');
-                                bar.style.width = "0%";
-                                closeVideoUploadModal();
-                            }, 1200);
-                        }
-                    });
+                        url: videoUrl,
+                        createdAt: newVideoObj.createdAt
+                    }).catch(() => {});
+
+                    alert("Video uploaded! Sent for Admin Approval.");
+                    document.getElementById('reelTitleInput').value = "";
+                    document.getElementById('reelCameraInput').value = "";
+                    document.getElementById('reelGalleryInput').value = "";
+                    document.getElementById('reelDurationStatus').textContent = 'Tap "Record Camera" or "Pick from Gallery" (Max 30s).';
+                    validReelFile = null;
+
+                    setTimeout(() => {
+                        box.classList.add('hidden');
+                        bar.style.width = "0%";
+                        closeVideoUploadModal();
+                    }, 900);
                 } else {
-                    txt.textContent = "Upload failed. Check Cloudinary preset.";
-                    alert("Video upload failed (" + xhr.status + ").");
+                    txt.textContent = `Upload failed (${xhr.status}). Check Cloudinary preset.`;
+                    alert("Cloudinary upload error (" + xhr.status + "). Please check your video or preset.");
                 }
             };
 
             xhr.onerror = function () {
                 btn.disabled = false;
                 btn.classList.remove('opacity-60');
-                txt.textContent = "Network error while uploading.";
+                txt.textContent = "Network error while uploading. Try a shorter video or better signal.";
+            };
+
+            xhr.ontimeout = function () {
+                btn.disabled = false;
+                btn.classList.remove('opacity-60');
+                txt.textContent = "Upload timed out. Please try a smaller/shorter clip.";
             };
 
             xhr.send(fd);
@@ -741,27 +801,45 @@
         }
 
         function approveVideoReel(id) {
-            const item = cachedPendingVideos.find(v => v.id === id);
-            if (!item) return;
+            const idx = cachedPendingVideos.findIndex(v => v.id === id);
+            if (idx === -1) return;
+            const [item] = cachedPendingVideos.splice(idx, 1);
+
+            cachedApprovedVideos.unshift(item);
+            saveReelCache();
+            checkPendingCount();
+            renderPendingVideos();
+            renderApprovedReels();
+
             const { id: _, ...videoData } = item;
-            db.ref('approved_videos').push(videoData, (err) => {
-                if (!err) {
-                    db.ref('pending_videos/' + id).remove();
-                    alert("Video Reel Approved & Live!");
-                }
-            });
+            db.ref('approved_videos').push(videoData).catch(() => {});
+            if (!id.startsWith('vid_')) {
+                db.ref('pending_videos/' + id).remove().catch(() => {});
+            }
+            alert("Video Reel Approved & Live!");
         }
 
         function rejectVideoReel(id) {
             if (confirm("Reject this video?")) {
-                db.ref('pending_videos/' + id).remove();
+                cachedPendingVideos = cachedPendingVideos.filter(v => v.id !== id);
+                saveReelCache();
+                checkPendingCount();
+                renderPendingVideos();
+                if (!id.startsWith('vid_')) {
+                    db.ref('pending_videos/' + id).remove().catch(() => {});
+                }
             }
         }
 
         function deleteApprovedReel(id) {
             if (!isAdminLoggedIn) return;
             if (confirm("Delete this video reel?")) {
-                db.ref('approved_videos/' + id).remove();
+                cachedApprovedVideos = cachedApprovedVideos.filter(v => v.id !== id);
+                saveReelCache();
+                renderApprovedReels();
+                if (!id.startsWith('vid_')) {
+                    db.ref('approved_videos/' + id).remove().catch(() => {});
+                }
             }
         }
 
@@ -794,6 +872,96 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        // Maveli AI Language, Voice & Malayalam Script Support
+        function setMaveliLang(lang) {
+            maveliLang = lang;
+            ['ml', 'hi', 'en'].forEach(l => {
+                const btn = document.getElementById('maveliLang-' + l);
+                if (btn) {
+                    btn.className = (l === lang)
+                        ? "px-2 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-700 text-white"
+                        : "px-2 py-0.5 rounded-lg text-[10px] font-bold bg-gray-100 text-gray-700";
+                }
+            });
+            const welcome = document.getElementById('maveliWelcomeMsg');
+            const input = document.getElementById('aiUserInput');
+            if (lang === 'ml') {
+                if (welcome) welcome.innerHTML = "നമസ്കാരം! 🙏 ഞാൻ <b>മാവേലി AI</b> ആണ്. ബിരിയാണി, റൂം, ഓട്ടോ, ഫർണിച്ചർ, റീൽസ് അല്ലെങ്കിൽ ഏത് കടയെക്കുറിച്ചും ചോദിക്കാം!";
+                if (input) input.placeholder = "മലയാളത്തിൽ ചോദിക്കൂ...";
+            } else if (lang === 'hi') {
+                if (welcome) welcome.innerHTML = "नमस्कार! 🙏 मैं <b>मावेली AI</b> हूँ। आप मुझसे बिरयानी, रूम, ऑटो, फर्नीचर, रील्स या किसी भी दुकान के बारे में सीधे पूछ सकते हैं!";
+                if (input) input.placeholder = "हिंदी में पूछें...";
+            } else {
+                if (welcome) welcome.innerHTML = "Namaskaram! 🙏 I am <b>Maveli AI</b>. Ask me about Biryani, Rooms, Auto, Furniture, Reels, or any local shop in Manjeri!";
+                if (input) input.placeholder = "Ask Maveli AI...";
+            }
+        }
+
+        function startMaveliVoice() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert('🎙️ Voice input is not supported on this browser.');
+                return;
+            }
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.lang = maveliLang === 'ml' ? 'ml-IN' : (maveliLang === 'hi' ? 'hi-IN' : 'en-IN');
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            const input = document.getElementById('aiUserInput');
+            recognition.onstart = function() {
+                if (input) input.placeholder = maveliLang === 'ml' ? "സംസാരിക്കൂ..." : (maveliLang === 'hi' ? "बोलिए..." : "Listening...");
+            };
+            recognition.onresult = function(event) {
+                const spoken = event.results[0][0].transcript;
+                if (input) {
+                    input.value = spoken;
+                    sendAiMessage();
+                }
+            };
+            recognition.onend = function() {
+                setMaveliLang(maveliLang);
+            };
+            recognition.start();
+        }
+
+        function buildMaveliReply(q) {
+            const isReel = q.includes('reel') || q.includes('video') || q.includes('വീഡിയോ') || q.includes('റീൽ') || q.includes('वीडियो') || q.includes('रील');
+            const isFood = q.includes('biryani') || q.includes('biriyani') || q.includes('food') || q.includes('ബിരിയാണി') || q.includes('ഭക്ഷണം') || q.includes('बिरयानी');
+            const isRoom = q.includes('room') || q.includes('rent') || q.includes('house') || q.includes('റൂം') || q.includes('വീട്') || q.includes('रूम');
+            const isAuto = q.includes('auto') || q.includes('taxi') || q.includes('bus') || q.includes('ഓട്ടോ') || q.includes('ബസ്') || q.includes('ऑटो');
+            const isFurn = q.includes('furniture') || q.includes('sofa') || q.includes('cot') || q.includes('ഫർണിച്ചർ') || q.includes('ഫർണിച്ചർ') || q.includes('फर्ണിച്ചർ') || q.includes('फर्नीचर');
+            const isEmer = q.includes('ambulance') || q.includes('emergency') || q.includes('hospital') || q.includes('ആംബുലൻസ്') || q.includes('എम्बुलेंस');
+
+            if (maveliLang === 'ml') {
+                if (isReel) return "🎬 <b>മഞ്ചേരി ലോക്കൽ റീൽസ്:</b> താഴെ മെനുവിലെ <b>Reels</b> ബട്ടൺ അമർത്തുക—ക്യാമറയിൽ നിന്നോ ഗാലറിയിൽ നിന്നോ 30 സെക്കൻഡ് വരെയുള്ള വീഡിയോ അപ്‌ലോഡ് ചെയ്യാം!";
+                if (isFood) return "🍗 <b>മഞ്ചേരി ഭക്ഷണം & ബിരിയാണി:</b> തലശ്ശേരി ദം ചിക്കൻ ബിരിയാണി (₹150), മലബാർ ബീഫ് റോസ്റ്റ്, വെജ് സദ്യ & മസാല ദോശ (₹80) ലഭ്യമാണ്.";
+                if (isRoom) return "🏠 <b>റൂം & വീട് വാടകയ്ക്ക്:</b> മഞ്ചേരി ടൗണിന് സമീപം കാർ പാർക്കിംഗോടും 24 മണിക്കൂർ വെള്ളത്തോടും കൂടിയ 1 & 2 BHK റൂമുകൾ (₹6,500/മാസം).";
+                if (isAuto) return "🛺 <b>ഓട്ടോ, ടാക്സി & ബസ്:</b> 24 മണിക്കൂറും GPS ഓട്ടോ/ടാക്സി സേവനവും മഞ്ചേരിയിൽ നിന്ന് കോഴിക്കോട്, നിലമ്പൂർ ബസ് സമയങ്ങളും ലഭ്യമാണ്.";
+                if (isFurn) return "🛋️ <b>ഫർണിച്ചർ:</b> നിലമ്പൂർ തേക്ക് സോഫ, കട്ടിൽ, ഡൈനിംഗ് സെറ്റുകൾ ₹12,500 മുതൽ ലഭ്യമാണ്.";
+                if (isEmer) return "🚑 <b>അടിയന്തര സഹായം:</b> ആംബുലൻസ്: <b>108</b>, പോലീസ്: <b>112</b>, മഞ്ചേരി മെഡിക്കൽ കോളേജ്: <b>0483-2766221</b>.";
+                return "🙏 <b>നമസ്കാരം!</b> ഞാൻ <b>മാവേലി AI</b> ആണ്. ബിരിയാണി, റൂം, ഓട്ടോ, ഫർണിച്ചർ, റീൽസ് എന്നിവയെക്കുറിച്ച് ചോദിക്കാം.";
+            }
+
+            if (maveliLang === 'hi') {
+                if (isReel) return "🎬 <b>मावेली AI — लोकल रील्स:</b> नीचे बॉटम बार में <b>Reels</b> दबाएं—कैमरा या गैलरी से 30 सेकंड तक का वीडियो देखें या अपलोड करें!";
+                if (isFood) return "🍗 <b>मंजेरी खाना और बिरयानी:</b> थलश्शेरी दम चिकन बिरयानी (₹150), मालाबार बीफ रोस्ट और वेज साध्या/डोसा (₹80) उपलब्ध है।";
+                if (isRoom) return "🏠 <b>रूम और घर किराया:</b> मंजेरी टाउन के पास पार्किंग और पानी की सुविधा के साथ 1 और 2 BHK रूम (₹6,500/माह)।";
+                if (isAuto) return "🛺 <b>ऑटो, टैक्सी और बस:</b> 24x7 ऑटो/टैक्सी और मंजेरी से कोझिकोड व निलंबूर के लिए बस समय उपलब्ध है।";
+                if (isFurn) return "🛋️ <b>फर्नीचर:</b> निलंबूर सागौन सोफा, कॉट और बेडरूम सेट ₹12,500 से शुरू।";
+                if (isEmer) return "🚑 <b>इमरजेंसी हेल्पलाइन:</b> एम्बुलेंस: <b>108</b>, पुलिस: <b>112</b>, मंजेरी मेडिकल कॉलेज: <b>0483-2766221</b>।";
+                return "🙏 <b>नमस्कार!</b> मैं <b>मावेली AI</b> हूँ। आप बिरयानी, रूम, ऑटो, फर्नीचर या रील्स के बारे में सीधे पूछ सकते हैं।";
+            }
+
+            if (isReel) return "🎬 <b>Maveli AI — Local Reels:</b> Tap <b>Reels</b> in the bottom bar to watch or upload short videos (up to 30s) from Camera or Gallery.";
+            if (isFood) return "🍗 <b>Manjeri Food & Biriyani:</b> Thalassery Dum Chicken Biriyani (₹150), Malabar Beef Roast & Veg Sadhya/Dosa (₹80) available.";
+            if (isRoom) return "🏠 <b>Rooms & Rent:</b> 1 & 2 BHK family rooms near Manjeri town with parking & water (₹6,500/mo).";
+            if (isAuto) return "🛺 <b>Auto, Taxi & Bus:</b> 24x7 auto/taxi stand and Manjeri–Kozhikode/Nilambur bus timings available.";
+            if (isFurn) return "🛋️ <b>Furniture:</b> Nilambur teak wood sofa, cot & bedroom sets starting at ₹12,500.";
+            if (isEmer) return "🚑 <b>Emergency Helpline:</b> Ambulance: <b>108</b>, Police: <b>112</b>, Manjeri Medical College: <b>0483-2766221</b>.";
+            return "🙏 <b>Namaskaram!</b> I am <b>Maveli AI</b>. Ask me about Biryani, Rooms, Auto, Furniture, Reels, or any Manjeri shop.";
         }
 
         function compressImageToBase64(file, callback) {
@@ -858,7 +1026,6 @@
             }
         }
 
-        // Voice Search (Mic)
         function startVoiceSearch() {
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
                 alert('🎙️ Voice Search is not supported on this browser.');
@@ -937,7 +1104,7 @@
                 timestamp: new Date().toLocaleString(),
                 user: currentUser || 'Anonymous User'
             };
-            db.ref('booking_logs').push(inquiryData);
+            db.ref('booking_logs').push(inquiryData).catch(() => {});
         }
 
         function shareListing(id, title, price, phone) {
@@ -1099,45 +1266,27 @@
 
             setTimeout(() => {
                 let reply = "";
-                if(q.includes('reel') || q.includes('video') || q.includes('वीडियो') || q.includes('रील')) {
-                    reply = "🎬 <b>Local Video Reels:</b><br>नीचे बॉटम बार में <b>Reels</b> बटन दबाएं—वहाँ से आप 30 सेकंड के अंदर वाला लोकल वीडियो देख या अपलोड कर सकते हैं!";
-                }
-                else if(q.includes('biryani') || q.includes('biriyani') || q.includes('food') || q.includes('hotel') || q.includes('khana') || q.includes('बिरयानी')) {
-                    reply = "🍗 <b>Manjeri Food & Biriyani:</b><br>• Thalassery Dum Chicken Biriyani (@ ₹150) & Malabar Beef Roast available!<br>• Pure Veg Sadhya & Masala Dosa (@ ₹80).<br>📞 Order on WhatsApp from Food category!";
-                } 
-                else if(q.includes('furniture') || q.includes('sofa') || q.includes('cot') || q.includes('wood') || q.includes('फर्नीचर')) {
-                    reply = "🛋️ <b>Furniture Hub:</b><br>Nilambur Teak Wood Sofa, Cots & Bridal Bedroom sets starting at ₹12,500 (Direct factory rates in Manjeri).";
-                } 
-                else if(q.includes('ambulance') || q.includes('emergency') || q.includes('hospital') || q.includes('police') || q.includes('sos') || q.includes('एम्बुलेंस')) {
-                    reply = "🚑 <b>Emergency Helpline Manjeri:</b><br>• Ambulance: <b>108</b><br>• Police / SOS: <b>112</b><br>• Manjeri Medical College: <b>0483-2766221</b><br>• Palliative Care (Free Wheelchair/Bed) also available!";
-                } 
-                else if(q.includes('madrasa') || q.includes('tuition') || q.includes('ustad') || q.includes('class') || q.includes('मदरसा') || q.includes('ट्यूशन')) {
-                    reply = "📖 <b>Madrasa & Tuition:</b><br>Darul Huda Madrasa & Ustad Tuition Hub offers Qur'an Tajweed, Arabic & Evening School Tuition (@ ₹400/mo).";
-                } 
-                else if(q.includes('marriage') || q.includes('shaadi') || q.includes('nikah') || q.includes('matrimonial') || q.includes('wedding') || q.includes('शादी')) {
-                    reply = "💍 <b>Shaadi & Matrimonial:</b><br>• Malabar Nikah Bureau (Verified Profiles)<br>• Bridal Silks, Mehandi & 4K Auditorium Videography available!";
-                } 
-                else if(q.includes('room') || q.includes('rent') || q.includes('house') || q.includes('flat') || q.includes('रूम')) {
-                    reply = "🏠 <b>Rooms & House Rent:</b><br>1 BHK & 2 BHK Family Rooms near Manjeri town with car parking & 24hr water (@ ₹6,500/mo).";
-                } 
-                else if(q.includes('auto') || q.includes('taxi') || q.includes('bus') || q.includes('delivery') || q.includes('ऑटो')) {
-                    reply = "🛺 <b>Travel & Auto Stand:</b><br>• 24x7 GPS Auto & Taxi Stand available.<br>• Porter Pickup Delivery (@ ₹100 base).<br>• KSRTC & Private Bus timings every 10 mins.";
-                } 
-                else {
-                    let match = cachedListings.find(item => 
-                        item.title.toLowerCase().includes(q) || 
-                        item.desc.toLowerCase().includes(q) || 
-                        item.category.toLowerCase().includes(q)
-                    );
-                    if(match) {
-                        reply = `✅ <b>Found in Bazaar:</b> ${match.title}<br>💰 Rate: <b>${match.price}</b><br>📝 ${match.desc}<br>📞 Contact: ${match.phone}`;
+                const hasLocalMatch = cachedListings.find(item =>
+                    item.title.toLowerCase().includes(q) ||
+                    item.desc.toLowerCase().includes(q) ||
+                    item.category.toLowerCase().includes(q)
+                );
+
+                if (hasLocalMatch && !q.includes('reel') && !q.includes('video')) {
+                    if (maveliLang === 'ml') {
+                        reply = `✅ <b>കണ്ടെത്തി:</b> ${hasLocalMatch.title}<br>💰 വില: <b>${hasLocalMatch.price}</b><br>📝 ${hasLocalMatch.desc}<br>📞 ഫോൺ: ${hasLocalMatch.phone}`;
+                    } else if (maveliLang === 'hi') {
+                        reply = `✅ <b>मिला:</b> ${hasLocalMatch.title}<br>💰 रेट: <b>${hasLocalMatch.price}</b><br>📝 ${hasLocalMatch.desc}<br>📞 फोन: ${hasLocalMatch.phone}`;
                     } else {
-                        reply = "🙏 <b>Namaskaram / सलाम!</b><br>आप मुझसे <b>Biryani, Furniture, Ambulance, Room, Madrasa, Shaadi, Auto, Bus, Reels</b> या किसी भी दुकान के बारे में सीधे पूछ सकते हैं!";
+                        reply = `✅ <b>Found:</b> ${hasLocalMatch.title}<br>💰 Rate: <b>${hasLocalMatch.price}</b><br>📝 ${hasLocalMatch.desc}<br>📞 Phone: ${hasLocalMatch.phone}`;
                     }
+                } else {
+                    reply = buildMaveliReply(q);
                 }
+
                 box.innerHTML += `<div class="bg-emerald-100 text-emerald-900 p-2 rounded-xl">${reply}</div>`;
                 box.scrollTop = box.scrollHeight;
-            }, 300);
+            }, 250);
         }
 
         function switchTab(tab) {
@@ -1279,6 +1428,7 @@
             loadPosters();
             loadSettings();
             renderListings(activeCategory);
+            checkPendingCount();
 
             db.ref('listings').on('value', (snapshot) => {
                 const data = snapshot.val();
@@ -1306,7 +1456,12 @@
 
             db.ref('pending_videos').on('value', (snapshot) => {
                 const data = snapshot.val();
-                cachedPendingVideos = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })).reverse() : [];
+                if (data) {
+                    const remoteVideos = Object.keys(data).map(key => ({ id: key, ...data[key] })).reverse();
+                    const localOnly = cachedPendingVideos.filter(lv => !remoteVideos.some(rv => rv.url === lv.url));
+                    cachedPendingVideos = [...localOnly, ...remoteVideos];
+                    saveReelCache();
+                }
                 checkPendingCount();
                 if(!document.getElementById('adminApprovalModal').classList.contains('hidden')) {
                     renderPendingVideos();
@@ -1315,7 +1470,12 @@
 
             db.ref('approved_videos').on('value', (snapshot) => {
                 const data = snapshot.val();
-                cachedApprovedVideos = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })).reverse() : [];
+                if (data) {
+                    const remoteApproved = Object.keys(data).map(key => ({ id: key, ...data[key] })).reverse();
+                    const localOnlyApproved = cachedApprovedVideos.filter(lv => !remoteApproved.some(rv => rv.url === lv.url));
+                    cachedApprovedVideos = [...localOnlyApproved, ...remoteApproved];
+                    saveReelCache();
+                }
                 if(!document.getElementById('reelsView').classList.contains('hidden')) {
                     renderApprovedReels();
                 }
