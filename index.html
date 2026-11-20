@@ -107,7 +107,7 @@
                         <span class="text-base">📅</span>
                         <div>
                             <p class="text-[10px] font-bold text-amber-900">Today Date / पंचांग</p>
-                            <p class="text-[11px] font-semibold text-amber-800">Nov 19, 2026 | Vrischikam 4</p>
+                            <p class="text-[11px] font-semibold text-amber-800">Nov 20, 2026 | Vrischikam 5</p>
                         </div>
                     </div>
                     <span class="text-[10px] bg-amber-600 text-white px-2 py-0.5 rounded font-bold">View</span>
@@ -273,15 +273,15 @@
             <div class="space-y-2 text-gray-700">
                 <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200">
                     <p class="font-bold text-amber-900">🇬🇧 Gregorian Date:</p>
-                    <p>Thursday, November 19, 2026</p>
+                    <p>Friday, November 20, 2026</p>
                 </div>
                 <div class="bg-emerald-50 p-2.5 rounded-xl border border-emerald-200">
                     <p class="font-bold text-amber-900">🌴 Malayalam Era (Kollavarsham):</p>
-                    <p>Vrischikam 4, 1202</p>
+                    <p>Vrischikam 5, 1202</p>
                 </div>
                 <div class="bg-teal-50 p-2.5 rounded-xl border border-teal-200">
                     <p class="font-bold text-emerald-900">🕌 Hijri Date (Islamic Calendar):</p>
-                    <p>Jumada al-Thani 9, 1448 AH (Ramadan & Muhurat tracking)</p>
+                    <p>Jumada al-Thani 10, 1448 AH (Ramadan & Muhurat tracking)</p>
                 </div>
             </div>
             <button onclick="closeCalendarModal()" class="w-full bg-amber-600 text-white py-2 rounded-xl font-bold shadow">Close Calendar</button>
@@ -319,7 +319,7 @@
         </div>
     </div>
 
-    <!-- Maveli AI Modal (Working Language Switch + Malayalam Script + Built-in Mic) -->
+    <!-- Maveli AI Modal -->
     <div id="aiAssistantModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
         <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3">
             <div class="flex justify-between items-center border-b pb-2 gap-2">
@@ -405,6 +405,14 @@
                 <button onclick="closeAdminApprovalModal()" class="text-gray-400 font-bold">✕</button>
             </div>
 
+            <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 space-y-1.5">
+                <h4 class="font-bold text-emerald-900">📲 Admin WhatsApp Alert Number</h4>
+                <div class="flex gap-1.5">
+                    <input type="text" id="adminAlertPhoneInput" placeholder="919876543210" class="flex-1 p-1.5 border rounded-lg bg-white text-gray-900">
+                    <button onclick="saveAdminAlertPhone()" class="bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-bold">Save</button>
+                </div>
+            </div>
+
             <div class="bg-teal-50 p-3 rounded-xl border border-teal-200 space-y-2">
                 <h4 class="font-bold text-teal-900">💳 Manage Donation UPI ID</h4>
                 <input type="text" id="adminUpiInput" placeholder="e.g. manjeribazaar@upi" class="w-full p-1.5 border rounded-lg bg-white text-gray-900">
@@ -455,7 +463,7 @@
         </div>
     </div>
 
-    <!-- Clean Profile Modal -->
+    <!-- Clean Profile Modal (With Admin PIN Support) -->
     <div id="profileModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
         <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 text-xs">
             <div class="flex justify-between items-center border-b pb-2">
@@ -463,8 +471,11 @@
                 <button onclick="closeProfileModal()" class="text-gray-400 font-bold">✕</button>
             </div>
             <div id="authContainer" class="space-y-2">
-                <input type="email" id="authEmail" placeholder="Email address" class="w-full p-2 border rounded-xl bg-white text-gray-900">
+                <input type="email" id="authEmail" oninput="toggleAdminPinField()" placeholder="Email address" class="w-full p-2 border rounded-xl bg-white text-gray-900">
                 <input type="password" id="authPassword" placeholder="Password" class="w-full p-2 border rounded-xl bg-white text-gray-900">
+                <div id="adminPinBox" class="hidden">
+                    <input type="password" id="authAdminPin" placeholder="Admin PIN (Required for Admin Email)" class="w-full p-2 border border-amber-400 rounded-xl bg-amber-50 text-gray-900">
+                </div>
                 <button onclick="handleLogin()" class="w-full bg-emerald-700 text-white py-2 rounded-xl font-bold">Login</button>
             </div>
             <div id="userProfileInfo" class="hidden space-y-2">
@@ -521,7 +532,9 @@
         
         let currentUser = localStorage.getItem('manjeri_user') || null;
         const SUPER_ADMIN = "uddinr20@gmail.com";
-        let isAdminLoggedIn = (currentUser === SUPER_ADMIN);
+        const ADMIN_LOGIN_PIN = "7860"; // Change this PIN anytime as needed
+        let adminAlertPhone = localStorage.getItem('mlb_admin_wa_phone') || "919876543210";
+        let isAdminLoggedIn = (currentUser === SUPER_ADMIN && localStorage.getItem('mlb_admin_pin_ok') === '1');
         let currentLang = 'en';
         let maveliLang = 'ml';
         let wishlist = [];
@@ -629,6 +642,30 @@
 
         let selectedUserPhotos = [];
         let selectedAdminPosterPhoto = "";
+
+        // WhatsApp Approval Notification Helper
+        function buildWhatsAppApprovalUrl(typeLabel, title, extraInfo = "") {
+            const cleanPhone = (adminAlertPhone || "919876543210").replace(/[^0-9]/g, '');
+            const siteUrl = window.location.href.split('?')[0];
+            const msg = `🔔 *Manjeri Local Bazaar Approval Alert*\nType: ${typeLabel}\nTitle: ${title}${extraInfo ? `\nDetails: ${extraInfo}` : ""}\nLink: ${siteUrl}`;
+            return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
+        }
+
+        function notifyAdminOnWhatsApp(typeLabel, title, extraInfo = "") {
+            const url = buildWhatsAppApprovalUrl(typeLabel, title, extraInfo);
+            window.open(url, '_blank');
+        }
+
+        function saveAdminAlertPhone() {
+            const val = document.getElementById('adminAlertPhoneInput').value.trim().replace(/[^0-9]/g, '');
+            if (!val) {
+                alert("Enter valid WhatsApp number with country code (e.g. 919876543210)");
+                return;
+            }
+            adminAlertPhone = val;
+            localStorage.setItem('mlb_admin_wa_phone', val);
+            alert("Admin WhatsApp alert number saved!");
+        }
 
         function saveReelCache() {
             try {
@@ -756,7 +793,11 @@
                         createdAt: newVideoObj.createdAt
                     }).catch(() => {});
 
-                    alert("Video uploaded! Sent for Admin Approval.");
+                    const sendWa = confirm("Video uploaded for Admin Approval! Send WhatsApp alert to Admin now?");
+                    if (sendWa) {
+                        notifyAdminOnWhatsApp("Video Reel", title, `Phone: ${phone}`);
+                    }
+
                     document.getElementById('reelTitleInput').value = "";
                     document.getElementById('reelCameraInput').value = "";
                     document.getElementById('reelGalleryInput').value = "";
@@ -803,8 +844,9 @@
                         <span class="text-[10px] text-gray-500">📞 ${v.phone}</span>
                     </div>
                     <video src="${v.url}" controls playsinline class="w-full max-h-48 rounded-lg bg-black"></video>
-                    <div class="flex gap-2 pt-1">
-                        <button onclick="approveVideoReel('${v.id}')" class="flex-1 bg-emerald-600 text-white py-1.5 rounded-lg font-bold">✅ Approve Reel</button>
+                    <div class="flex gap-1.5 pt-1">
+                        <button onclick="approveVideoReel('${v.id}')" class="flex-1 bg-emerald-600 text-white py-1.5 rounded-lg font-bold">✅ Approve</button>
+                        <button onclick="notifyAdminOnWhatsApp('Video Reel', '${v.title.replace(/'/g, "\\'")}', 'Phone: ${v.phone}')" class="bg-green-100 text-green-800 px-2.5 py-1.5 rounded-lg font-bold">📲 WA</button>
                         <button onclick="rejectVideoReel('${v.id}')" class="flex-1 bg-red-100 text-red-700 py-1.5 rounded-lg font-bold">❌ Reject</button>
                     </div>
                 </div>
@@ -1184,13 +1226,21 @@
             }
         }
 
+        function toggleAdminPinField() {
+            const emailVal = (document.getElementById('authEmail').value || '').trim().toLowerCase();
+            const pinBox = document.getElementById('adminPinBox');
+            if (!pinBox) return;
+            if (emailVal === SUPER_ADMIN) pinBox.classList.remove('hidden');
+            else pinBox.classList.add('hidden');
+        }
+
         function openProfileModal() {
             document.getElementById('profileModal').classList.remove('hidden');
             if(currentUser) {
                 document.getElementById('authContainer').classList.add('hidden');
                 document.getElementById('userProfileInfo').classList.remove('hidden');
                 document.getElementById('loggedInUserEmail').innerText = currentUser;
-                if(currentUser === SUPER_ADMIN) {
+                if(currentUser === SUPER_ADMIN && isAdminLoggedIn) {
                     document.getElementById('adminQuickBtn').classList.remove('hidden');
                 } else {
                     document.getElementById('adminQuickBtn').classList.add('hidden');
@@ -1198,6 +1248,7 @@
             } else {
                 document.getElementById('authContainer').classList.remove('hidden');
                 document.getElementById('userProfileInfo').classList.add('hidden');
+                toggleAdminPinField();
             }
         }
         function closeProfileModal() { document.getElementById('profileModal').classList.add('hidden'); }
@@ -1205,20 +1256,31 @@
         function handleLogin() {
             let email = document.getElementById('authEmail').value.trim().toLowerCase();
             if(!email) { alert('Enter email'); return; }
-            currentUser = email;
-            localStorage.setItem('manjeri_user', email);
-            if(currentUser === SUPER_ADMIN) {
+
+            if (email === SUPER_ADMIN) {
+                const enteredPin = (document.getElementById('authAdminPin').value || '').trim();
+                if (enteredPin !== ADMIN_LOGIN_PIN) {
+                    alert('Invalid Admin PIN! Please enter the correct Admin PIN.');
+                    return;
+                }
+                currentUser = email;
                 isAdminLoggedIn = true;
+                localStorage.setItem('manjeri_user', email);
+                localStorage.setItem('mlb_admin_pin_ok', '1');
                 alert('Welcome! Admin Access Unlocked.');
                 closeProfileModal();
                 renderCategoriesBar();
                 checkPendingCount();
                 openAdminApprovalModal();
             } else {
+                currentUser = email;
                 isAdminLoggedIn = false;
+                localStorage.setItem('manjeri_user', email);
+                localStorage.removeItem('mlb_admin_pin_ok');
                 alert('Logged in successfully!');
                 closeProfileModal();
                 renderCategoriesBar();
+                checkPendingCount();
             }
         }
 
@@ -1226,6 +1288,7 @@
             currentUser = null;
             isAdminLoggedIn = false;
             localStorage.removeItem('manjeri_user');
+            localStorage.removeItem('mlb_admin_pin_ok');
             document.getElementById('authContainer').classList.remove('hidden');
             document.getElementById('userProfileInfo').classList.add('hidden');
             alert('Logged out.');
@@ -1239,13 +1302,14 @@
         function closePostAdModal() { document.getElementById('postAdModal').classList.add('hidden'); }
         
         function openAdminApprovalModal() {
-            if(!isAdminLoggedIn && currentUser !== SUPER_ADMIN) {
+            if(!isAdminLoggedIn || currentUser !== SUPER_ADMIN) {
                 openProfileModal();
                 return;
             }
             renderAdminCategoriesList();
             renderPendingVideos();
             renderPendingAds();
+            document.getElementById('adminAlertPhoneInput').value = adminAlertPhone;
             document.getElementById('adminUpiInput').value = globalUpiId;
             document.getElementById('adminApprovalModal').classList.remove('hidden');
         }
@@ -1356,7 +1420,7 @@
                 `;
             });
 
-            if(currentUser === SUPER_ADMIN) {
+            if(currentUser === SUPER_ADMIN && isAdminLoggedIn) {
                 container.innerHTML += `
                     <button onclick="openAdminApprovalModal()" class="bg-amber-600 text-white text-xs px-4 py-3 rounded-2xl font-bold whitespace-nowrap shadow-sm flex items-center gap-1 flex-shrink-0">
                         <span>➕</span> Add Category
@@ -1588,7 +1652,10 @@
                 category: cat, title, desc, phone, price, images: imageUrls
             }, (err) => {
                 if(!err) {
-                    alert('Ad submitted! Waiting for Admin approval.');
+                    const sendWa = confirm("Ad submitted for Admin approval! Send WhatsApp alert to Admin now?");
+                    if (sendWa) {
+                        notifyAdminOnWhatsApp(`Ad (${cat})`, title, `${price} | Phone: ${phone}`);
+                    }
                     clearUserPhotos();
                     document.getElementById('userAdTitle').value = '';
                     document.getElementById('userAdPrice').value = '';
@@ -1611,8 +1678,9 @@
                         </div>
                     </div>
                     <p class="text-[11px] text-gray-600">${item.desc}</p>
-                    <div class="flex gap-2 pt-1">
-                        <button onclick="approveAd('${item.id}')" class="flex-1 bg-emerald-600 text-white py-1.5 rounded-lg font-bold">✅ Approve & Live</button>
+                    <div class="flex gap-1.5 pt-1">
+                        <button onclick="approveAd('${item.id}')" class="flex-1 bg-emerald-600 text-white py-1.5 rounded-lg font-bold">✅ Approve</button>
+                        <button onclick="notifyAdminOnWhatsApp('Ad (${item.category})', '${item.title.replace(/'/g, "\\'")}', '${item.price} | Phone: ${item.phone}')" class="bg-green-100 text-green-800 px-2.5 py-1.5 rounded-lg font-bold">📲 WA</button>
                         <button onclick="rejectAd('${item.id}')" class="flex-1 bg-red-100 text-red-700 py-1.5 rounded-lg font-bold">❌ Reject</button>
                     </div>
                 </div>
