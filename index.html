@@ -18,12 +18,9 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%23047857'/%3E%3Cpath d='M48 74h96l-8-26H56l-8 26zm6 8h84v56H54V82zm22 14v42h40V96H76z' fill='%23f59e0b'/%3E%3Ctext x='96' y='168' font-family='Arial,sans-serif' font-size='22' font-weight='bold' fill='%23ffffff' text-anchor='middle'%3EManjeri Bazaar%3C/text%3E%3C/svg%3E">
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%23047857'/%3E%3Cpath d='M48 74h96l-8-26H56l-8 26zm6 8h84v56H54V82zm22 14v42h40V96H76z' fill='%23f59e0b'/%3E%3Ctext x='96' y='168' font-family='Arial,sans-serif' font-size='22' font-weight='bold' fill='%23ffffff' text-anchor='middle'%3EManjeri Bazaar%3C/text%3E%3C/svg%3E">
     <link rel="manifest" href='data:application/manifest+json,{"name":"Manjeri Local Bazaar","short_name":"Manjeri Bazaar","start_url":".","display":"standalone","background_color":"#047857","theme_color":"#047857","icons":[{"src":"data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 192 192%27%3E%3Crect width=%27192%27 height=%27192%27 rx=%2736%27 fill=%27%23047857%27/%3E%3Cpath d=%27M48 74h96l-8-26H56l-8 26zm6 8h84v56H54V82zm22 14v42h40V96H76z%27 fill=%27%23f59e0b%27/%3E%3Ctext x=%2796%27 y=%27168%27 font-family=%27Arial,sans-serif%27 font-size=%2722%27 font-weight=%27bold%27 fill=%27%23ffffff%27 text-anchor=%27middle%27%3EManjeri Bazaar%3C/text%3E%3C/svg%3E","sizes":"192x192","type":"image/svg+xml"}]}'>
-    <!-- Tailwind CSS v3 CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; color: #1f2937; }
@@ -37,7 +34,6 @@
     <!-- Top Header -->
     <header class="bg-emerald-700 text-white p-3 shadow-md sticky top-0 z-50">
         <div class="max-w-md mx-auto flex flex-col gap-2.5">
-            
             <div class="flex justify-between items-center">
                 <div class="flex items-center gap-2.5">
                     <button onclick="openDrawerMenu()" class="bg-emerald-800 hover:bg-emerald-900 text-white w-9 h-9 rounded-xl text-lg font-bold shadow-md flex items-center justify-center border border-emerald-600/50">
@@ -82,7 +78,6 @@
                     </button>
                 </div>
             </div>
-
         </div>
     </header>
 
@@ -101,7 +96,6 @@
                     <button onclick="closeDrawerMenu()" class="text-gray-400 font-bold text-lg p-1">✕</button>
                 </div>
 
-                <!-- Mini Calendar Date Box inside Menu -->
                 <div onclick="openCalendarModal(); closeDrawerMenu();" class="bg-amber-50 border border-amber-200 p-2.5 rounded-xl mb-4 cursor-pointer hover:bg-amber-100 transition flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <span class="text-base">📅</span>
@@ -136,13 +130,13 @@
     </div>
 
     <!-- Main Container -->
-    <main class="max-w-md mx-auto p-3.5 space-y-3.5" id="mainContentView">
+    <main class="max-w-md mx-auto p-3.5 space-y-4" id="mainContentView">
 
-        <!-- Larger Swipeable Category Chips -->
+        <!-- Category Chips -->
         <div class="flex gap-2.5 overflow-x-auto hide-scrollbar py-1 mb-1" id="categoryContainer"></div>
 
         <!-- Search Bar with Voice Mic & Malayalam Script Support -->
-        <div class="relative mb-2.5 flex items-center gap-2">
+        <div class="relative mb-2 flex items-center gap-2">
             <div class="relative flex-1">
                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">🔍</span>
                 <input type="text" id="searchInput" oninput="searchListings()" placeholder="Search room, biryani, footwear, റൂം, ബിരിയാണി..." class="w-full pl-9 pr-4 py-2.5 bg-white text-gray-900 border border-gray-200 rounded-xl text-xs shadow-xs focus:outline-emerald-600">
@@ -152,8 +146,22 @@
             </button>
         </div>
 
+        <!-- My Today's Wholesale Offers Section -->
+        <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-3 space-y-2.5 shadow-xs">
+            <div class="flex justify-between items-center gap-2">
+                <div>
+                    <h3 class="font-bold text-xs text-amber-900 uppercase">🔥 Today's Wholesale Offers (आज का ऑफर)</h3>
+                    <p class="text-[10px] text-amber-800">Confirm with shop before replying to customer</p>
+                </div>
+                <button id="addOwnerOfferBtn" onclick="openOwnerOfferModal()" class="hidden bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold px-3 py-1.5 rounded-xl shadow">
+                    + Add Offer
+                </button>
+            </div>
+            <div id="ownerOffersContainer" class="flex gap-3 overflow-x-auto hide-scrollbar pb-1"></div>
+        </div>
+
         <!-- Category Listings with Prominent Post Ad Button -->
-        <div class="mt-4 mb-6">
+        <div class="mt-2 mb-6">
             <div class="flex justify-between items-center gap-2 mb-3">
                 <h3 class="font-bold text-xs text-gray-700 uppercase" id="categoryTitleHeading">📋 All Category Listings</h3>
                 <button onclick="openPostAdModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-2xl shadow-md transition flex items-center gap-1.5 flex-shrink-0">
@@ -170,18 +178,64 @@
         <div class="bg-emerald-700 text-white p-3.5 rounded-2xl shadow flex justify-between items-center gap-2">
             <div>
                 <h3 class="font-bold text-sm">🎬 Manjeri Local Reels</h3>
-                <p class="text-[10px] text-emerald-100">30s shop videos — Camera or Gallery</p>
+                <p class="text-[10px] text-emerald-100">30s shop videos — View & Like only (No download)</p>
             </div>
             <button onclick="openVideoUploadModal()" class="bg-white text-emerald-800 text-xs font-bold px-3.5 py-2 rounded-xl shadow flex-shrink-0">
                 🎥 Upload Video
             </button>
         </div>
 
-        <!-- Approved Reels List -->
         <div id="approvedReelsContainer" class="space-y-4"></div>
     </div>
 
-    <!-- Video Upload Modal (Separate Camera & Gallery Buttons, Max 30s) -->
+    <!-- Owner Today's Offer Modal -->
+    <div id="ownerOfferModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
+        <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 max-h-[85vh] overflow-y-auto text-xs">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-amber-900">🔥 Add Today's Wholesale Offer</h3>
+                <button onclick="closeOwnerOfferModal()" class="text-gray-400 font-bold">✕</button>
+            </div>
+            <div>
+                <label class="font-semibold text-gray-600">Offer Title:</label>
+                <input type="text" id="offerTitleInput" placeholder="e.g. 3 Maxi Combo Offer" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="font-semibold text-gray-600">Customer Price:</label>
+                    <input type="text" id="offerPriceInput" placeholder="e.g. ₹500" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900">
+                </div>
+                <div>
+                    <label class="font-semibold text-gray-600">Your Margin Note:</label>
+                    <input type="text" id="offerMarginInput" placeholder="e.g. +₹50 margin" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900">
+                </div>
+            </div>
+            <div>
+                <label class="font-semibold text-gray-600">Shop Name & Availability Note:</label>
+                <input type="text" id="offerShopInput" placeholder="e.g. Wholesale Shop Manjeri — Confirm before reply" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900">
+            </div>
+            <div>
+                <label class="font-semibold text-gray-600">WhatsApp Number:</label>
+                <input type="text" id="offerPhoneInput" placeholder="919876543210" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900">
+            </div>
+            <div>
+                <label class="font-semibold text-gray-600 block mb-1">Offer Photo:</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <label class="bg-emerald-50 border border-emerald-300 text-emerald-800 p-2 rounded-xl text-center font-bold cursor-pointer">
+                        📷 Camera
+                        <input type="file" accept="image/*" capture="environment" class="hidden" onchange="handleOfferPhotoFile(this)">
+                    </label>
+                    <label class="bg-blue-50 border border-blue-300 text-blue-800 p-2 rounded-xl text-center font-bold cursor-pointer">
+                        🖼️ Gallery
+                        <input type="file" accept="image/*" class="hidden" onchange="handleOfferPhotoFile(this)">
+                    </label>
+                </div>
+                <img id="offerPhotoPreview" src="" class="hidden w-16 h-16 rounded-lg object-cover border mt-2">
+            </div>
+            <button onclick="submitOwnerOffer()" class="w-full bg-amber-600 hover:bg-amber-700 text-white py-2.5 rounded-xl font-bold shadow">Publish Today's Offer</button>
+        </div>
+    </div>
+
+    <!-- Video Upload Modal -->
     <div id="videoUploadModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
         <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 max-h-[85vh] overflow-y-auto text-xs">
             <div class="flex justify-between items-center border-b pb-2">
@@ -196,7 +250,7 @@
 
             <div>
                 <label class="font-semibold text-gray-600">WhatsApp / Phone Number:</label>
-                <input type="text" id="reelPhoneInput" placeholder="919876543210" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900" value="919876543210">
+                <input type="text" id="reelPhoneInput" placeholder="919876543210" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900">
             </div>
 
             <div>
@@ -346,7 +400,7 @@
         </div>
     </div>
 
-    <!-- Post Ad Modal -->
+    <!-- Post Ad Modal (With Category-Specific Fields) -->
     <div id="postAdModal" class="fixed inset-0 bg-black/60 z-[99999] hidden flex items-center justify-center p-4">
         <div class="bg-white text-gray-900 rounded-2xl max-w-sm w-full p-4 shadow-xl space-y-3 max-h-[85vh] overflow-y-auto text-xs pb-6">
             <div class="flex justify-between items-center border-b pb-2">
@@ -355,14 +409,18 @@
             </div>
             <div>
                 <label class="font-semibold text-gray-600">Select Category:</label>
-                <select id="userAdCat" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900"></select>
+                <select id="userAdCat" onchange="renderCategorySpecificFields()" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900"></select>
             </div>
             <div>
-                <label class="font-semibold text-gray-600">Ad Title / Business Name:</label>
+                <label class="font-semibold text-gray-600" id="adTitleLabel">Ad Title / Business Name:</label>
                 <input type="text" id="userAdTitle" placeholder="e.g. 2 BHK House for Rent in Manjeri" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900">
             </div>
-            <div>
-                <label class="font-semibold text-gray-600">Price / Rate Tag:</label>
+
+            <!-- Dynamic Category Fields Box -->
+            <div id="categorySpecificFieldsBox" class="bg-emerald-50/70 border border-emerald-200 rounded-xl p-2.5 space-y-2"></div>
+
+            <div id="adPriceFieldWrapper">
+                <label class="font-semibold text-gray-600" id="adPriceLabel">Price / Rate Tag:</label>
                 <input type="text" id="userAdPrice" placeholder="e.g. ₹6,500 / month" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900">
             </div>
             <div>
@@ -371,7 +429,7 @@
             </div>
             <div>
                 <label class="font-semibold text-gray-600">WhatsApp Phone Number:</label>
-                <input type="text" id="userAdPhone" placeholder="919876543210" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900" value="919876543210">
+                <input type="text" id="userAdPhone" placeholder="919876543210" class="w-full p-2 border rounded-xl mt-1 bg-white text-gray-900">
             </div>
 
             <div>
@@ -405,10 +463,25 @@
                 <button onclick="closeAdminApprovalModal()" class="text-gray-400 font-bold">✕</button>
             </div>
 
+            <!-- Simple Interest & Visitor Count (No Personal Tracking) -->
+            <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-200 space-y-1.5">
+                <h4 class="font-bold text-indigo-900">📊 Interest & Visit Overview</h4>
+                <div class="grid grid-cols-2 gap-2 text-center pt-1">
+                    <div class="bg-white p-2 rounded-lg border border-indigo-100">
+                        <p class="text-[10px] text-gray-500">Today Visits</p>
+                        <p class="text-sm font-bold text-indigo-800" id="adminTodayVisits">0</p>
+                    </div>
+                    <div class="bg-white p-2 rounded-lg border border-indigo-100">
+                        <p class="text-[10px] text-gray-500">Total Interest Clicks</p>
+                        <p class="text-sm font-bold text-emerald-700" id="adminTotalInterest">0</p>
+                    </div>
+                </div>
+            </div>
+
             <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 space-y-1.5">
                 <h4 class="font-bold text-emerald-900">📲 Admin WhatsApp Alert Number</h4>
                 <div class="flex gap-1.5">
-                    <input type="text" id="adminAlertPhoneInput" placeholder="919876543210" class="flex-1 p-1.5 border rounded-lg bg-white text-gray-900">
+                    <input type="text" id="adminAlertPhoneInput" placeholder="91..." class="flex-1 p-1.5 border rounded-lg bg-white text-gray-900">
                     <button onclick="saveAdminAlertPhone()" class="bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-bold">Save</button>
                 </div>
             </div>
@@ -421,8 +494,8 @@
 
             <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 space-y-2">
                 <h4 class="font-bold text-amber-900">➕ Add New Category</h4>
-                <input type="text" id="adminCatName" placeholder="Category Name (e.g. Electronics)" class="w-full p-1.5 border rounded-lg bg-white text-gray-900">
-                <input type="text" id="adminCatIcon" placeholder="Emoji Icon (e.g. 💻)" class="w-full p-1.5 border rounded-lg bg-white text-gray-900">
+                <input type="text" id="adminCatName" placeholder="Category Name (e.g. Vehicles)" class="w-full p-1.5 border rounded-lg bg-white text-gray-900">
+                <input type="text" id="adminCatIcon" placeholder="Emoji Icon (e.g. 🚗)" class="w-full p-1.5 border rounded-lg bg-white text-gray-900">
                 <button onclick="adminAddCategory()" class="w-full bg-amber-600 text-white py-1.5 rounded-lg font-bold">Save Category Live</button>
             </div>
 
@@ -433,7 +506,7 @@
                 <h4 class="font-bold text-emerald-900">🌟 Add Full-Image Featured Banner</h4>
                 <input type="text" id="adminPosterTitle" placeholder="Poster Title (e.g. Rajadhani Manjeri)" class="w-full p-1.5 border rounded-lg bg-white text-gray-900">
                 <input type="text" id="adminPosterDesc" placeholder="Description / Offer" class="w-full p-1.5 border rounded-lg bg-white text-gray-900">
-                <input type="text" id="adminPosterPhone" placeholder="WhatsApp Phone (919876543210)" class="w-full p-1.5 border rounded-lg bg-white text-gray-900" value="919876543210">
+                <input type="text" id="adminPosterPhone" placeholder="WhatsApp Phone (91...)" class="w-full p-1.5 border rounded-lg bg-white text-gray-900">
                 <input type="text" id="adminPosterBadge" placeholder="Badge Text (e.g. FEATURED)" class="w-full p-1.5 border rounded-lg bg-white text-gray-900" value="FEATURED">
                 
                 <label class="block text-[10px] font-bold text-gray-700">Select Full Poster Photo:</label>
@@ -487,7 +560,7 @@
         </div>
     </div>
 
-    <!-- Bottom Navigation Bar (Reels added right after Home) -->
+    <!-- Bottom Navigation Bar -->
     <nav class="fixed bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md border border-gray-200 p-2 shadow-2xl rounded-2xl z-35">
         <div class="max-w-md mx-auto flex justify-around text-center items-center">
             <button onclick="switchTab('home')" id="nav-home" class="text-emerald-700 text-xs font-bold flex flex-col items-center">
@@ -532,19 +605,29 @@
         
         let currentUser = localStorage.getItem('manjeri_user') || null;
         const SUPER_ADMIN = "uddinr20@gmail.com";
-        const ADMIN_LOGIN_PIN = "7860"; // Change this PIN anytime as needed
-        let adminAlertPhone = localStorage.getItem('mlb_admin_wa_phone') || "919876543210";
+        const ADMIN_LOGIN_PIN = "3480";
+        let adminAlertPhone = localStorage.getItem('mlb_admin_wa_phone') || "";
         let isAdminLoggedIn = (currentUser === SUPER_ADMIN && localStorage.getItem('mlb_admin_pin_ok') === '1');
         let currentLang = 'en';
         let maveliLang = 'ml';
         let wishlist = [];
         let cart = [];
-        let globalUpiId = "manjeribazaar@upi";
+        let globalUpiId = localStorage.getItem('mlb_upi_id') || "manjeribazaar@upi";
         let autoSlideTimer = null;
 
         let validReelFile = null;
         let cachedPendingVideos = JSON.parse(localStorage.getItem('mlb_pending_videos_v1') || '[]');
         let cachedApprovedVideos = JSON.parse(localStorage.getItem('mlb_approved_videos_v1') || '[]');
+        let cachedOwnerOffers = JSON.parse(localStorage.getItem('mlb_owner_offers_v1') || '[]');
+        let likedIds = JSON.parse(localStorage.getItem('mlb_liked_ids_v1') || '[]');
+        let viewedIds = JSON.parse(localStorage.getItem('mlb_viewed_ids_v1') || '[]');
+        let selectedOfferPhoto = "";
+
+        let statsState = {
+            todayDate: new Date().toISOString().slice(0, 10),
+            todayVisits: parseInt(localStorage.getItem('mlb_today_visits') || '0', 10),
+            interestClicks: parseInt(localStorage.getItem('mlb_interest_clicks') || '0', 10)
+        };
 
         let defaultCategories = [
             { id: 'all', name: 'All Ads', icon: '🌟' },
@@ -559,6 +642,7 @@
             { id: 'foodveg', name: 'Food (Veg)', icon: '🥗' },
             { id: 'dress', name: 'Dress & Fancy', icon: '👗' },
             { id: 'olx', name: 'OLX Sale', icon: '🏷️' },
+            { id: 'vehicles', name: 'Vehicles (Cars & Bikes)', icon: '🚗' },
             { id: 'jobs', name: 'Jobs & Workers', icon: '💼' },
             { id: 'tiles', name: 'Tiles & Sanitary', icon: '🧱' },
             { id: 'beauty', name: 'Beauty & Fashion', icon: '💅' },
@@ -579,7 +663,7 @@
             { id: 'namaz', name: 'Namaz Time', icon: '🕌' }
         ];
 
-        let savedCats = JSON.parse(localStorage.getItem('manjeri_categories_v5'));
+        let savedCats = JSON.parse(localStorage.getItem('manjeri_categories_v6'));
         let categories = (savedCats && savedCats.length >= 25) ? savedCats : defaultCategories;
 
         const malayalamKeywordMap = {
@@ -597,43 +681,30 @@
             'ട്യൂഷൻ': 'tuition',
             'വിവാഹം': 'matrimonial',
             'തുണി': 'dress',
-            'കട': 'groceries'
+            'കട': 'groceries',
+            'വാഹനം': 'vehicles',
+            'ബസ്': 'bus'
         };
 
         let defaultPosters = [
-            { title: "Rajadhani Manjeri", desc: "Grand shopping, hypermarket & lifestyle hub!", phone: "919876543210", img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600", badge: "FEATURED 1" },
-            { title: "Malabar Wedding Silks", desc: "Flat 20% off on bridal & wedding collections!", phone: "919876543210", img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600", badge: "SLIDE 2" },
-            { title: "Al-Haya Madrasa & Tuition", desc: "Admission open for Qur'an, Arabic & School Subjects", phone: "919876543210", img: "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=600", badge: "SLIDE 3" },
-            { title: "Manjeri Royal Caterings", desc: "Hot & Fresh Malabar Biriyani direct via WhatsApp", phone: "919876543210", img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600", badge: "SLIDE 4" }
+            { title: "Rajadhani Manjeri", desc: "Grand shopping, hypermarket & lifestyle hub!", phone: "", img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600", badge: "FEATURED 1" },
+            { title: "Malabar Wedding Silks", desc: "Flat 20% off on bridal & wedding collections!", phone: "", img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600", badge: "SLIDE 2" },
+            { title: "Al-Haya Madrasa & Tuition", desc: "Admission open for Qur'an, Arabic & School Subjects", phone: "", img: "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=600", badge: "SLIDE 3" },
+            { title: "Manjeri Royal Caterings", desc: "Hot & Fresh Malabar Biriyani direct via WhatsApp", phone: "", img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600", badge: "SLIDE 4" }
         ];
 
         let defaultListings = [
-            { id: 'd1', category: 'tuition', title: 'Darul Huda Madrasa & Ustad Tuition Hub', desc: 'Experienced Ustad teaching Qur\'an Tajweed, Madrasa subjects, and evening school tuition for kids.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1577896851231-70ef18881754?w=600', 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600'], price: '₹400 / mo' },
-            { id: 'd2', category: 'matrimonial', title: 'Malabar Nikah & Matrimonial Bureau Manjeri', desc: 'Trusted wedding proposals for brides & grooms across Malappuram, Manjeri & Nilambur.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600', 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600'], price: 'Verified Profiles' },
-            { id: 'd3', category: 'rooms', title: '1 BHK & 2 BHK Family Rooms for Rent', desc: 'Prime location near Manjeri town, car parking & 24hr well water available.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600', 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600'], price: '₹6,500 / mo' },
-            { id: 'd4', category: 'footwear', title: 'Malabar Branded Shoes & Wedding Footwear', desc: 'Latest sports shoes, sandals, and formal leather footwear at wholesale rates.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600', 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600'], price: '₹499 onwards' },
-            { id: 'd5', category: 'foodnonveg', title: 'Authentic Thalassery Dum Chicken Biriyani', desc: 'Spicy Naadan style chicken biriyani, pathri, and Malabar beef roast.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600', 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600'], price: '₹150' },
-            { id: 'd6', category: 'foodveg', title: 'Pure Veg Kerala Sadhya & Masala Dosa', desc: 'Fresh morning breakfast, ghee roast, and traditional banana leaf lunch.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600'], price: '₹80' },
-            { id: 'd7', category: 'groceries', title: 'Manjeri Super Daily Fresh Groceries', desc: 'Biryani rice, pure coconut oil, pulses & spices delivered directly to home.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1542838132-92c53300491e?w=600'], price: '₹42/kg onwards' },
-            { id: 'd8', category: 'dress', title: 'Manjeri Bridal Abaya, Parda & Kids Wear', desc: 'Imported Dubai Abayas, wedding lehengas, and festival dress collection.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=600'], price: '₹799 onwards' },
-            { id: 'd9', category: 'palliative', title: 'Manjeri Pain & Palliative Care Society', desc: '24/7 free medical bed, wheelchair, oxygen concentrator & home nursing support.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600'], price: 'Free Service' },
-            { id: 'd10', category: 'crockery', title: 'Malabar Steel & Wedding Crockery House', desc: 'Full kitchen dinner sets, non-stick cookware, and glass utensils.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1584346125727-4406159670f0?w=600'], price: 'Wholesale Rate' },
-            { id: 'd11', category: 'transport', title: 'Manjeri Town Auto & Taxi 24x7 GPS Stand', desc: 'Safe & fast auto-rickshaw and family cab service for hospital and airport.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=600'], price: 'Meter Rate' },
-            { id: 'd12', category: 'furniture', title: 'Nilambur Teak Wood Sofa & Cot Showroom', desc: 'Direct factory price wooden cots, dining tables, and bridal bedroom sets.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600'], price: '₹12,500 onwards' },
-            { id: 'd13', category: 'tiles', title: 'Kerala Marbles, Granites & Sanitary Ware', desc: 'Premium floor tiles, bathroom fittings, and kitchen sinks in Manjeri.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600'], price: '₹38 / sq.ft' },
-            { id: 'd14', category: 'tailors', title: 'Master Bridal Stitching & Gents Tailoring', desc: 'Custom blouse design, churidar stitching, and wedding suits.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600'], price: '₹250 onwards' },
-            { id: 'd15', category: 'veg', title: 'Nadan Farm Fresh Organic Vegetables', desc: 'Daily fresh tomato, onion, banana, and curry leaves at market price.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600'], price: 'Fresh Daily' },
-            { id: 'd16', category: 'videographer', title: '4K Wedding Auditorium Videography & Drone', desc: 'Complete marriage photo album, live streaming, and cinematic reels.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600'], price: '₹15,000 Package' },
-            { id: 'd17', category: 'books', title: 'Manjeri Islamic & Public Library Books Hub', desc: 'Academic guides, Islamic literature, PSC books, and stationery.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=600'], price: '20% Discount' },
-            { id: 'd18', category: 'namaz', title: 'Manjeri Town Juma Masjid Namaz Timings', desc: 'Fajr: 5:15 AM | Dhuhr: 12:35 PM | Asr: 3:55 PM | Maghrib: 6:12 PM | Isha: 7:30 PM', phone: '919876543210', images: ['https://images.unsplash.com/photo-1564769625905-50e93615e769?w=600'], price: 'Daily Updated' },
-            { id: 'd19', category: 'bus', title: 'Manjeri to Kozhikode, Nilambur & Ooty Bus Times', desc: 'KSRTC & Private bus timings every 10 mins from Manjeri New Stand.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600'], price: 'Live Timings' },
-            { id: 'd20', category: 'olx', title: 'Used iPhone 14 & Activa Scooter for Urgent Sale', desc: 'Single owner, neat condition, bill and box available in Manjeri.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600'], price: '₹32,000' },
-            { id: 'd21', category: 'jobs', title: 'Salesman, Driver & Billing Staff Wanted', desc: 'Immediate joining for Manjeri supermarket and delivery hub.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600'], price: '₹15,000 / mo' },
-            { id: 'd22', category: 'beauty', title: 'Henna Bridal Mehandi & Ladies Beauty Parlour', desc: 'Home service bridal makeup and organic facial packages.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600'], price: '₹999 onwards' },
-            { id: 'd23', category: 'delivery', title: 'Manjeri Fast Porter & Pickup Auto Delivery', desc: 'House shifting, furniture moving, and parcel delivery within 30 mins.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600'], price: '₹100 Base' },
-            { id: 'd24', category: 'travels', title: 'Umrah Visa, Flights & Wayanad Tour Packages', desc: 'Complete passport, visa stamping, and family tempo traveller rentals.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600'], price: 'Best Rates' },
-            { id: 'd25', category: 'gym', title: 'Iron Paradise Fitness Gym & Turf Manjeri', desc: 'Personal trainer, cardio section, and 7s football turf booking.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600'], price: '₹800 / mo' },
-            { id: 'd26', category: 'workers', title: 'Plumber, Electrician, Painter & Homemade Snacks', desc: 'Verified local technicians and fresh homemade Malabar snacks.', phone: '919876543210', images: ['https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600'], price: 'On Call' }
+            { id: 'd1', category: 'tuition', title: 'Darul Huda Madrasa & Ustad Tuition Hub', desc: 'Experienced Ustad teaching Qur\'an Tajweed, Madrasa subjects, and evening school tuition for kids.', phone: '', images: ['https://images.unsplash.com/photo-1577896851231-70ef18881754?w=600', 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600'], price: '₹400 / mo', views: 24, likes: 6 },
+            { id: 'd2', category: 'matrimonial', title: 'Malabar Nikah & Matrimonial Bureau Manjeri', desc: 'Trusted wedding proposals for brides & grooms across Malappuram, Manjeri & Nilambur.', phone: '', images: ['https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600', 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600'], price: 'Age: 24–28 | Verified', views: 31, likes: 9 },
+            { id: 'd3', category: 'rooms', title: '1 BHK & 2 BHK Family Rooms for Rent', desc: 'Prime location near Manjeri town, car parking & 24hr well water available.', phone: '', images: ['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600', 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600'], price: '₹6,500 / mo', views: 19, likes: 4 },
+            { id: 'd4', category: 'footwear', title: 'Malabar Branded Shoes & Wedding Footwear', desc: 'Latest sports shoes, sandals, and formal leather footwear at wholesale rates.', phone: '', images: ['https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600', 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600'], price: '₹499 onwards', views: 15, likes: 5 },
+            { id: 'd5', category: 'foodnonveg', title: 'Authentic Thalassery Dum Chicken Biriyani', desc: 'Spicy Naadan style chicken biriyani, pathri, and Malabar beef roast.', phone: '', images: ['https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600', 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600'], price: '₹150 / plate', views: 42, likes: 12 },
+            { id: 'd6', category: 'foodveg', title: 'Pure Veg Kerala Sadhya & Masala Dosa', desc: 'Fresh morning breakfast, ghee roast, and traditional banana leaf lunch.', phone: '', images: ['https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600'], price: '₹80 / meal', views: 14, likes: 3 },
+            { id: 'd7', category: 'groceries', title: 'Manjeri Super Daily Fresh Groceries', desc: 'Biryani rice, pure coconut oil, pulses & spices delivered directly to home.', phone: '', images: ['https://images.unsplash.com/photo-1542838132-92c53300491e?w=600'], price: '₹42 / 1 kg', views: 27, likes: 8 },
+            { id: 'd12', category: 'furniture', title: 'Nilambur Teak Wood Sofa & Cot Showroom', desc: 'Direct factory price wooden cots, dining tables, and bridal bedroom sets.', phone: '', images: ['https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600'], price: '₹12,500 onwards', views: 22, likes: 7 },
+            { id: 'd15', category: 'veg', title: 'Nadan Farm Fresh Organic Vegetables', desc: 'Daily fresh tomato, onion, banana, and curry leaves at market price.', phone: '', images: ['https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600'], price: '₹35 / 1 kg', views: 18, likes: 5 },
+            { id: 'd19', category: 'bus', title: 'Manjeri to Kozhikode, Nilambur & Ooty Bus Times', desc: 'KSRTC & Private bus timings every 10 mins from Manjeri New Stand.', phone: '', images: ['https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600'], price: 'Timing: Every 10m | Fare: ₹45', views: 36, likes: 10 },
+            { id: 'd20', category: 'vehicles', title: 'Well-Maintained Bike & Scooter in Manjeri', desc: 'Single owner, neat condition, papers clear in Manjeri.', phone: '', images: ['https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=600'], price: '₹39,000 | 2016 | 65,000 km', views: 29, likes: 8 }
         ];
 
         let cachedListings = defaultListings;
@@ -643,27 +714,74 @@
         let selectedUserPhotos = [];
         let selectedAdminPosterPhoto = "";
 
-        // WhatsApp Approval Notification Helper
-        function buildWhatsAppApprovalUrl(typeLabel, title, extraInfo = "") {
-            const cleanPhone = (adminAlertPhone || "919876543210").replace(/[^0-9]/g, '');
-            const siteUrl = window.location.href.split('?')[0];
-            const msg = `🔔 *Manjeri Local Bazaar Approval Alert*\nType: ${typeLabel}\nTitle: ${title}${extraInfo ? `\nDetails: ${extraInfo}` : ""}\nLink: ${siteUrl}`;
-            return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
+        function sanitizePhone(raw) {
+            return (raw || "").replace(/[^0-9]/g, '');
         }
 
-        function notifyAdminOnWhatsApp(typeLabel, title, extraInfo = "") {
-            const url = buildWhatsAppApprovalUrl(typeLabel, title, extraInfo);
-            window.open(url, '_blank');
+        function getTargetWhatsAppPhone(specificPhone = "") {
+            const cleanSpecific = sanitizePhone(specificPhone);
+            if (cleanSpecific) return cleanSpecific;
+            const cleanAdmin = sanitizePhone(adminAlertPhone);
+            return cleanAdmin;
+        }
+
+        function buildWhatsAppUrl(phone, text) {
+            const encoded = encodeURIComponent(text);
+            return phone ? `https://wa.me/${phone}?text=${encoded}` : `https://wa.me/?text=${encoded}`;
+        }
+
+        function updateInterestCounter(typeLabel = "inquiry") {
+            statsState.interestClicks += 1;
+            localStorage.setItem('mlb_interest_clicks', String(statsState.interestClicks));
+            updateAdminStatsDisplay();
+            db.ref('stats/interestClicks').transaction((curr) => (curr || 0) + 1).catch(() => {});
+        }
+
+        function updateAdminStatsDisplay() {
+            const vEl = document.getElementById('adminTodayVisits');
+            const iEl = document.getElementById('adminTotalInterest');
+            if (vEl) vEl.innerText = statsState.todayVisits;
+            if (iEl) iEl.innerText = statsState.interestClicks;
+        }
+
+        function initVisitCounter() {
+            const todayStr = new Date().toISOString().slice(0, 10);
+            const savedDate = localStorage.getItem('mlb_visit_date');
+            if (savedDate !== todayStr) {
+                localStorage.setItem('mlb_visit_date', todayStr);
+                statsState.todayVisits = 1;
+            } else {
+                statsState.todayVisits = parseInt(localStorage.getItem('mlb_today_visits') || '0', 10) + 1;
+            }
+            localStorage.setItem('mlb_today_visits', String(statsState.todayVisits));
+            updateAdminStatsDisplay();
+        }
+
+        // WhatsApp Approval Notification Helper
+        function buildWhatsAppApprovalUrl(typeLabel, title, extraInfo = "", targetPhone = "") {
+            const cleanPhone = getTargetWhatsAppPhone(targetPhone);
+            const siteUrl = window.location.href.split('?')[0];
+            const msg = `Manjeri Local Bazaar\n🔔 Approval Alert: ${typeLabel}\nTitle: ${title}${extraInfo ? `\nDetails: ${extraInfo}` : ""}\nLink: ${siteUrl}`;
+            return buildWhatsAppUrl(cleanPhone, msg);
+        }
+
+        function notifyAdminOnWhatsApp(typeLabel, title, extraInfo = "", targetPhone = "") {
+            const url = buildWhatsAppApprovalUrl(typeLabel, title, extraInfo, targetPhone);
+            const win = window.open(url, '_blank');
+            if (!win) {
+                window.location.href = url;
+            }
         }
 
         function saveAdminAlertPhone() {
-            const val = document.getElementById('adminAlertPhoneInput').value.trim().replace(/[^0-9]/g, '');
+            const val = sanitizePhone(document.getElementById('adminAlertPhoneInput').value.trim());
             if (!val) {
-                alert("Enter valid WhatsApp number with country code (e.g. 919876543210)");
+                alert("Enter valid WhatsApp number with country code (e.g. 91...)");
                 return;
             }
             adminAlertPhone = val;
             localStorage.setItem('mlb_admin_wa_phone', val);
+            db.ref('settings/adminWaPhone').set(val).catch(() => {});
             alert("Admin WhatsApp alert number saved!");
         }
 
@@ -674,8 +792,308 @@
             } catch (e) {}
         }
 
-        // Video Reels Upload & Approval Functions
+        function saveOwnerOffersCache() {
+            try {
+                localStorage.setItem('mlb_owner_offers_v1', JSON.stringify(cachedOwnerOffers));
+            } catch (e) {}
+        }
+
+        // Views & Likes for Products and Videos
+        function recordViewOnce(collection, id) {
+            const key = `${collection}_${id}`;
+            if (viewedIds.includes(key)) return;
+            viewedIds.push(key);
+            localStorage.setItem('mlb_viewed_ids_v1', JSON.stringify(viewedIds));
+
+            if (collection === 'listings') {
+                const item = cachedListings.find(l => l.id === id);
+                if (item) {
+                    item.views = (item.views || 0) + 1;
+                    renderListings(activeCategory, document.getElementById('searchInput').value);
+                }
+                if (!id.startsWith('d')) {
+                    db.ref(`listings/${id}/views`).transaction((v) => (v || 0) + 1).catch(() => {});
+                }
+            } else if (collection === 'approved_videos') {
+                const vid = cachedApprovedVideos.find(v => v.id === id);
+                if (vid) {
+                    vid.views = (vid.views || 0) + 1;
+                    saveReelCache();
+                    renderApprovedReels();
+                }
+                if (!id.startsWith('vid_')) {
+                    db.ref(`approved_videos/${id}/views`).transaction((v) => (v || 0) + 1).catch(() => {});
+                }
+            }
+        }
+
+        function toggleLikeItem(collection, id) {
+            const key = `${collection}_${id}`;
+            const alreadyLiked = likedIds.includes(key);
+            const delta = alreadyLiked ? -1 : 1;
+
+            if (alreadyLiked) {
+                likedIds = likedIds.filter(k => k !== key);
+            } else {
+                likedIds.push(key);
+                updateInterestCounter("like");
+            }
+            localStorage.setItem('mlb_liked_ids_v1', JSON.stringify(likedIds));
+
+            if (collection === 'listings') {
+                const item = cachedListings.find(l => l.id === id);
+                if (item) {
+                    item.likes = Math.max(0, (item.likes || 0) + delta);
+                    renderListings(activeCategory, document.getElementById('searchInput').value);
+                }
+                if (!id.startsWith('d')) {
+                    db.ref(`listings/${id}/likes`).transaction((v) => Math.max(0, (v || 0) + delta)).catch(() => {});
+                }
+            } else if (collection === 'approved_videos') {
+                const vid = cachedApprovedVideos.find(v => v.id === id);
+                if (vid) {
+                    vid.likes = Math.max(0, (vid.likes || 0) + delta);
+                    saveReelCache();
+                    renderApprovedReels();
+                }
+                if (!id.startsWith('vid_')) {
+                    db.ref(`approved_videos/${id}/likes`).transaction((v) => Math.max(0, (v || 0) + delta)).catch(() => {});
+                }
+            }
+        }
+
+        // Owner Today's Offers (Wholesale + Margin + Confirm Flow)
+        function openOwnerOfferModal() {
+            if (!isAdminLoggedIn) {
+                openProfileModal();
+                return;
+            }
+            document.getElementById('offerPhoneInput').value = adminAlertPhone || "";
+            document.getElementById('ownerOfferModal').classList.remove('hidden');
+        }
+        function closeOwnerOfferModal() {
+            document.getElementById('ownerOfferModal').classList.add('hidden');
+        }
+        function handleOfferPhotoFile(input) {
+            if (input.files && input.files[0]) {
+                compressImageToBase64(input.files[0], (b64) => {
+                    selectedOfferPhoto = b64;
+                    const img = document.getElementById('offerPhotoPreview');
+                    img.src = b64;
+                    img.classList.remove('hidden');
+                });
+            }
+        }
+        function submitOwnerOffer() {
+            if (!isAdminLoggedIn) return;
+            const title = document.getElementById('offerTitleInput').value.trim();
+            const price = document.getElementById('offerPriceInput').value.trim() || "₹500";
+            const margin = document.getElementById('offerMarginInput').value.trim() || "+₹50";
+            const shop = document.getElementById('offerShopInput').value.trim() || "Wholesale Offer — Confirm stock before reply";
+            const phone = sanitizePhone(document.getElementById('offerPhoneInput').value.trim() || adminAlertPhone);
+
+            if (!title) {
+                alert("Enter offer title (e.g. 3 Maxi ₹500)");
+                return;
+            }
+
+            const newOffer = {
+                id: "off_" + Date.now(),
+                title,
+                price,
+                margin,
+                shop,
+                phone,
+                img: selectedOfferPhoto || "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=600"
+            };
+
+            cachedOwnerOffers.unshift(newOffer);
+            saveOwnerOffersCache();
+            renderOwnerOffers();
+
+            const { id: _, ...offerData } = newOffer;
+            db.ref('owner_offers').push(offerData).catch(() => {});
+
+            document.getElementById('offerTitleInput').value = "";
+            document.getElementById('offerPriceInput').value = "";
+            document.getElementById('offerMarginInput').value = "";
+            document.getElementById('offerShopInput').value = "";
+            selectedOfferPhoto = "";
+            document.getElementById('offerPhotoPreview').classList.add('hidden');
+            closeOwnerOfferModal();
+            alert("Today's Offer published!");
+        }
+
+        function deleteOwnerOffer(id) {
+            if (!isAdminLoggedIn) return;
+            if (confirm("Delete this offer?")) {
+                cachedOwnerOffers = cachedOwnerOffers.filter(o => o.id !== id);
+                saveOwnerOffersCache();
+                renderOwnerOffers();
+                if (!id.startsWith('off_')) {
+                    db.ref('owner_offers/' + id).remove().catch(() => {});
+                }
+            }
+        }
+
+        function renderOwnerOffers() {
+            const btn = document.getElementById('addOwnerOfferBtn');
+            if (btn) {
+                if (isAdminLoggedIn) btn.classList.remove('hidden');
+                else btn.classList.add('hidden');
+            }
+
+            const container = document.getElementById('ownerOffersContainer');
+            if (!container) return;
+
+            if (!cachedOwnerOffers.length) {
+                container.innerHTML = `
+                    <div class="bg-white border border-amber-200 rounded-xl p-3 text-[11px] text-gray-600 w-full">
+                        <b>Today's Offer:</b> Wholesale deals (like 3 Maxi ₹500) will appear here. Confirm stock with the shop before replying to buyers.
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = cachedOwnerOffers.map(o => {
+                const targetPhone = getTargetWhatsAppPhone(o.phone);
+                const msg = `Manjeri Local Bazaar\nToday's Offer Inquiry: ${o.title} (${o.price})\nPlease confirm availability with shop first.`;
+                const waHref = buildWhatsAppUrl(targetPhone, msg);
+                const delBtn = isAdminLoggedIn ? `<button onclick="deleteOwnerOffer('${o.id}')" class="bg-red-600 text-white text-[9px] px-1.5 py-0.5 rounded font-bold">✕</button>` : '';
+                const marginTag = isAdminLoggedIn && o.margin ? `<span class="text-[9px] bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-bold">${o.margin}</span>` : '';
+
+                return `
+                    <div class="min-w-[235px] max-w-[235px] bg-white border border-amber-200 rounded-xl p-2.5 shadow-xs flex-shrink-0 flex flex-col justify-between gap-2">
+                        <div>
+                            <div class="flex justify-between items-start gap-1">
+                                <h4 class="font-bold text-xs text-gray-900 line-clamp-1">${o.title}</h4>
+                                ${delBtn}
+                            </div>
+                            <div class="flex items-center gap-1.5 mt-1">
+                                <span class="text-xs font-bold text-emerald-700">${o.price}</span>
+                                ${marginTag}
+                            </div>
+                            <p class="text-[10px] text-gray-500 mt-1 line-clamp-2">${o.shop}</p>
+                        </div>
+                        <a href="${waHref}" target="_blank" onclick="updateInterestCounter('offer')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold py-1.5 px-2.5 rounded-lg text-center">
+                            💬 Confirm & Reply (Manjeri Local Bazaar)
+                        </a>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Category-Specific Fields inside Post Ad Modal
+        function renderCategorySpecificFields() {
+            const cat = document.getElementById('userAdCat').value;
+            const box = document.getElementById('categorySpecificFieldsBox');
+            const priceWrapper = document.getElementById('adPriceFieldWrapper');
+            const priceLabel = document.getElementById('adPriceLabel');
+            const titleLabel = document.getElementById('adTitleLabel');
+
+            priceWrapper.classList.remove('hidden');
+            priceLabel.innerText = "Price / Rate Tag:";
+            titleLabel.innerText = "Ad Title / Business Name:";
+
+            if (cat === 'vehicles' || cat === 'olx') {
+                box.innerHTML = `
+                    <p class="text-[10px] font-bold text-emerald-800">🚗 Vehicle / Item Details:</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" id="dynVehBrand" placeholder="Brand (e.g. Yamaha / Honda)" class="p-2 border rounded-lg bg-white text-gray-900 text-xs">
+                        <input type="text" id="dynVehModel" placeholder="Model (e.g. FZ1 / Activa)" class="p-2 border rounded-lg bg-white text-gray-900 text-xs">
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <input type="text" id="dynVehYear" placeholder="Year / Age" class="p-2 border rounded-lg bg-white text-gray-900 text-xs">
+                        <input type="text" id="dynVehFuel" placeholder="Fuel (Petrol/EV)" class="p-2 border rounded-lg bg-white text-gray-900 text-xs">
+                        <input type="text" id="dynVehKm" placeholder="KM Driven" class="p-2 border rounded-lg bg-white text-gray-900 text-xs">
+                    </div>
+                `;
+            } else if (cat === 'groceries' || cat === 'veg' || cat === 'foodnonveg' || cat === 'foodveg') {
+                priceLabel.innerText = "Rate for Selected Quantity (₹):";
+                box.innerHTML = `
+                    <p class="text-[10px] font-bold text-emerald-800">⚖️ Weight / Volume Unit:</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <select id="dynUnitType" class="p-2 border rounded-lg bg-white text-gray-900 text-xs">
+                            <option value="1 kg">1 kg</option>
+                            <option value="2 kg">2 kg</option>
+                            <option value="5 kg">5 kg</option>
+                            <option value="500 g">500 g</option>
+                            <option value="1 Litre">1 Litre</option>
+                            <option value="2 Litre">2 Litre</option>
+                            <option value="Per Piece / Plate">Per Piece / Plate</option>
+                        </select>
+                        <input type="text" id="dynCustomQty" placeholder="Custom qty (optional)" class="p-2 border rounded-lg bg-white text-gray-900 text-xs">
+                    </div>
+                `;
+            } else if (cat === 'matrimonial') {
+                titleLabel.innerText = "Profile Name / Bureau:";
+                priceWrapper.classList.add('hidden');
+                box.innerHTML = `
+                    <p class="text-[10px] font-bold text-emerald-800">💍 Matrimonial Profile Details (No Sale Price):</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" id="dynMatAge" placeholder="Age (e.g. 25 yrs)" class="p-2 border rounded-lg bg-white text-gray-900 text-xs">
+                        <input type="text" id="dynMatEdu" placeholder="Education / Job" class="p-2 border rounded-lg bg-white text-gray-900 text-xs">
+                    </div>
+                    <input type="text" id="dynMatPlace" placeholder="Place / Locality (e.g. Manjeri)" class="w-full p-2 border rounded-lg bg-white text-gray-900 text-xs">
+                `;
+            } else if (cat === 'bus') {
+                priceLabel.innerText = "Today's Bus Fare / Rate (₹):";
+                box.innerHTML = `
+                    <p class="text-[10px] font-bold text-emerald-800">🚌 Bus Route & Timing:</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" id="dynBusRoute" placeholder="Route (e.g. Manjeri - Nilambur)" class="p-2 border rounded-lg bg-white text-gray-900 text-xs">
+                        <input type="text" id="dynBusTiming" placeholder="Timing (e.g. 08:30 AM / Every 15m)" class="p-2 border rounded-lg bg-white text-gray-900 text-xs">
+                    </div>
+                `;
+            } else {
+                box.innerHTML = `<p class="text-[10px] text-gray-500">Fill standard details below.</p>`;
+            }
+        }
+
+        function collectCategorySpecificData(cat, rawPrice, rawDesc) {
+            let finalPrice = rawPrice || 'Contact';
+            let finalDesc = rawDesc || 'Available in Manjeri.';
+
+            if (cat === 'vehicles' || cat === 'olx') {
+                const brand = (document.getElementById('dynVehBrand')?.value || '').trim();
+                const model = (document.getElementById('dynVehModel')?.value || '').trim();
+                const year = (document.getElementById('dynVehYear')?.value || '').trim();
+                const fuel = (document.getElementById('dynVehFuel')?.value || '').trim();
+                const km = (document.getElementById('dynVehKm')?.value || '').trim();
+                const infoParts = [brand, model, year ? `Year/Age: ${year}` : '', fuel, km ? `${km} km` : ''].filter(Boolean);
+                if (infoParts.length) {
+                    finalDesc = `${infoParts.join(' • ')}${rawDesc ? ` — ${rawDesc}` : ''}`;
+                }
+            } else if (cat === 'groceries' || cat === 'veg' || cat === 'foodnonveg' || cat === 'foodveg') {
+                const unitSel = document.getElementById('dynUnitType')?.value || '';
+                const customQty = (document.getElementById('dynCustomQty')?.value || '').trim();
+                const unitText = customQty || unitSel;
+                if (unitText && rawPrice) {
+                    finalPrice = `${rawPrice} / ${unitText}`;
+                }
+            } else if (cat === 'matrimonial') {
+                const age = (document.getElementById('dynMatAge')?.value || '').trim();
+                const edu = (document.getElementById('dynMatEdu')?.value || '').trim();
+                const place = (document.getElementById('dynMatPlace')?.value || '').trim();
+                const matParts = [age ? `Age: ${age}` : '', edu, place].filter(Boolean);
+                finalPrice = age ? `Age: ${age}` : 'Proposal';
+                if (matParts.length) {
+                    finalDesc = `${matParts.join(' • ')}${rawDesc ? ` — ${rawDesc}` : ''}`;
+                }
+            } else if (cat === 'bus') {
+                const route = (document.getElementById('dynBusRoute')?.value || '').trim();
+                const timing = (document.getElementById('dynBusTiming')?.value || '').trim();
+                const busParts = [route ? `Route: ${route}` : '', timing ? `Timing: ${timing}` : ''].filter(Boolean);
+                if (busParts.length) {
+                    finalDesc = `${busParts.join(' • ')}${rawDesc ? ` — ${rawDesc}` : ''}`;
+                }
+            }
+
+            return { finalPrice, finalDesc };
+        }
+
+        // Video Reels Upload & Approval Functions (Download Disabled)
         function openVideoUploadModal() {
+            document.getElementById('reelPhoneInput').value = adminAlertPhone || "";
             document.getElementById('videoUploadModal').classList.remove('hidden');
         }
         function closeVideoUploadModal() {
@@ -718,7 +1136,7 @@
 
         function uploadReelToCloudinary() {
             const title = document.getElementById('reelTitleInput').value.trim();
-            const phone = document.getElementById('reelPhoneInput').value.trim() || '919876543210';
+            const phone = sanitizePhone(document.getElementById('reelPhoneInput').value.trim());
 
             if (!title) {
                 alert("Please enter a shop or video title.");
@@ -778,6 +1196,8 @@
                         title,
                         phone,
                         url: videoUrl,
+                        views: 0,
+                        likes: 0,
                         createdAt: new Date().toLocaleString()
                     };
 
@@ -785,17 +1205,22 @@
                     saveReelCache();
                     checkPendingCount();
                     renderPendingVideos();
+                    updateInterestCounter("video_upload");
 
                     db.ref('pending_videos').push({
                         title,
                         phone,
                         url: videoUrl,
+                        views: 0,
+                        likes: 0,
                         createdAt: newVideoObj.createdAt
                     }).catch(() => {});
 
-                    const sendWa = confirm("Video uploaded for Admin Approval! Send WhatsApp alert to Admin now?");
-                    if (sendWa) {
-                        notifyAdminOnWhatsApp("Video Reel", title, `Phone: ${phone}`);
+                    const waUrl = buildWhatsAppApprovalUrl("Video Reel", title, phone ? `Phone: ${phone}` : "", phone);
+                    const openWa = confirm("Video uploaded for Admin Approval! Open WhatsApp to notify Admin now?");
+                    if (openWa) {
+                        const win = window.open(waUrl, '_blank');
+                        if (!win) window.location.href = waUrl;
                     }
 
                     document.getElementById('reelTitleInput').value = "";
@@ -830,6 +1255,7 @@
             xhr.send(fd);
         }
 
+        // No download option for users or admins
         function renderPendingVideos() {
             const container = document.getElementById('pendingVideosContainer');
             if (!container) return;
@@ -838,15 +1264,15 @@
                 return;
             }
             container.innerHTML = cachedPendingVideos.map(v => `
-                <div class="bg-white p-2.5 rounded border space-y-1.5 shadow-xs">
+                <div class="bg-white p-2.5 rounded border space-y-1.5 shadow-xs" oncontextmenu="return false;">
                     <div class="flex justify-between items-center">
                         <h4 class="font-bold text-gray-900">${v.title}</h4>
-                        <span class="text-[10px] text-gray-500">📞 ${v.phone}</span>
+                        <span class="text-[10px] text-gray-500">${v.phone ? '📞 ' + v.phone : ''}</span>
                     </div>
-                    <video src="${v.url}" controls playsinline class="w-full max-h-48 rounded-lg bg-black"></video>
+                    <video src="${v.url}" controls controlsList="nodownload noplaybackrate" disablePictureInPicture playsinline class="w-full max-h-48 rounded-lg bg-black"></video>
                     <div class="flex gap-1.5 pt-1">
                         <button onclick="approveVideoReel('${v.id}')" class="flex-1 bg-emerald-600 text-white py-1.5 rounded-lg font-bold">✅ Approve</button>
-                        <button onclick="notifyAdminOnWhatsApp('Video Reel', '${v.title.replace(/'/g, "\\'")}', 'Phone: ${v.phone}')" class="bg-green-100 text-green-800 px-2.5 py-1.5 rounded-lg font-bold">📲 WA</button>
+                        <button onclick="notifyAdminOnWhatsApp('Video Reel', '${v.title.replace(/'/g, "\\'")}', '${v.phone ? 'Phone: ' + v.phone : ''}', '${v.phone || ''}')" class="bg-green-100 text-green-800 px-2.5 py-1.5 rounded-lg font-bold">📲 WA</button>
                         <button onclick="rejectVideoReel('${v.id}')" class="flex-1 bg-red-100 text-red-700 py-1.5 rounded-lg font-bold">❌ Reject</button>
                     </div>
                 </div>
@@ -857,6 +1283,8 @@
             const idx = cachedPendingVideos.findIndex(v => v.id === id);
             if (idx === -1) return;
             const [item] = cachedPendingVideos.splice(idx, 1);
+            item.views = item.views || 0;
+            item.likes = item.likes || 0;
 
             cachedApprovedVideos.unshift(item);
             saveReelCache();
@@ -908,20 +1336,33 @@
                 return;
             }
             container.innerHTML = cachedApprovedVideos.map(v => {
+                const targetPhone = getTargetWhatsAppPhone(v.phone);
+                const msg = `Manjeri Local Bazaar\nHello regarding reel: ${v.title}`;
+                const waHref = buildWhatsAppUrl(targetPhone, msg);
+                const isLiked = likedIds.includes(`approved_videos_${v.id}`);
+                const viewsCount = v.views || 0;
+                const likesCount = v.likes || 0;
                 const delBtn = isAdminLoggedIn ? `<button onclick="deleteApprovedReel('${v.id}')" class="text-red-600 text-[11px] font-bold">🗑️ Delete</button>` : '';
+
                 return `
-                    <div class="bg-white rounded-2xl shadow-sm border p-3 space-y-2">
+                    <div class="bg-white rounded-2xl shadow-sm border p-3 space-y-2" oncontextmenu="return false;">
                         <div class="flex justify-between items-center">
                             <div>
                                 <h4 class="font-bold text-xs text-gray-900">${v.title}</h4>
-                                <p class="text-[10px] text-gray-500">📞 ${v.phone || ''}</p>
+                                <p class="text-[10px] text-gray-500">${v.phone ? '📞 ' + v.phone : 'Manjeri Local Bazaar'}</p>
                             </div>
                             <div class="flex items-center gap-2">
                                 ${delBtn}
-                                <a href="https://wa.me/${v.phone || '919876543210'}?text=Hello" target="_blank" class="bg-emerald-600 text-white text-[10px] px-2.5 py-1 rounded-lg font-bold">WhatsApp</a>
+                                <a href="${waHref}" target="_blank" onclick="updateInterestCounter('reel_wa')" class="bg-emerald-600 text-white text-[10px] px-2.5 py-1 rounded-lg font-bold">WhatsApp</a>
                             </div>
                         </div>
-                        <video src="${v.url}" controls playsinline class="w-full max-h-96 rounded-xl bg-black"></video>
+                        <video src="${v.url}" onplay="recordViewOnce('approved_videos', '${v.id}')" controls controlsList="nodownload noplaybackrate" disablePictureInPicture playsinline class="w-full max-h-96 rounded-xl bg-black"></video>
+                        <div class="flex justify-between items-center pt-1 text-xs text-gray-600">
+                            <span class="font-semibold">👁️ ${viewsCount} Views</span>
+                            <button onclick="toggleLikeItem('approved_videos', '${v.id}')" class="px-3 py-1 rounded-xl font-bold ${isLiked ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'}">
+                                ${isLiked ? '❤️' : '🤍'} Like (${likesCount})
+                            </button>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -989,7 +1430,7 @@
             const isEmer = q.includes('ambulance') || q.includes('emergency') || q.includes('hospital') || q.includes('ആംബുലൻസ്') || q.includes('एम्बुलेंस');
 
             if (maveliLang === 'ml') {
-                if (isReel) return "🎬 <b>മഞ്ചേരി ലോക്കൽ റീൽസ്:</b> താഴെ മെനുവിലെ <b>Reels</b> ബട്ടൺ അമർത്തുക—ക്യാമറയിൽ നിന്നോ ഗാലറിയിൽ നിന്നോ 30 സെക്കൻഡ് വരെയുള്ള വീഡിയോ അപ്‌ലോഡ് ചെയ്യാം!";
+                if (isReel) return "🎬 <b>മഞ്ചേരി ലോക്കൽ റീൽസ്:</b> താഴെ മെനുവിലെ <b>Reels</b> ബട്ടൺ അമർത്തുക—ക്യാമറയിൽ നിന്നോ ഗാലറിയിൽ നിന്നോ 30 സെക്കൻഡ് വരെയുള്ള വീഡിയോ കാണാം!";
                 if (isFood) return "🍗 <b>മഞ്ചേരി ഭക്ഷണം & ബിരിയാണി:</b> തലശ്ശേരി ദം ചിക്കൻ ബിരിയാണി (₹150), മലബാർ ബീഫ് റോസ്റ്റ്, വെജ് സദ്യ & മസാല ദോശ (₹80) ലഭ്യമാണ്.";
                 if (isRoom) return "🏠 <b>റൂം & വീട് വാടകയ്ക്ക്:</b> മഞ്ചേരി ടൗണിന് സമീപം കാർ പാർക്കിംഗോടും 24 മണിക്കൂർ വെള്ളത്തോടും കൂടിയ 1 & 2 BHK റൂമുകൾ (₹6,500/മാസം).";
                 if (isAuto) return "🛺 <b>ഓട്ടോ, ടാക്സി & ബസ്:</b> 24 മണിക്കൂറും GPS ഓട്ടോ/ടാക്സി സേവനവും മഞ്ചേരിയിൽ നിന്ന് കോഴിക്കോട്, നിലമ്പൂർ ബസ് സമയങ്ങളും ലഭ്യമാണ്.";
@@ -1146,16 +1587,17 @@
         function installAppPrompt() { alert("📥 To install: Tap browser menu (3 dots) and select 'Add to Home screen'."); }
         function shareApp() {
             let appUrl = window.location.href.split('?')[0];
-            window.open(`https://wa.me/?text=${encodeURIComponent('🌟 Manjeri Local Bazaar: ' + appUrl)}`, '_blank');
+            updateInterestCounter("share_app");
+            window.open(buildWhatsAppUrl("", `Manjeri Local Bazaar: ${appUrl}`), '_blank');
         }
         
         function logBookingInquiry(title, price, phone) {
+            updateInterestCounter("inquiry");
             let inquiryData = {
                 title: title,
                 price: price,
-                phone: phone,
-                timestamp: new Date().toLocaleString(),
-                user: currentUser || 'Anonymous User'
+                phone: sanitizePhone(phone),
+                timestamp: new Date().toLocaleString()
             };
             db.ref('booking_logs').push(inquiryData).catch(() => {});
         }
@@ -1163,7 +1605,9 @@
         function shareListing(id, title, price, phone) {
             logBookingInquiry(title, price, phone);
             let productUrl = `${window.location.href.split('?')[0]}?id=${id}`;
-            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(title + ' - ' + price + '\n' + productUrl)}`, '_blank');
+            const targetPhone = getTargetWhatsAppPhone(phone);
+            const msg = `Manjeri Local Bazaar\n${title} - ${price}\n${productUrl}`;
+            window.open(buildWhatsAppUrl(targetPhone, msg), '_blank');
         }
 
         function openDrawerMenu() {
@@ -1270,6 +1714,7 @@
                 alert('Welcome! Admin Access Unlocked.');
                 closeProfileModal();
                 renderCategoriesBar();
+                renderOwnerOffers();
                 checkPendingCount();
                 openAdminApprovalModal();
             } else {
@@ -1280,6 +1725,7 @@
                 alert('Logged in successfully!');
                 closeProfileModal();
                 renderCategoriesBar();
+                renderOwnerOffers();
                 checkPendingCount();
             }
         }
@@ -1293,12 +1739,18 @@
             document.getElementById('userProfileInfo').classList.add('hidden');
             alert('Logged out.');
             renderCategoriesBar();
+            renderOwnerOffers();
             checkPendingCount();
         }
 
         function openSosModal() { document.getElementById('sosModal').classList.remove('hidden'); }
         function closeSosModal() { document.getElementById('sosModal').classList.add('hidden'); }
-        function openPostAdModal() { document.getElementById('postAdModal').classList.remove('hidden'); renderCategoryDropdowns(); }
+        function openPostAdModal() {
+            document.getElementById('userAdPhone').value = adminAlertPhone || "";
+            document.getElementById('postAdModal').classList.remove('hidden');
+            renderCategoryDropdowns();
+            renderCategorySpecificFields();
+        }
         function closePostAdModal() { document.getElementById('postAdModal').classList.add('hidden'); }
         
         function openAdminApprovalModal() {
@@ -1306,6 +1758,7 @@
                 openProfileModal();
                 return;
             }
+            updateAdminStatsDisplay();
             renderAdminCategoriesList();
             renderPendingVideos();
             renderPendingAds();
@@ -1317,15 +1770,19 @@
         function openAiAssistant() { document.getElementById('aiAssistantModal').classList.remove('hidden'); }
         function closeAiAssistant() { document.getElementById('aiAssistantModal').classList.add('hidden'); }
 
+        // Persistent UPI ID save (Firebase + localStorage)
         function saveAdminUpi() {
             let newUpi = document.getElementById('adminUpiInput').value.trim();
             if(!newUpi) { alert('Enter valid UPI ID'); return; }
-            db.ref('settings/upiId').set(newUpi, (err) => {
-                if(!err) {
-                    globalUpiId = newUpi;
-                    document.getElementById('displayUpiId').innerText = newUpi;
-                    alert('UPI ID updated live successfully!');
-                }
+            globalUpiId = newUpi;
+            localStorage.setItem('mlb_upi_id', newUpi);
+            let el = document.getElementById('displayUpiId');
+            if(el) el.innerText = newUpi;
+
+            db.ref('settings/upiId').set(newUpi).then(() => {
+                alert('UPI ID updated live & saved!');
+            }).catch(() => {
+                alert('UPI ID saved locally!');
             });
         }
 
@@ -1349,11 +1806,11 @@
 
                 if (hasLocalMatch && !q.includes('reel') && !q.includes('video')) {
                     if (maveliLang === 'ml') {
-                        reply = `✅ <b>കണ്ടെത്തി:</b> ${hasLocalMatch.title}<br>💰 വില: <b>${hasLocalMatch.price}</b><br>📝 ${hasLocalMatch.desc}<br>📞 ഫോൺ: ${hasLocalMatch.phone}`;
+                        reply = `✅ <b>കണ്ടെത്തി:</b> ${hasLocalMatch.title}<br>💰 വില: <b>${hasLocalMatch.price}</b><br>📝 ${hasLocalMatch.desc}`;
                     } else if (maveliLang === 'hi') {
-                        reply = `✅ <b>मिला:</b> ${hasLocalMatch.title}<br>💰 रेट: <b>${hasLocalMatch.price}</b><br>📝 ${hasLocalMatch.desc}<br>📞 फोन: ${hasLocalMatch.phone}`;
+                        reply = `✅ <b>मिला:</b> ${hasLocalMatch.title}<br>💰 रेट: <b>${hasLocalMatch.price}</b><br>📝 ${hasLocalMatch.desc}`;
                     } else {
-                        reply = `✅ <b>Found:</b> ${hasLocalMatch.title}<br>💰 Rate: <b>${hasLocalMatch.price}</b><br>📝 ${hasLocalMatch.desc}<br>📞 Phone: ${hasLocalMatch.phone}`;
+                        reply = `✅ <b>Found:</b> ${hasLocalMatch.title}<br>💰 Rate: <b>${hasLocalMatch.price}</b><br>📝 ${hasLocalMatch.desc}`;
                     }
                 } else {
                     reply = buildMaveliReply(q);
@@ -1456,7 +1913,7 @@
             let temp = categories[index];
             categories[index] = categories[targetIndex];
             categories[targetIndex] = temp;
-            localStorage.setItem('manjeri_categories_v5', JSON.stringify(categories));
+            localStorage.setItem('manjeri_categories_v6', JSON.stringify(categories));
             renderCategoriesBar();
             renderAdminCategoriesList();
         }
@@ -1467,7 +1924,7 @@
             if(!name) { alert('Enter category name'); return; }
             let id = name.toLowerCase().replace(/[^a-z0-9]/g, '_');
             categories.push({ id, name, icon });
-            localStorage.setItem('manjeri_categories_v5', JSON.stringify(categories));
+            localStorage.setItem('manjeri_categories_v6', JSON.stringify(categories));
             renderCategoriesBar();
             renderCategoryDropdowns();
             renderAdminCategoriesList();
@@ -1479,7 +1936,7 @@
         function adminDeleteCategory(id) {
             if(confirm('Delete this category?')) {
                 categories = categories.filter(c => c.id !== id);
-                localStorage.setItem('manjeri_categories_v5', JSON.stringify(categories));
+                localStorage.setItem('manjeri_categories_v6', JSON.stringify(categories));
                 renderCategoriesBar();
                 renderCategoryDropdowns();
                 renderAdminCategoriesList();
@@ -1499,7 +1956,12 @@
         }
 
         function initFirebaseSync() {
+            initVisitCounter();
+            let upiEl = document.getElementById('displayUpiId');
+            if (upiEl) upiEl.innerText = globalUpiId;
+
             renderCategoriesBar();
+            renderOwnerOffers();
             loadPosters();
             loadSettings();
             renderListings(activeCategory);
@@ -1508,7 +1970,12 @@
             db.ref('listings').on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
-                    let firebaseListings = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                    let firebaseListings = Object.keys(data).map(key => ({
+                        id: key,
+                        views: 0,
+                        likes: 0,
+                        ...data[key]
+                    }));
                     cachedListings = [...firebaseListings.reverse(), ...defaultListings];
                 } else {
                     cachedListings = defaultListings;
@@ -1546,13 +2013,29 @@
             db.ref('approved_videos').on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
-                    const remoteApproved = Object.keys(data).map(key => ({ id: key, ...data[key] })).reverse();
+                    const remoteApproved = Object.keys(data).map(key => ({
+                        id: key,
+                        views: 0,
+                        likes: 0,
+                        ...data[key]
+                    })).reverse();
                     const localOnlyApproved = cachedApprovedVideos.filter(lv => !remoteApproved.some(rv => rv.url === lv.url));
                     cachedApprovedVideos = [...localOnlyApproved, ...remoteApproved];
                     saveReelCache();
                 }
                 if(!document.getElementById('reelsView').classList.contains('hidden')) {
                     renderApprovedReels();
+                }
+            });
+
+            db.ref('owner_offers').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    const remoteOffers = Object.keys(data).map(key => ({ id: key, ...data[key] })).reverse();
+                    const localOnlyOffers = cachedOwnerOffers.filter(lo => !remoteOffers.some(ro => ro.title === lo.title && ro.price === lo.price));
+                    cachedOwnerOffers = [...localOnlyOffers, ...remoteOffers];
+                    saveOwnerOffersCache();
+                    renderOwnerOffers();
                 }
             });
         }
@@ -1562,8 +2045,26 @@
                 let val = snapshot.val();
                 if(val) {
                     globalUpiId = val;
+                    localStorage.setItem('mlb_upi_id', val);
                     let el = document.getElementById('displayUpiId');
                     if(el) el.innerText = val;
+                }
+            });
+
+            db.ref('settings/adminWaPhone').on('value', (snapshot) => {
+                let val = sanitizePhone(snapshot.val() || "");
+                if (val && !localStorage.getItem('mlb_admin_wa_phone')) {
+                    adminAlertPhone = val;
+                    localStorage.setItem('mlb_admin_wa_phone', val);
+                }
+            });
+
+            db.ref('stats/interestClicks').on('value', (snapshot) => {
+                const dbClicks = snapshot.val();
+                if (typeof dbClicks === 'number' && dbClicks > statsState.interestClicks) {
+                    statsState.interestClicks = dbClicks;
+                    localStorage.setItem('mlb_interest_clicks', String(dbClicks));
+                    updateAdminStatsDisplay();
                 }
             });
         }
@@ -1577,6 +2078,10 @@
                 container.innerHTML = '';
                 postersToDisplay.forEach((p) => {
                     let delBtn = (isAdminLoggedIn && p.id) ? `<button onclick="deletePoster('${p.id}')" class="absolute top-2 right-2 bg-red-600 text-white text-[10px] px-2 py-1 rounded-lg font-bold shadow z-10">🗑️ Delete</button>` : '';
+                    const targetPhone = getTargetWhatsAppPhone(p.phone);
+                    const msg = `Manjeri Local Bazaar\nHello regarding banner: ${p.title}`;
+                    const waHref = buildWhatsAppUrl(targetPhone, msg);
+
                     container.innerHTML += `
                         <div class="relative min-w-[270px] max-w-[270px] h-44 rounded-2xl overflow-hidden shadow-md flex-shrink-0 bg-gray-900 group">
                             ${delBtn}
@@ -1584,12 +2089,12 @@
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-3 text-white">
                                 <div class="flex justify-between items-center">
                                     <span class="text-[9px] bg-emerald-600 px-2 py-0.5 rounded font-bold uppercase">${p.badge || 'FEATURED'}</span>
-                                    <span class="text-[10px] text-emerald-200 font-semibold">📞 ${p.phone}</span>
+                                    <span class="text-[10px] text-emerald-200 font-semibold">${p.phone ? '📞 ' + p.phone : 'Manjeri Bazaar'}</span>
                                 </div>
                                 <h3 class="font-bold text-sm mt-1 truncate">${p.title}</h3>
                                 <p class="text-[10px] text-gray-200 line-clamp-1">${p.desc}</p>
                                 <div class="mt-2 flex justify-end">
-                                    <a href="https://wa.me/${p.phone}?text=Hello" target="_blank" onclick="logBookingInquiry('${p.title}', 'Banner', '${p.phone}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] px-3 py-1 rounded-lg font-bold shadow">💬 WhatsApp Chat</a>
+                                    <a href="${waHref}" target="_blank" onclick="logBookingInquiry('${p.title}', 'Banner', '${p.phone || ''}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] px-3 py-1 rounded-lg font-bold shadow">💬 WhatsApp Chat</a>
                                 </div>
                             </div>
                         </div>
@@ -1621,7 +2126,7 @@
         function submitAdminPoster() {
             let title = document.getElementById('adminPosterTitle').value.trim();
             let desc = document.getElementById('adminPosterDesc').value.trim();
-            let phone = document.getElementById('adminPosterPhone').value.trim();
+            let phone = sanitizePhone(document.getElementById('adminPosterPhone').value.trim() || adminAlertPhone);
             let badge = document.getElementById('adminPosterBadge').value.trim() || "FEATURED";
 
             if(!title) { alert('Enter poster title!'); return; }
@@ -1641,27 +2146,53 @@
         function submitUserAd() {
             let cat = document.getElementById('userAdCat').value;
             let title = document.getElementById('userAdTitle').value.trim();
-            let price = document.getElementById('userAdPrice').value.trim() || 'Contact';
-            let desc = document.getElementById('userAdDesc').value.trim() || 'Available in Manjeri.';
-            let phone = document.getElementById('userAdPhone').value.trim() || '919876543210';
+            let rawPrice = document.getElementById('userAdPrice').value.trim();
+            let rawDesc = document.getElementById('userAdDesc').value.trim();
+            let phone = sanitizePhone(document.getElementById('userAdPhone').value.trim());
 
             if(!title) { alert('Enter ad title!'); return; }
+            const { finalPrice, finalDesc } = collectCategorySpecificData(cat, rawPrice, rawDesc);
             let imageUrls = selectedUserPhotos.length > 0 ? selectedUserPhotos : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500"];
 
-            db.ref('pending_ads').push({
-                category: cat, title, desc, phone, price, images: imageUrls
-            }, (err) => {
-                if(!err) {
-                    const sendWa = confirm("Ad submitted for Admin approval! Send WhatsApp alert to Admin now?");
-                    if (sendWa) {
-                        notifyAdminOnWhatsApp(`Ad (${cat})`, title, `${price} | Phone: ${phone}`);
-                    }
-                    clearUserPhotos();
-                    document.getElementById('userAdTitle').value = '';
-                    document.getElementById('userAdPrice').value = '';
-                    document.getElementById('userAdDesc').value = '';
-                    closePostAdModal();
+            const adPayload = {
+                category: cat,
+                title,
+                desc: finalDesc,
+                phone,
+                price: finalPrice,
+                images: imageUrls,
+                views: 0,
+                likes: 0
+            };
+
+            const waUrl = buildWhatsAppApprovalUrl(`Ad (${cat})`, title, `${finalPrice}${phone ? ` | Phone: ${phone}` : ""}`, phone);
+            updateInterestCounter("post_ad");
+
+            db.ref('pending_ads').push(adPayload).then(() => {
+                const openWa = confirm("Ad submitted for Admin approval! Open WhatsApp to notify Admin now?");
+                if (openWa) {
+                    const win = window.open(waUrl, '_blank');
+                    if (!win) window.location.href = waUrl;
                 }
+                clearUserPhotos();
+                document.getElementById('userAdTitle').value = '';
+                document.getElementById('userAdPrice').value = '';
+                document.getElementById('userAdDesc').value = '';
+                closePostAdModal();
+            }).catch(() => {
+                cachedPending.unshift({ id: "pad_" + Date.now(), ...adPayload });
+                checkPendingCount();
+                renderPendingAds();
+                const openWa = confirm("Ad queued for approval! Open WhatsApp to notify Admin now?");
+                if (openWa) {
+                    const win = window.open(waUrl, '_blank');
+                    if (!win) window.location.href = waUrl;
+                }
+                clearUserPhotos();
+                document.getElementById('userAdTitle').value = '';
+                document.getElementById('userAdPrice').value = '';
+                document.getElementById('userAdDesc').value = '';
+                closePostAdModal();
             });
         }
 
@@ -1680,7 +2211,7 @@
                     <p class="text-[11px] text-gray-600">${item.desc}</p>
                     <div class="flex gap-1.5 pt-1">
                         <button onclick="approveAd('${item.id}')" class="flex-1 bg-emerald-600 text-white py-1.5 rounded-lg font-bold">✅ Approve</button>
-                        <button onclick="notifyAdminOnWhatsApp('Ad (${item.category})', '${item.title.replace(/'/g, "\\'")}', '${item.price} | Phone: ${item.phone}')" class="bg-green-100 text-green-800 px-2.5 py-1.5 rounded-lg font-bold">📲 WA</button>
+                        <button onclick="notifyAdminOnWhatsApp('Ad (${item.category})', '${item.title.replace(/'/g, "\\'")}', '${item.price}${item.phone ? ' | Phone: ' + item.phone : ''}', '${item.phone || ''}')" class="bg-green-100 text-green-800 px-2.5 py-1.5 rounded-lg font-bold">📲 WA</button>
                         <button onclick="rejectAd('${item.id}')" class="flex-1 bg-red-100 text-red-700 py-1.5 rounded-lg font-bold">❌ Reject</button>
                     </div>
                 </div>
@@ -1691,6 +2222,8 @@
             let item = cachedPending.find(p => p.id === id);
             if(!item) return;
             let { id: _, ...data } = item;
+            data.views = data.views || 0;
+            data.likes = data.likes || 0;
             db.ref('listings').push(data, (err) => {
                 if(!err) {
                     db.ref('pending_ads/' + id).remove();
@@ -1721,7 +2254,10 @@
             let item = cachedListings.find(l => l.id === id);
             if(!item) return;
             let idx = wishlist.findIndex(w => w.id === id);
-            if(idx > -1) wishlist.splice(idx, 1); else wishlist.push(item);
+            if(idx > -1) wishlist.splice(idx, 1); else {
+                wishlist.push(item);
+                updateInterestCounter("wishlist");
+            }
             updateBadges();
             renderListings(activeCategory, document.getElementById('searchInput').value);
         }
@@ -1730,6 +2266,7 @@
             let item = cachedListings.find(l => l.id === id);
             if(!item) return;
             cart.push(item);
+            updateInterestCounter("cart");
             alert('Added to Cart 🛒');
             updateBadges();
         }
@@ -1757,15 +2294,20 @@
         function renderCart() {
             let container = document.getElementById('cartContainer');
             if(!container) return;
-            container.innerHTML = cart.length === 0 ? `<p class="text-xs text-gray-500 text-center py-6">Cart is empty 🛒</p>` : cart.map(item => `
-                <div class="bg-white p-3 rounded-2xl shadow-sm border flex justify-between items-center">
-                    <div class="flex items-center gap-3">
-                        <img src="${item.images[0]}" class="w-12 h-12 rounded-xl object-cover">
-                        <div><h4 class="font-bold text-xs">${item.title}</h4><p class="text-[11px] text-emerald-700 font-bold">${item.price}</p></div>
+            container.innerHTML = cart.length === 0 ? `<p class="text-xs text-gray-500 text-center py-6">Cart is empty 🛒</p>` : cart.map(item => {
+                const targetPhone = getTargetWhatsAppPhone(item.phone);
+                const msg = `Manjeri Local Bazaar\nOrder Inquiry: ${item.title} (${item.price})`;
+                const waHref = buildWhatsAppUrl(targetPhone, msg);
+                return `
+                    <div class="bg-white p-3 rounded-2xl shadow-sm border flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <img src="${item.images[0]}" class="w-12 h-12 rounded-xl object-cover">
+                            <div><h4 class="font-bold text-xs">${item.title}</h4><p class="text-[11px] text-emerald-700 font-bold">${item.price}</p></div>
+                        </div>
+                        <a href="${waHref}" target="_blank" onclick="logBookingInquiry('${item.title}', '${item.price}', '${item.phone || ''}')" class="bg-emerald-600 text-white text-[10px] px-3 py-1.5 rounded-xl font-bold">WhatsApp</a>
                     </div>
-                    <a href="https://wa.me/${item.phone}?text=Order" target="_blank" onclick="logBookingInquiry('${item.title}', '${item.price}', '${item.phone}')" class="bg-emerald-600 text-white text-[10px] px-3 py-1.5 rounded-xl font-bold">WhatsApp</a>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function renderListings(cat = 'all', q = '') {
@@ -1801,31 +2343,43 @@
             filtered.forEach(item => {
                 let imgList = item.images && item.images.length > 0 ? item.images : ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500'];
                 let isWish = wishlist.some(w => w.id === item.id);
+                let isLiked = likedIds.includes(`listings_${item.id}`);
+                let viewsCount = item.views || 0;
+                let likesCount = item.likes || 0;
                 let adminDelBtn = isAdminLoggedIn ? `<button onclick="deleteListing('${item.id}')" class="bg-red-50 text-red-600 text-xs px-2 py-1 rounded-lg font-bold">🗑️</button>` : '';
+                const targetPhone = getTargetWhatsAppPhone(item.phone);
+                const msg = `Manjeri Local Bazaar\nInquiry: ${item.title} (${item.price})`;
+                const waHref = buildWhatsAppUrl(targetPhone, msg);
 
                 container.innerHTML += `
                     <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
                         <div class="relative bg-gray-100">
                             <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar">
-                                ${imgList.map(i=>`<img src="${i}" onclick="openImageViewer('${i}')" class="w-full h-48 object-cover flex-shrink-0 snap-center cursor-pointer" title="Tap for Full Screen">`).join('')}
+                                ${imgList.map(i=>`<img src="${i}" onclick="recordViewOnce('listings', '${item.id}'); openImageViewer('${i}');" class="w-full h-48 object-cover flex-shrink-0 snap-center cursor-pointer" title="Tap for Full Screen">`).join('')}
                             </div>
                             <button onclick="toggleWishlist('${item.id}')" class="absolute top-2 left-2 bg-white/80 p-1.5 rounded-full text-sm">${isWish ? '❤️' : '🤍'}</button>
                             <span class="absolute top-2 right-2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">📷 ${imgList.length} (Tap to zoom)</span>
                             <span class="absolute bottom-2 left-2 bg-emerald-700 text-white text-[10px] px-2.5 py-0.5 rounded-lg font-bold">${item.price}</span>
                         </div>
                         <div class="p-3.5 space-y-2">
-                            <div class="flex justify-between items-start">
+                            <div class="flex justify-between items-start gap-2">
                                 <h4 class="font-bold text-sm text-gray-800">${item.title}</h4>
-                                <span class="text-[9px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-bold uppercase">${item.category}</span>
+                                <span class="text-[9px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-bold uppercase flex-shrink-0">${item.category}</span>
                             </div>
                             <p class="text-xs text-gray-600">${item.desc}</p>
+                            <div class="flex justify-between items-center text-[11px] text-gray-600 pt-1">
+                                <span class="font-semibold">👁️ ${viewsCount} Views</span>
+                                <button onclick="toggleLikeItem('listings', '${item.id}')" class="px-2.5 py-0.5 rounded-lg font-bold ${isLiked ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'}">
+                                    ${isLiked ? '❤️' : '🤍'} Like (${likesCount})
+                                </button>
+                            </div>
                             <div class="flex justify-between items-center pt-2 border-t">
-                                <span class="text-[11px] text-gray-500 font-medium">📞 ${item.phone}</span>
+                                <span class="text-[11px] text-gray-500 font-medium">${item.phone ? '📞 ' + item.phone : 'Manjeri Bazaar'}</span>
                                 <div class="flex gap-1.5 items-center">
                                     ${adminDelBtn}
-                                    <button onclick="shareListing('${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.price}', '${item.phone}')" class="text-blue-600 text-xs px-2 py-1 font-bold">Share</button>
+                                    <button onclick="shareListing('${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.price.replace(/'/g, "\\'")}', '${item.phone || ''}')" class="text-blue-600 text-xs px-2 py-1 font-bold">Share</button>
                                     <button onclick="addToCart('${item.id}')" class="bg-amber-600 text-white text-xs px-2.5 py-1.5 rounded-xl font-bold">Cart</button>
-                                    <a href="https://wa.me/${item.phone}?text=Hello" target="_blank" onclick="logBookingInquiry('${item.title.replace(/'/g, "\\'")}', '${item.price}', '${item.phone}')" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded-xl font-bold">WhatsApp</a>
+                                    <a href="${waHref}" target="_blank" onclick="recordViewOnce('listings', '${item.id}'); logBookingInquiry('${item.title.replace(/'/g, "\\'")}', '${item.price.replace(/'/g, "\\'")}', '${item.phone || ''}')" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded-xl font-bold">WhatsApp</a>
                                 </div>
                             </div>
                         </div>
@@ -1847,6 +2401,7 @@
         window.addEventListener('focus', function() {
             if(db) {
                 renderCategoriesBar();
+                renderOwnerOffers();
                 renderListings(activeCategory, document.getElementById('searchInput').value);
             }
         });
