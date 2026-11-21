@@ -718,7 +718,7 @@
             { id: 'd20', category: 'vehicles', title: 'Well-Maintained Bike & Scooter in Manjeri', desc: 'Single owner, neat condition, papers clear in Manjeri.', phone: '', images: ['https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=600'], price: '₹39,000 | 2016 | 65,000 km', views: 29, likes: 8 }
         ];
 
-        let cachedListings = defaultListings;
+        let cachedListings = [...defaultListings];
         let cachedPending = [];
         let activeCategory = 'all';
 
@@ -1848,6 +1848,7 @@
             if(tab === 'home') {
                 h.classList.remove('hidden');
                 if (banner) banner.classList.remove('hidden');
+                renderListings(activeCategory, document.getElementById('searchInput').value);
             } else if(tab === 'reels') {
                 r.classList.remove('hidden');
                 if (banner) banner.classList.add('hidden');
@@ -1866,7 +1867,6 @@
             }
         }
 
-        // Persist category order both in localStorage and Firebase
         function saveCategoryOrderNow(showMsg = false) {
             try {
                 localStorage.setItem('manjeri_categories_v6', JSON.stringify(categories));
@@ -1984,23 +1984,40 @@
 
             db.ref('listings').on('value', (snapshot) => {
                 const data = snapshot.val();
-                if (data) {
-                    let firebaseListings = Object.keys(data).map(key => ({
-                        id: key,
-                        views: 0,
-                        likes: 0,
-                        ...data[key]
-                    }));
+                if (data && typeof data === 'object') {
+                    let firebaseListings = Object.keys(data)
+                        .map(key => {
+                            const row = data[key];
+                            if (!row || typeof row !== 'object') return null;
+                            return {
+                                id: key,
+                                category: row.category || 'others',
+                                title: row.title || 'Local Listing',
+                                desc: row.desc || '',
+                                phone: row.phone || '',
+                                price: row.price || 'Contact',
+                                images: Array.isArray(row.images) && row.images.length ? row.images : ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500'],
+                                views: row.views || 0,
+                                likes: row.likes || 0
+                            };
+                        })
+                        .filter(Boolean);
                     cachedListings = [...firebaseListings.reverse(), ...defaultListings];
                 } else {
-                    cachedListings = defaultListings;
+                    cachedListings = [...defaultListings];
                 }
-                renderListings(activeCategory, document.getElementById('searchInput').value);
+                const searchVal = document.getElementById('searchInput') ? document.getElementById('searchInput').value : '';
+                renderListings(activeCategory, searchVal);
+            }, () => {
+                if (!cachedListings || !cachedListings.length) {
+                    cachedListings = [...defaultListings];
+                }
+                renderListings(activeCategory, document.getElementById('searchInput')?.value || '');
             });
 
             db.ref('pending_ads').on('value', (snapshot) => {
                 const data = snapshot.val();
-                if (data) {
+                if (data && typeof data === 'object') {
                     cachedPending = Object.keys(data).map(key => ({ id: key, ...data[key] }));
                 } else {
                     cachedPending = [];
@@ -2367,21 +2384,27 @@
             let moreWrapper = document.getElementById('moreAdsWrapper');
             let moreBtn = document.getElementById('loadMoreAdsBtn');
             if(!container) return;
-            
-            container.innerHTML = '';
-            
-            let queryLower = q.toLowerCase().trim();
+
+            const sourceList = (Array.isArray(cachedListings) && cachedListings.length > 0) ? cachedListings : defaultListings;
+            let queryLower = (q || '').toLowerCase().trim();
             let mappedCat = malayalamKeywordMap[queryLower] || null;
 
-            let filtered = cachedListings.filter(item => {
+            let filtered = sourceList.filter(item => {
+                if (!item || typeof item !== 'object') return false;
                 let matchesCat = (cat === 'all' || item.category === cat || (mappedCat && item.category === mappedCat));
-                let matchesSearch = item.title.toLowerCase().includes(queryLower) || 
-                                    item.desc.toLowerCase().includes(queryLower) || 
-                                    (mappedCat && item.category === mappedCat);
+                let titleStr = String(item.title || '').toLowerCase();
+                let descStr = String(item.desc || '').toLowerCase();
+                let matchesSearch = !queryLower || titleStr.includes(queryLower) || descStr.includes(queryLower) || (mappedCat && item.category === mappedCat);
                 return matchesCat && matchesSearch;
             });
 
-            heading.innerHTML = `📋 Listings: <span class="text-emerald-700 uppercase font-bold">${cat}</span> (${filtered.length})`;
+            if (!filtered.length && cat === 'all' && !queryLower) {
+                filtered = [...defaultListings];
+            }
+
+            if (heading) {
+                heading.innerHTML = `📋 Listings: <span class="text-emerald-700 uppercase font-bold">${cat}</span> (${filtered.length})`;
+            }
 
             if(filtered.length === 0) {
                 if (moreWrapper) moreWrapper.classList.add('hidden');
@@ -2405,8 +2428,8 @@
                 }
             }
 
-            itemsToRender.forEach(item => {
-                let imgList = item.images && item.images.length > 0 ? item.images : ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500'];
+            const htmlChunks = itemsToRender.map(item => {
+                let imgList = Array.isArray(item.images) && item.images.length > 0 ? item.images : ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500'];
                 let isWish = wishlist.some(w => w.id === item.id);
                 let isLiked = likedIds.includes(`listings_${item.id}`);
                 let viewsCount = item.views || 0;
@@ -2416,7 +2439,7 @@
                 const msg = `Manjeri Local Bazaar\nInquiry: ${item.title} (${item.price})`;
                 const waHref = buildWhatsAppUrl(targetPhone, msg);
 
-                container.innerHTML += `
+                return `
                     <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
                         <div class="relative bg-gray-100">
                             <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar">
@@ -2442,15 +2465,17 @@
                                 <span class="text-[11px] text-gray-500 font-medium">${item.phone ? '📞 ' + item.phone : 'Manjeri Bazaar'}</span>
                                 <div class="flex gap-1.5 items-center">
                                     ${adminDelBtn}
-                                    <button onclick="shareListing('${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.price.replace(/'/g, "\\'")}', '${item.phone || ''}')" class="text-blue-600 text-xs px-2 py-1 font-bold">Share</button>
+                                    <button onclick="shareListing('${item.id}', '${String(item.title || '').replace(/'/g, "\\'")}', '${String(item.price || '').replace(/'/g, "\\'")}', '${item.phone || ''}')" class="text-blue-600 text-xs px-2 py-1 font-bold">Share</button>
                                     <button onclick="addToCart('${item.id}')" class="bg-amber-600 text-white text-xs px-2.5 py-1.5 rounded-xl font-bold">Cart</button>
-                                    <a href="${waHref}" target="_blank" onclick="recordViewOnce('listings', '${item.id}'); logBookingInquiry('${item.title.replace(/'/g, "\\'")}', '${item.price.replace(/'/g, "\\'")}', '${item.phone || ''}')" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded-xl font-bold">WhatsApp</a>
+                                    <a href="${waHref}" target="_blank" onclick="recordViewOnce('listings', '${item.id}'); logBookingInquiry('${String(item.title || '').replace(/'/g, "\\'")}', '${String(item.price || '').replace(/'/g, "\\'")}', '${item.phone || ''}')" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded-xl font-bold">WhatsApp</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 `;
             });
+
+            container.innerHTML = htmlChunks.join('');
         }
 
         function filterCategory(cat) {
