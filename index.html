@@ -101,7 +101,7 @@
                         <span class="text-base">📅</span>
                         <div>
                             <p class="text-[10px] font-bold text-amber-900">Today Date / पंचांग</p>
-                            <p class="text-[11px] font-semibold text-amber-800">Nov 20, 2026 | Vrischikam 5</p>
+                            <p class="text-[11px] font-semibold text-amber-800">Nov 21, 2026 | Vrischikam 6</p>
                         </div>
                     </div>
                     <span class="text-[10px] bg-amber-600 text-white px-2 py-0.5 rounded font-bold">View</span>
@@ -169,6 +169,11 @@
                 </button>
             </div>
             <div id="listingsContainer" class="space-y-4"></div>
+            <div id="moreAdsWrapper" class="mt-4 text-center hidden">
+                <button onclick="loadMoreAds()" id="loadMoreAdsBtn" class="bg-white border border-emerald-600 text-emerald-700 hover:bg-emerald-50 text-xs font-bold px-5 py-2.5 rounded-xl shadow-xs transition">
+                    ⬇️ More Ads
+                </button>
+            </div>
         </div>
 
     </main>
@@ -327,15 +332,15 @@
             <div class="space-y-2 text-gray-700">
                 <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200">
                     <p class="font-bold text-amber-900">🇬🇧 Gregorian Date:</p>
-                    <p>Friday, November 20, 2026</p>
+                    <p>Saturday, November 21, 2026</p>
                 </div>
                 <div class="bg-emerald-50 p-2.5 rounded-xl border border-emerald-200">
                     <p class="font-bold text-amber-900">🌴 Malayalam Era (Kollavarsham):</p>
-                    <p>Vrischikam 5, 1202</p>
+                    <p>Vrischikam 6, 1202</p>
                 </div>
                 <div class="bg-teal-50 p-2.5 rounded-xl border border-teal-200">
                     <p class="font-bold text-emerald-900">🕌 Hijri Date (Islamic Calendar):</p>
-                    <p>Jumada al-Thani 10, 1448 AH (Ramadan & Muhurat tracking)</p>
+                    <p>Jumada al-Thani 11, 1448 AH (Ramadan & Muhurat tracking)</p>
                 </div>
             </div>
             <button onclick="closeCalendarModal()" class="w-full bg-amber-600 text-white py-2 rounded-xl font-bold shadow">Close Calendar</button>
@@ -499,7 +504,10 @@
                 <button onclick="adminAddCategory()" class="w-full bg-amber-600 text-white py-1.5 rounded-lg font-bold">Save Category Live</button>
             </div>
 
-            <h4 class="font-bold text-gray-700">Manage Categories (Order Up/Down):</h4>
+            <div class="flex justify-between items-center">
+                <h4 class="font-bold text-gray-700">Manage Categories (Order Up/Down):</h4>
+                <button onclick="saveCategoryOrderNow(true)" class="bg-emerald-700 text-white px-2.5 py-1 rounded-lg font-bold text-[10px]">💾 Save Order</button>
+            </div>
             <div id="adminCategoriesList" class="space-y-1 max-h-36 overflow-y-auto p-1 bg-gray-50 rounded border"></div>
 
             <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 space-y-2 mt-2">
@@ -602,6 +610,8 @@
         const CLOUDINARY_CLOUD_NAME = "i1u3mwzg";
         const CLOUDINARY_UPLOAD_PRESET = "zvnsmynv";
         const MAX_REEL_SECONDS = 30;
+        const INITIAL_ADS_LIMIT = 6;
+        const ADS_BATCH_STEP = 6;
         
         let currentUser = localStorage.getItem('manjeri_user') || null;
         const SUPER_ADMIN = "uddinr20@gmail.com";
@@ -614,6 +624,7 @@
         let cart = [];
         let globalUpiId = localStorage.getItem('mlb_upi_id') || "manjeribazaar@upi";
         let autoSlideTimer = null;
+        let visibleAdsLimit = INITIAL_ADS_LIMIT;
 
         let validReelFile = null;
         let cachedPendingVideos = JSON.parse(localStorage.getItem('mlb_pending_videos_v1') || '[]');
@@ -664,7 +675,7 @@
         ];
 
         let savedCats = JSON.parse(localStorage.getItem('manjeri_categories_v6'));
-        let categories = (savedCats && savedCats.length >= 25) ? savedCats : defaultCategories;
+        let categories = (savedCats && Array.isArray(savedCats) && savedCats.length >= 2) ? savedCats : defaultCategories;
 
         const malayalamKeywordMap = {
             'റൂം': 'rooms',
@@ -757,7 +768,6 @@
             updateAdminStatsDisplay();
         }
 
-        // WhatsApp Approval Notification Helper
         function buildWhatsAppApprovalUrl(typeLabel, title, extraInfo = "", targetPhone = "") {
             const cleanPhone = getTargetWhatsAppPhone(targetPhone);
             const siteUrl = window.location.href.split('?')[0];
@@ -798,7 +808,6 @@
             } catch (e) {}
         }
 
-        // Views & Likes for Products and Videos
         function recordViewOnce(collection, id) {
             const key = `${collection}_${id}`;
             if (viewedIds.includes(key)) return;
@@ -862,7 +871,6 @@
             }
         }
 
-        // Owner Today's Offers (Wholesale + Margin + Confirm Flow)
         function openOwnerOfferModal() {
             if (!isAdminLoggedIn) {
                 openProfileModal();
@@ -982,7 +990,6 @@
             }).join('');
         }
 
-        // Category-Specific Fields inside Post Ad Modal
         function renderCategorySpecificFields() {
             const cat = document.getElementById('userAdCat').value;
             const box = document.getElementById('categorySpecificFieldsBox');
@@ -1091,7 +1098,6 @@
             return { finalPrice, finalDesc };
         }
 
-        // Video Reels Upload & Approval Functions (Download Disabled)
         function openVideoUploadModal() {
             document.getElementById('reelPhoneInput').value = adminAlertPhone || "";
             document.getElementById('videoUploadModal').classList.remove('hidden');
@@ -1255,7 +1261,6 @@
             xhr.send(fd);
         }
 
-        // No download option for users or admins
         function renderPendingVideos() {
             const container = document.getElementById('pendingVideosContainer');
             if (!container) return;
@@ -1368,7 +1373,6 @@
             }).join('');
         }
 
-        // Maveli AI Language, Voice & Malayalam Script Support
         function setMaveliLang(lang) {
             maveliLang = lang;
             ['ml', 'hi', 'en'].forEach(l => {
@@ -1770,7 +1774,6 @@
         function openAiAssistant() { document.getElementById('aiAssistantModal').classList.remove('hidden'); }
         function closeAiAssistant() { document.getElementById('aiAssistantModal').classList.add('hidden'); }
 
-        // Persistent UPI ID save (Firebase + localStorage)
         function saveAdminUpi() {
             let newUpi = document.getElementById('adminUpiInput').value.trim();
             if(!newUpi) { alert('Enter valid UPI ID'); return; }
@@ -1863,6 +1866,18 @@
             }
         }
 
+        // Persist category order both in localStorage and Firebase
+        function saveCategoryOrderNow(showMsg = false) {
+            try {
+                localStorage.setItem('manjeri_categories_v6', JSON.stringify(categories));
+            } catch (e) {}
+            db.ref('settings/categoriesOrder').set(categories).then(() => {
+                if (showMsg) alert("Category order saved!");
+            }).catch(() => {
+                if (showMsg) alert("Category order saved locally!");
+            });
+        }
+
         function renderCategoriesBar() {
             let container = document.getElementById('categoryContainer');
             if(!container) return;
@@ -1913,7 +1928,7 @@
             let temp = categories[index];
             categories[index] = categories[targetIndex];
             categories[targetIndex] = temp;
-            localStorage.setItem('manjeri_categories_v6', JSON.stringify(categories));
+            saveCategoryOrderNow(false);
             renderCategoriesBar();
             renderAdminCategoriesList();
         }
@@ -1924,7 +1939,7 @@
             if(!name) { alert('Enter category name'); return; }
             let id = name.toLowerCase().replace(/[^a-z0-9]/g, '_');
             categories.push({ id, name, icon });
-            localStorage.setItem('manjeri_categories_v6', JSON.stringify(categories));
+            saveCategoryOrderNow(false);
             renderCategoriesBar();
             renderCategoryDropdowns();
             renderAdminCategoriesList();
@@ -1936,7 +1951,7 @@
         function adminDeleteCategory(id) {
             if(confirm('Delete this category?')) {
                 categories = categories.filter(c => c.id !== id);
-                localStorage.setItem('manjeri_categories_v6', JSON.stringify(categories));
+                saveCategoryOrderNow(false);
                 renderCategoriesBar();
                 renderCategoryDropdowns();
                 renderAdminCategoriesList();
@@ -2041,6 +2056,20 @@
         }
 
         function loadSettings() {
+            db.ref('settings/categoriesOrder').on('value', (snapshot) => {
+                const remoteOrder = snapshot.val();
+                if (Array.isArray(remoteOrder) && remoteOrder.length >= 2) {
+                    categories = remoteOrder;
+                    try {
+                        localStorage.setItem('manjeri_categories_v6', JSON.stringify(categories));
+                    } catch (e) {}
+                    renderCategoriesBar();
+                    if (!document.getElementById('adminApprovalModal').classList.contains('hidden')) {
+                        renderAdminCategoriesList();
+                    }
+                }
+            });
+
             db.ref('settings/upiId').on('value', (snapshot) => {
                 let val = snapshot.val();
                 if(val) {
@@ -2224,26 +2253,42 @@
             let { id: _, ...data } = item;
             data.views = data.views || 0;
             data.likes = data.likes || 0;
-            db.ref('listings').push(data, (err) => {
-                if(!err) {
-                    db.ref('pending_ads/' + id).remove();
-                    alert('Ad Approved & Published Live!');
+            db.ref('listings').push(data).then(() => {
+                if (!id.startsWith('pad_')) {
+                    db.ref('pending_ads/' + id).remove().catch(() => {});
                 }
+                cachedPending = cachedPending.filter(p => p.id !== id);
+                checkPendingCount();
+                renderPendingAds();
+                alert('Ad Approved & Published Live!');
+            }).catch(() => {
+                const liveItem = { id: "live_" + Date.now(), ...data };
+                cachedListings.unshift(liveItem);
+                cachedPending = cachedPending.filter(p => p.id !== id);
+                checkPendingCount();
+                renderPendingAds();
+                renderListings(activeCategory, document.getElementById('searchInput').value);
+                alert('Ad Approved & Live!');
             });
         }
 
         function rejectAd(id) {
             if(confirm('Reject this ad?')) {
-                db.ref('pending_ads/' + id).remove();
+                if (!id.startsWith('pad_')) {
+                    db.ref('pending_ads/' + id).remove().catch(() => {});
+                }
+                cachedPending = cachedPending.filter(p => p.id !== id);
+                checkPendingCount();
+                renderPendingAds();
             }
         }
 
         function deleteListing(id) {
             if(!isAdminLoggedIn) return;
             if(confirm('Delete this listing?')) {
-                if(id.startsWith('d')) {
+                if(id.startsWith('d') || id.startsWith('live_')) {
                     cachedListings = cachedListings.filter(l => l.id !== id);
-                    renderListings(activeCategory);
+                    renderListings(activeCategory, document.getElementById('searchInput').value);
                 } else {
                     db.ref('listings/' + id).remove();
                 }
@@ -2310,10 +2355,17 @@
             }).join('');
         }
 
+        function loadMoreAds() {
+            visibleAdsLimit += ADS_BATCH_STEP;
+            renderListings(activeCategory, document.getElementById('searchInput').value);
+        }
+
         function renderListings(cat = 'all', q = '') {
             activeCategory = cat;
             let container = document.getElementById('listingsContainer');
             let heading = document.getElementById('categoryTitleHeading');
+            let moreWrapper = document.getElementById('moreAdsWrapper');
+            let moreBtn = document.getElementById('loadMoreAdsBtn');
             if(!container) return;
             
             container.innerHTML = '';
@@ -2332,6 +2384,7 @@
             heading.innerHTML = `📋 Listings: <span class="text-emerald-700 uppercase font-bold">${cat}</span> (${filtered.length})`;
 
             if(filtered.length === 0) {
+                if (moreWrapper) moreWrapper.classList.add('hidden');
                 container.innerHTML = `
                     <div class="bg-white p-6 rounded-2xl text-center space-y-2 border">
                         <p class="text-xs text-gray-500">No ads in this category yet.</p>
@@ -2340,7 +2393,19 @@
                 return;
             }
 
-            filtered.forEach(item => {
+            let itemsToRender = filtered.slice(0, visibleAdsLimit);
+            let remainingCount = filtered.length - itemsToRender.length;
+
+            if (moreWrapper && moreBtn) {
+                if (remainingCount > 0) {
+                    moreWrapper.classList.remove('hidden');
+                    moreBtn.innerText = `⬇️ More Ads (${remainingCount} more available)`;
+                } else {
+                    moreWrapper.classList.add('hidden');
+                }
+            }
+
+            itemsToRender.forEach(item => {
                 let imgList = item.images && item.images.length > 0 ? item.images : ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500'];
                 let isWish = wishlist.some(w => w.id === item.id);
                 let isLiked = likedIds.includes(`listings_${item.id}`);
@@ -2390,11 +2455,13 @@
 
         function filterCategory(cat) {
             activeCategory = cat;
+            visibleAdsLimit = INITIAL_ADS_LIMIT;
             renderCategoriesBar();
             renderListings(cat, document.getElementById('searchInput').value);
         }
 
         function searchListings() {
+            visibleAdsLimit = INITIAL_ADS_LIMIT;
             renderListings(activeCategory, document.getElementById('searchInput').value);
         }
 
