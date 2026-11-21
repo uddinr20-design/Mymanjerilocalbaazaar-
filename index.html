@@ -315,11 +315,23 @@
         </div>
     </div>
 
-    <!-- Full-Screen Image Viewer Modal -->
-    <div id="imageViewerModal" class="fixed inset-0 bg-black/90 z-[999999] hidden flex flex-col items-center justify-center p-4" onclick="closeImageViewer()">
-        <button onclick="closeImageViewer()" class="absolute top-4 right-4 bg-white/20 text-white w-9 h-9 rounded-full font-bold text-lg flex items-center justify-center">✕</button>
-        <img id="fullScreenImage" src="" class="max-w-full max-h-[82vh] object-contain rounded-xl shadow-2xl" onclick="event.stopPropagation()">
-        <p class="text-white/80 text-xs mt-3">Tap anywhere outside to close</p>
+    <!-- Full-Screen Multi-Photo Swipeable Image Viewer Modal -->
+    <div id="imageViewerModal" class="fixed inset-0 bg-black/95 z-[999999] hidden flex flex-col items-center justify-center p-3" onclick="closeImageViewer()">
+        <div class="w-full max-w-md flex justify-between items-center px-2 mb-2" onclick="event.stopPropagation()">
+            <span id="viewerCounterBadge" class="bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full">1 / 1</span>
+            <button onclick="closeImageViewer()" class="bg-white/20 hover:bg-white/30 text-white w-9 h-9 rounded-full font-bold text-lg flex items-center justify-center">✕</button>
+        </div>
+
+        <div class="relative w-full max-w-md flex items-center justify-center" onclick="event.stopPropagation()">
+            <button id="viewerPrevBtn" onclick="stepViewerSlide(-1)" class="hidden absolute left-2 z-20 bg-black/60 hover:bg-black/80 text-white w-10 h-10 rounded-full font-bold text-base flex items-center justify-center border border-white/20">◀</button>
+
+            <div id="viewerTrack" onscroll="handleViewerScroll()" class="w-full flex overflow-x-auto snap-x snap-mandatory hide-scrollbar scroll-smooth rounded-2xl bg-black"></div>
+
+            <button id="viewerNextBtn" onclick="stepViewerSlide(1)" class="hidden absolute right-2 z-20 bg-black/60 hover:bg-black/80 text-white w-10 h-10 rounded-full font-bold text-base flex items-center justify-center border border-white/20">▶</button>
+        </div>
+
+        <div id="viewerDotsBox" class="flex gap-1.5 mt-3" onclick="event.stopPropagation()"></div>
+        <p class="text-white/75 text-[11px] mt-2">Swipe left/right to see all photos • Tap outside to close</p>
     </div>
 
     <!-- Calendar Modal -->
@@ -624,7 +636,10 @@
         let cart = [];
         let globalUpiId = localStorage.getItem('mlb_upi_id') || "manjeribazaar@upi";
         let autoSlideTimer = null;
+        let cardAutoSlideTimer = null;
         let visibleAdsLimit = INITIAL_ADS_LIMIT;
+        let viewerImages = [];
+        let viewerCurrentIdx = 0;
 
         let validReelFile = null;
         let cachedPendingVideos = JSON.parse(localStorage.getItem('mlb_pending_videos_v1') || '[]');
@@ -770,7 +785,7 @@
 
         function buildWhatsAppApprovalUrl(typeLabel, title, extraInfo = "", targetPhone = "") {
             const cleanPhone = getTargetWhatsAppPhone(targetPhone);
-            const siteUrl = window.location.href.split('?')[0];
+            const siteUrl = "https://uddinr20-design.github.io/Mymanjerilocalbaazaar-/#";
             const msg = `Manjeri Local Bazaar\n🔔 Approval Alert: ${typeLabel}\nTitle: ${title}${extraInfo ? `\nDetails: ${extraInfo}` : ""}\nLink: ${siteUrl}`;
             return buildWhatsAppUrl(cleanPhone, msg);
         }
@@ -818,7 +833,8 @@
                 const item = cachedListings.find(l => l.id === id);
                 if (item) {
                     item.views = (item.views || 0) + 1;
-                    renderListings(activeCategory, document.getElementById('searchInput').value);
+                    const vSpan = document.getElementById(`views-count-${id}`);
+                    if (vSpan) vSpan.innerText = `👁️ ${item.views} Views`;
                 }
                 if (!id.startsWith('d')) {
                     db.ref(`listings/${id}/views`).transaction((v) => (v || 0) + 1).catch(() => {});
@@ -1468,13 +1484,13 @@
                 let img = new Image();
                 img.onload = function() {
                     let canvas = document.createElement('canvas');
-                    let maxW = 700;
+                    let maxW = 900;
                     let scale = img.width > maxW ? (maxW / img.width) : 1;
                     canvas.width = img.width * scale;
                     canvas.height = img.height * scale;
                     let ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    callback(canvas.toDataURL('image/jpeg', 0.75));
+                    callback(canvas.toDataURL('image/jpeg', 0.82));
                 };
                 img.src = e.target.result;
             };
@@ -1502,7 +1518,7 @@
             let countTxt = document.getElementById('userPhotoCountText');
             box.innerHTML = selectedUserPhotos.map((img, i) => `
                 <div class="relative flex-shrink-0">
-                    <img src="${img}" class="w-14 h-14 object-cover rounded-lg border border-emerald-400">
+                    <img src="${img}" class="w-16 h-16 object-contain bg-gray-100 rounded-lg border border-emerald-400">
                     <span class="absolute -top-1 -right-1 bg-emerald-700 text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full">${i+1}</span>
                 </div>
             `).join('');
@@ -1556,16 +1572,137 @@
         function openCalendarModal() { document.getElementById('calendarModal').classList.remove('hidden'); }
         function closeCalendarModal() { document.getElementById('calendarModal').classList.add('hidden'); }
 
-        function openImageViewer(src) {
-            document.getElementById('fullScreenImage').src = src;
-            document.getElementById('imageViewerModal').classList.remove('hidden');
+        // Multi-Photo Swipeable Full-Screen Viewer
+        function openListingImageViewer(listingId, startIndex = 0) {
+            const item = cachedListings.find(l => l.id === listingId);
+            const imgs = (item && Array.isArray(item.images) && item.images.length > 0)
+                ? item.images
+                : ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500'];
+            openMultiImageViewer(imgs, startIndex);
         }
+
+        function openImageViewer(src) {
+            openMultiImageViewer([src], 0);
+        }
+
+        function openMultiImageViewer(imgs, startIndex = 0) {
+            viewerImages = Array.isArray(imgs) && imgs.length ? imgs : [];
+            if (!viewerImages.length) return;
+            viewerCurrentIdx = Math.max(0, Math.min(startIndex, viewerImages.length - 1));
+
+            const modal = document.getElementById('imageViewerModal');
+            const track = document.getElementById('viewerTrack');
+            const prevBtn = document.getElementById('viewerPrevBtn');
+            const nextBtn = document.getElementById('viewerNextBtn');
+
+            track.innerHTML = viewerImages.map((src, idx) => `
+                <div class="w-full flex-shrink-0 snap-center flex items-center justify-center bg-black min-h-[70vh]">
+                    <img src="${src}" class="max-w-full max-h-[76vh] object-contain select-none" alt="Photo ${idx + 1}">
+                </div>
+            `).join('');
+
+            if (viewerImages.length > 1) {
+                prevBtn.classList.remove('hidden');
+                nextBtn.classList.remove('hidden');
+            } else {
+                prevBtn.classList.add('hidden');
+                nextBtn.classList.add('hidden');
+            }
+
+            modal.classList.remove('hidden');
+            updateViewerIndicator();
+
+            setTimeout(() => {
+                const w = track.clientWidth || window.innerWidth;
+                track.scrollTo({ left: viewerCurrentIdx * w, behavior: 'auto' });
+            }, 20);
+        }
+
+        function updateViewerIndicator() {
+            const badge = document.getElementById('viewerCounterBadge');
+            const dotsBox = document.getElementById('viewerDotsBox');
+            if (badge) {
+                badge.innerText = `${viewerCurrentIdx + 1} / ${viewerImages.length}`;
+            }
+            if (dotsBox) {
+                dotsBox.innerHTML = viewerImages.length > 1
+                    ? viewerImages.map((_, i) => `<span onclick="goToViewerSlide(${i})" class="w-2.5 h-2.5 rounded-full cursor-pointer ${i === viewerCurrentIdx ? 'bg-emerald-400 scale-110' : 'bg-white/40'}"></span>`).join('')
+                    : '';
+            }
+        }
+
+        function goToViewerSlide(idx) {
+            const track = document.getElementById('viewerTrack');
+            if (!track || !viewerImages.length) return;
+            viewerCurrentIdx = (idx + viewerImages.length) % viewerImages.length;
+            const w = track.clientWidth || window.innerWidth;
+            track.scrollTo({ left: viewerCurrentIdx * w, behavior: 'smooth' });
+            updateViewerIndicator();
+        }
+
+        function stepViewerSlide(delta) {
+            goToViewerSlide(viewerCurrentIdx + delta);
+        }
+
+        function handleViewerScroll() {
+            const track = document.getElementById('viewerTrack');
+            if (!track || !viewerImages.length) return;
+            const w = track.clientWidth || 1;
+            const newIdx = Math.round(track.scrollLeft / w);
+            if (newIdx !== viewerCurrentIdx && newIdx >= 0 && newIdx < viewerImages.length) {
+                viewerCurrentIdx = newIdx;
+                updateViewerIndicator();
+            }
+        }
+
         function closeImageViewer() {
             document.getElementById('imageViewerModal').classList.add('hidden');
         }
 
+        // Card-Level Auto-Slide & Sync for Multi-Image Ads
+        function updateCardImageCounter(listingId, activeIdx, totalCount) {
+            const badge = document.getElementById(`card-img-badge-${listingId}`);
+            if (badge) {
+                badge.innerText = `📷 ${activeIdx + 1}/${totalCount} • Full View`;
+            }
+            for (let i = 0; i < totalCount; i++) {
+                const dot = document.getElementById(`card-dot-${listingId}-${i}`);
+                if (dot) {
+                    dot.className = (i === activeIdx)
+                        ? "w-2 h-2 rounded-full bg-emerald-400 transition-all"
+                        : "w-1.5 h-1.5 rounded-full bg-white/70 transition-all";
+                }
+            }
+        }
+
+        function handleCardTrackScroll(trackEl, listingId, totalCount) {
+            if (!trackEl || totalCount <= 1) return;
+            const w = trackEl.clientWidth || 1;
+            const idx = Math.min(totalCount - 1, Math.max(0, Math.round(trackEl.scrollLeft / w)));
+            trackEl.dataset.activeIdx = String(idx);
+            updateCardImageCounter(listingId, idx, totalCount);
+        }
+
+        function startCardAutoSliders() {
+            if (cardAutoSlideTimer) clearInterval(cardAutoSlideTimer);
+            cardAutoSlideTimer = setInterval(() => {
+                const tracks = document.querySelectorAll('.ad-card-slider-track');
+                tracks.forEach(track => {
+                    const total = parseInt(track.dataset.total || '1', 10);
+                    if (total <= 1 || !track.offsetParent) return;
+                    const listingId = track.dataset.listingId;
+                    const curr = parseInt(track.dataset.activeIdx || '0', 10);
+                    const next = (curr + 1) % total;
+                    const w = track.clientWidth || 280;
+                    track.dataset.activeIdx = String(next);
+                    track.scrollTo({ left: next * w, behavior: 'smooth' });
+                    updateCardImageCounter(listingId, next, total);
+                });
+            }, 3500);
+        }
+
         function openQrModal() {
-            let currentUrl = window.location.href.split('?')[0];
+            let currentUrl = "https://uddinr20-design.github.io/Mymanjerilocalbaazaar-/#";
             let qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&color=065f46&bgcolor=ffffff&data=${encodeURIComponent(currentUrl)}`;
             document.getElementById('qrCodeImage').src = qrApiUrl;
             document.getElementById('qrModal').classList.remove('hidden');
@@ -1590,7 +1727,7 @@
 
         function installAppPrompt() { alert("📥 To install: Tap browser menu (3 dots) and select 'Add to Home screen'."); }
         function shareApp() {
-            let appUrl = window.location.href.split('?')[0];
+            let appUrl = "https://uddinr20-design.github.io/Mymanjerilocalbaazaar-/#";
             updateInterestCounter("share_app");
             window.open(buildWhatsAppUrl("", `Manjeri Local Bazaar: ${appUrl}`), '_blank');
         }
@@ -1608,7 +1745,7 @@
 
         function shareListing(id, title, price, phone) {
             logBookingInquiry(title, price, phone);
-            let productUrl = `${window.location.href.split('?')[0]}?id=${id}`;
+            let productUrl = `https://uddinr20-design.github.io/Mymanjerilocalbaazaar-/#`;
             const targetPhone = getTargetWhatsAppPhone(phone);
             const msg = `Manjeri Local Bazaar\n${title} - ${price}\n${productUrl}`;
             window.open(buildWhatsAppUrl(targetPhone, msg), '_blank');
@@ -2248,7 +2385,7 @@
             container.innerHTML = cachedPending.length === 0 ? `<p class="text-gray-400 text-[11px]">No pending ads waiting.</p>` : cachedPending.map(item => `
                 <div class="bg-white p-2.5 rounded border space-y-1.5 shadow-xs">
                     <div class="flex items-center gap-2">
-                        <img src="${item.images ? item.images[0] : ''}" class="w-10 h-10 rounded object-cover border">
+                        <img src="${item.images ? item.images[0] : ''}" class="w-12 h-12 rounded object-contain bg-gray-100 border">
                         <div>
                             <h4 class="font-bold text-gray-900">${item.title} (${item.price})</h4>
                             <span class="text-[9px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded uppercase font-bold">${item.category}</span>
@@ -2345,7 +2482,7 @@
             container.innerHTML = wishlist.length === 0 ? `<p class="text-xs text-gray-500 text-center py-6">Wishlist is empty ❤️</p>` : wishlist.map(item => `
                 <div class="bg-white p-3 rounded-2xl shadow-sm border flex justify-between items-center">
                     <div class="flex items-center gap-3">
-                        <img src="${item.images[0]}" class="w-12 h-12 rounded-xl object-cover">
+                        <img src="${item.images[0]}" class="w-12 h-12 rounded-xl object-contain bg-gray-100">
                         <div><h4 class="font-bold text-xs">${item.title}</h4><p class="text-[11px] text-emerald-700 font-bold">${item.price}</p></div>
                     </div>
                     <button onclick="toggleWishlist('${item.id}')" class="text-red-500 text-xs font-bold px-2 py-1 bg-red-50 rounded-lg">Remove</button>
@@ -2363,7 +2500,7 @@
                 return `
                     <div class="bg-white p-3 rounded-2xl shadow-sm border flex justify-between items-center">
                         <div class="flex items-center gap-3">
-                            <img src="${item.images[0]}" class="w-12 h-12 rounded-xl object-cover">
+                            <img src="${item.images[0]}" class="w-12 h-12 rounded-xl object-contain bg-gray-100">
                             <div><h4 class="font-bold text-xs">${item.title}</h4><p class="text-[11px] text-emerald-700 font-bold">${item.price}</p></div>
                         </div>
                         <a href="${waHref}" target="_blank" onclick="logBookingInquiry('${item.title}', '${item.price}', '${item.phone || ''}')" class="bg-emerald-600 text-white text-[10px] px-3 py-1.5 rounded-xl font-bold">WhatsApp</a>
@@ -2439,15 +2576,22 @@
                 const msg = `Manjeri Local Bazaar\nInquiry: ${item.title} (${item.price})`;
                 const waHref = buildWhatsAppUrl(targetPhone, msg);
 
+                const dotsHtml = imgList.length > 1
+                    ? `<div class="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 px-2 py-1 rounded-full z-10">
+                        ${imgList.map((_, idx) => `<span id="card-dot-${item.id}-${idx}" class="${idx === 0 ? 'w-2 h-2 rounded-full bg-emerald-400' : 'w-1.5 h-1.5 rounded-full bg-white/70'}"></span>`).join('')}
+                       </div>`
+                    : '';
+
                 return `
                     <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                        <div class="relative bg-gray-100">
-                            <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar">
-                                ${imgList.map(i=>`<img src="${i}" onclick="recordViewOnce('listings', '${item.id}'); openImageViewer('${i}');" class="w-full h-48 object-cover flex-shrink-0 snap-center cursor-pointer" title="Tap for Full Screen">`).join('')}
+                        <div class="relative bg-gray-900/95">
+                            <div onscroll="handleCardTrackScroll(this, '${item.id}', ${imgList.length})" data-listing-id="${item.id}" data-total="${imgList.length}" data-active-idx="0" class="ad-card-slider-track flex overflow-x-auto snap-x snap-mandatory hide-scrollbar scroll-smooth">
+                                ${imgList.map((i, idx) => `<img src="${i}" onclick="recordViewOnce('listings', '${item.id}'); openListingImageViewer('${item.id}', ${idx});" class="w-full h-64 object-contain bg-gray-900 flex-shrink-0 snap-center cursor-pointer" title="Tap to view all photos full screen">`).join('')}
                             </div>
-                            <button onclick="toggleWishlist('${item.id}')" class="absolute top-2 left-2 bg-white/80 p-1.5 rounded-full text-sm">${isWish ? '❤️' : '🤍'}</button>
-                            <span class="absolute top-2 right-2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">📷 ${imgList.length} (Tap to zoom)</span>
-                            <span class="absolute bottom-2 left-2 bg-emerald-700 text-white text-[10px] px-2.5 py-0.5 rounded-lg font-bold">${item.price}</span>
+                            <button onclick="toggleWishlist('${item.id}')" class="absolute top-2 left-2 bg-white/85 p-1.5 rounded-full text-sm z-10">${isWish ? '❤️' : '🤍'}</button>
+                            <span id="card-img-badge-${item.id}" onclick="recordViewOnce('listings', '${item.id}'); openListingImageViewer('${item.id}', 0);" class="cursor-pointer absolute top-2 right-2 bg-black/70 text-white text-[10px] px-2.5 py-0.5 rounded-full font-bold z-10">📷 1/${imgList.length} • Full View</span>
+                            <span class="absolute bottom-2 left-2 bg-emerald-700 text-white text-[10px] px-2.5 py-0.5 rounded-lg font-bold z-10">${item.price}</span>
+                            ${dotsHtml}
                         </div>
                         <div class="p-3.5 space-y-2">
                             <div class="flex justify-between items-start gap-2">
@@ -2456,7 +2600,7 @@
                             </div>
                             <p class="text-xs text-gray-600">${item.desc}</p>
                             <div class="flex justify-between items-center text-[11px] text-gray-600 pt-1">
-                                <span class="font-semibold">👁️ ${viewsCount} Views</span>
+                                <span id="views-count-${item.id}" class="font-semibold">👁️ ${viewsCount} Views</span>
                                 <button onclick="toggleLikeItem('listings', '${item.id}')" class="px-2.5 py-0.5 rounded-lg font-bold ${isLiked ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'}">
                                     ${isLiked ? '❤️' : '🤍'} Like (${likesCount})
                                 </button>
@@ -2476,6 +2620,7 @@
             });
 
             container.innerHTML = htmlChunks.join('');
+            startCardAutoSliders();
         }
 
         function filterCategory(cat) {
@@ -2504,3 +2649,4 @@
     </script>
 </body>
 </html>
+
